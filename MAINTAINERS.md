@@ -3,6 +3,7 @@
 Following is the current list of maintainers on this project
 
 The maintainers are listed in alphabetical order.
+- Vijay Arya ([vijay-arya](https://github.com/vijay-arya))
 - Michael Hind ([michaelhind](https://github.com/michaelhind))
 - Animesh Singh ([animeshsingh](https://github.com/animeshsingh))
 - Kush Varshney ([krvarshney](https://github.com/krvarshney))
