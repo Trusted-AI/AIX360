@@ -21,14 +21,23 @@ Below is an (incomplete) list of people (in alphabetical order) who contributed 
 via code, tests, or documentation:
 
 * Vijay Arya
+* Rachel Bellamy
+* Pin-Yu Chen
 * Amit Dhurandar
 * Mike Hind
-* Sam Hoffman
+* Samuel C. Hoffman
+* Stephanie Houde
+* Qingzi(Vera) Liao
+* Ronny Luss
 * Sameep Mehta
-* Sami Mourad
 * Saška Mojsilović
-* Animesh Singh
+* Sami Mourad
+* Pablo Pedemonte
+* John T. Richards
+* Prasanna Sattigeri
+* Karthikeyan Shanmugam
 * Moninder Singh
+* Animesh Singh
 * Kush Varshney
 * Dennis Wei
-
+* Yunfeng Zhang

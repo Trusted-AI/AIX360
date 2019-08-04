@@ -1,0 +1,5 @@
+model_checkpoint_path: "train_resnetmodel_new1_399.ckpt"
+all_model_checkpoint_paths: "train_resnetmodel_new1_99.ckpt"
+all_model_checkpoint_paths: "train_resnetmodel_new1_199.ckpt"
+all_model_checkpoint_paths: "train_resnetmodel_new1_299.ckpt"
+all_model_checkpoint_paths: "train_resnetmodel_new1_399.ckpt"
