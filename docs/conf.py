@@ -23,7 +23,7 @@ copyright = '2019, IBM Corporation'
 author = 'IBM Research'
 
 # The full version, including alpha/beta/rc tags
-release = aix360.__version__
+release = '0.1' #aix360.__version__
 
 
 # -- General configuration ---------------------------------------------------
