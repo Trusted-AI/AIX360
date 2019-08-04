@@ -11,7 +11,7 @@ The AI Explainbability 360 toolkit is an open-source library that supports inter
 For more information and installation instructions, see `our GitHub page <https://github.com/IBM/AIX360>`_.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Package Reference:
 
    algorithms
