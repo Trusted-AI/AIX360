@@ -6,7 +6,7 @@
 AI Explainability 360
 ==================================
 
-The AI Explainbability 360 toolkit is an open-source library that supports interpretability and explainability of data and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics. 
+The AI Explainability 360 toolkit is an open-source library that supports interpretability and explainability of data and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics. 
 
 For more information and installation instructions, see `our GitHub page <https://github.com/IBM/AIX360>`_.
 
