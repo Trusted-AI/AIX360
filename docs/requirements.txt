@@ -12,3 +12,4 @@ tensorflow
 xport
 scikit-image
 requests
+torch
