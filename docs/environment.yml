@@ -6,10 +6,6 @@ channels:
 
 dependencies:
     - python==3.6
-    - torch
-    - torchvision
-    - tensorflow
-    - keras
     - pip:
         - matplotlib
         - joblib>=0.11
@@ -23,3 +19,7 @@ dependencies:
         - xport
         - scikit-image
         - requests
+        - torch
+        - torchvision
+        - keras
+        - tensorflow
