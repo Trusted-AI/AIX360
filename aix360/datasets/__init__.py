@@ -5,5 +5,4 @@ from .celeba_dataset import CelebADataset
 from .cdc_dataset import CDCDataset
 from .cifar_dataset import CIFARDataset
 from .ted_dataset import TEDDataset
-# commenting due to issues with readthedocs
-#from .fashion_mnist_dataset import FMnistDataset
+from .fashion_mnist_dataset import FMnistDataset
