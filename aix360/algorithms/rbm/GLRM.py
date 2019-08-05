@@ -10,7 +10,7 @@ class GLRMExplainer(DISExplainer):
     * **Logistic Rule Regression:** logistic regression on rule-based features [#Icml2019]_.
 
     References:
-        .. [#Icml2019] D. Wei, S. Dash, T. Gao, O. Günlük, "Generalized linear rule
+        .. [#Icml2019] `D. Wei, S. Dash, T. Gao, O. Günlük, "Generalized linear rule
            models." International Conference on Machine Learning (ICML), 2019.
            <http://proceedings.mlr.press/v97/wei19a/wei19a.pdf>`_
     """

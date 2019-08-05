@@ -10,7 +10,7 @@ class BRCGExplainer(DISExplainer):
     normal form (DNF) or conjunctive normal form (CNF) using column generation (CG) [#NeurIPS2018]_.
 
     References:
-        .. [#NeurIPS2018] S. Dash, O. Günlük, D. Wei, "Boolean decision rules via
+        .. [#NeurIPS2018] `S. Dash, O. Günlük, D. Wei, "Boolean decision rules via
            column generation." Neural Information Processing Systems (NeurIPS), 2018.
            <https://papers.nips.cc/paper/7716-boolean-decision-rules-via-column-generation.pdf>`_
     """
