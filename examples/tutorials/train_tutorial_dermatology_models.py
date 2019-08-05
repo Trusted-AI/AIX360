@@ -73,7 +73,7 @@ class ISICDataset():
         self.train_size = len(self.train_loader)
         self.range = [-1.0, 1.0]
         self.batch_size = batch_size
-        self.num_instances = len(train_set)
+        self.num_training_instances = len(train_set)
         self.likelihood_type = "gaussian"
         self.output_activation_type = "tanh"
 
