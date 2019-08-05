@@ -25,7 +25,7 @@ setuptools.setup(
                 'Image',
                 'keras',
                 'matplotlib',
-		'numpy>=1.16',
+		'numpy',
                 'pandas',
                 'scipy>=0.17',
                 'tensorflow',

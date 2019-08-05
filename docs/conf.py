@@ -10,7 +10,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-autodoc_mock_imports = ["numpy", "sklearn"]
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
@@ -62,3 +61,9 @@ html_theme = 'sphinx_rtd_theme'
 # html_static_path = ['_static']
 
 master_doc = 'index'
+
+# Exclude imports
+autodoc_mock_imports = [
+    "torch",
+    "torchvision"
+]
