@@ -1,6 +1,0 @@
-scikit-learn>=0.21.2
-keras
-tensorflow
-Image
-scikit-image
-xport

@@ -17,8 +17,10 @@ sphinx:
 formats: all
 
 # Optionally set the version of Python and requirements required to build your docs
+conda:
+    file: docs/environment.yml
+
 python:
-  version: 3.6
-  install:
-     - requirements: docs/requirements.txt
-  system_packages: true
+    version: 3.6
+    pip_install: true
+
