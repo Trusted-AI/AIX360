@@ -14,8 +14,9 @@ from skimage.segmentation import slic
 
 
 class CEM_MAFImageExplainer(LocalWBExplainer):
-    """CEM_MAFImageExplainer is a Contrastive Image explainer with Monotonic
-    Attribute Functions. [#]_
+    """CEM_MAFImageExplainer is a Contrastive Image explainer that leverages Monotonic
+    Attribute Functions. The main idea here is to explain images using high level semantically meaningful attributes 
+    that may either be directly available or learned through supervised or unsupervised methods. [#]_
 
     References:
         .. [#] `Ronny Luss, Pin-Yu Chen, Amit Dhurandhar, Prasanna Sattigeri,
