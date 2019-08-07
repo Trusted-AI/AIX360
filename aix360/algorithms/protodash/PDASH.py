@@ -9,8 +9,8 @@ class ProtodashExplainer(DIExplainer):
     """
     ProtodashExplainer provides exemplar-based explanations for summarizing datasets as well
     as explaining predictions made by an AI model. It employs a fast gradient based algorithm
-    to find prototypes along with their importance weights. The algorithm minimizes the maximum
-    mean discrepancy metric and has constant factor approximation guarantees. [#]_.
+    to find prototypes along with their (non-negative) importance weights. The algorithm minimizes the maximum
+    mean discrepancy metric and has constant factor approximation guarantees for this weakly submodular function. [#]_.
 
     References:
         .. [#] `Karthik S. Gurumoorthy, Amit Dhurandhar, Guillermo Cecchi,
