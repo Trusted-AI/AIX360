@@ -36,11 +36,11 @@ class CIFARDataset():
                 urllib.request.urlretrieve('https://www.cs.toronto.edu/~kriz/' + name, full_name)
                 print("retrieved")
             #now extract the files
-            print("extracting files")
+            #print("extracting files")
             tar = tarfile.open(full_name, "r:gz")
             tar.extractall(self._dirpath)
             tar.close()        
-            print("extracted files")
+            #print("extracted files")
             
             self._process_data()
 
@@ -53,6 +53,7 @@ class CIFARDataset():
         num_classes=10
         per_file_size=10000
         
+        print("processing files...")
         datafile_path = os.path.join(self._dirpath, 'cifar-10-batches-py')
         for i in range(5):
             with open(os.path.join(datafile_path,'data_batch_'+str(i+1)), 'rb') as fileobj:
@@ -88,28 +89,35 @@ class CIFARDataset():
             y_test=OneHotEncoder(sparse=False).fit_transform(y_test).astype('uint8')
         
         with open(os.path.join(self._dirpath,'cifar-10-train1-image.json'),'w') as outfile:
+            print("writing ",os.path.join(self._dirpath,'cifar-10-train1-image.json'))
             json.dump(x_train_1.tolist(),outfile)
         outfile.close()
         
         with open(os.path.join(self._dirpath,'./cifar-10-train2-image.json'),'w') as outfile:
+            print("writing ",os.path.join(self._dirpath,'cifar-10-train2-image.json'))
             json.dump(x_train_2.tolist(),outfile)
         outfile.close()
         
         with open(os.path.join(self._dirpath,'./cifar-10-test-image.json'),'w') as outfile:
+            print("writing ",os.path.join(self._dirpath,'cifar-10-test-image.json'))
             json.dump(x_test.tolist(),outfile)
         outfile.close()
         
         with open(os.path.join(self._dirpath,'./cifar-10-train1-label.json'),'w') as outfile:
+            print("writing ",os.path.join(self._dirpath,'cifar-10-train1-label.json'))
             json.dump(y_train_1.tolist(),outfile)
         outfile.close()
         
         with open(os.path.join(self._dirpath,'./cifar-10-train2-label.json'),'w') as outfile:
+            print("writing ",os.path.join(self._dirpath,'cifar-10-train2-label.json'))
             json.dump(y_train_2.tolist(),outfile)
         outfile.close()
         
         with open(os.path.join(self._dirpath,'./cifar-10-test-label.json'),'w') as outfile:
+            print("writing ",os.path.join(self._dirpath,'cifar-10-test-label.json'))
             json.dump(y_test.tolist(),outfile)
         outfile.close()
+        print("processing completed")
         #cleanup
         if os.path.exists(datafile_path):
             shutil.rmtree(datafile_path)
