@@ -47,7 +47,8 @@ class CEMExplainer(LocalWBExplainer):
                          arg_max_iter, arg_init_const, arg_beta, arg_gamma):
 
         """
-        Explains an input instance input_X and returns contrastive explanations
+        Explains an input instance input_X and returns contrastive explanations. 
+        Note that this assumes that the classifier was trained with inputs normalized in [-0.5,0.5] range.
 
         Args:
             input_X (numpy.ndarray): input instance to be explained
