@@ -13,7 +13,7 @@ the user through the various steps of the notebook.
 
 - [Health and Nutrition Survey](./tutorials/CDC.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/CDC.ipynb)]<br/>Shows how to quickly understand the National Health and Nutrition Examination Survey datasets to hasten research in epidemiology and health policy.
 
-[Employee Attrition](./tutorials/attrition.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/attrition.ipynb)]<br/>Shows how to explain predictions of an employee attrition model from a synthesized dataset.
+- [Employee Attrition](./tutorials/attrition.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/attrition.ipynb)]<br/>Shows how to explain predictions of an employee attrition model from a synthesized dataset.
 
 ## Examples
 - [CEMExplainer using MNIST dataset](./contrastive/CEM-MINST.ipynb)  [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/contrastive/CEM-MNIST.ipynb)]
