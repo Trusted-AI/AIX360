@@ -5,7 +5,7 @@ the user through the various steps of the notebook.
 
 ## Tutorials
 
-- [Credit Approval Tutorial](./tutorials/HELOC.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/HELOC.ipynb)]<br/>Shows how to explain credit approval models using the FICO Explainable Machine Learning Challenge dataset.
+- [Credit Approval Tutorial](./tutorials/HELOC.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/HELOC.ipynb)]<br/>Shows how to explain credit approval models that use the FICO Explainable Machine Learning Challenge dataset.
 
 - [Medical Expenditure Tutorial](./tutorials/MEPS.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/MEPS.ipynb)]<br/>Shows how to create interpretable machine learning models in a care management scenario using Medical Expenditure Panel Survey data.
 
