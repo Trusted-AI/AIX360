@@ -35,8 +35,8 @@ class ProfweightExplainer(GlobalWBExplainer):
 
     def explain(self,x_train,y_train,x_test,y_test,simple_model,hps,list_probe_filenames,start_layer,end_layer,model_type='neural_keras'):
         """
-        Obtains sample-wise weights from stored probe confidences for different layers of the complex moddel. Retrains a simple
-        model using these weights.
+        Obtains (train) sample-wise weights from stored probe confidences for different layers of the complex moddel. Retrains a simple
+        model using the corresponding weighted training set.
 
         Parameters:
             x_train (numpy array): Dataset of features to retrain the simple model using weights derived from probe confidences. Dimensions (num of samples x feature dimensions)
