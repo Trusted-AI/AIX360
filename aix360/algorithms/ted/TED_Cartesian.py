@@ -4,7 +4,7 @@ from sklearn import metrics
 class TED_CartesianExplainer(DISExplainer):
     """TED is an explainability framework that leverages domain-relevant explanations in
     the training dataset to predict both labels and explanations for new instances [#]_.
-    This an implementation of the simplest instantiation of TED, called the Cartesian Product.
+    This is an implementation of the simplest instantiation of TED, called the Cartesian Product.
 
     References:
         .. [#] `Michael Hind, Dennis Wei, Murray Campbell, Noel C. F. Codella,
