@@ -109,7 +109,7 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 
 The `examples` directory contains a diverse collection of jupyter notebooks
 that use AI Explainability 360 in various ways. Both examples and tutorial notebooks illustrate
-working code using AIX360. Tutorials provide additional discussion that walks
+working code using the toolkit. Tutorials provide additional discussion that walks
 the user through the various steps of the notebook. See the details about
 tutorials and examples [here](examples/README.md). 
 
