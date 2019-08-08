@@ -1,3 +1,5 @@
+# AI Explainability 360 (AIX360 v0.1)
+
 [![Build Status](https://travis-ci.com/IBM/AIX360.svg?branch=master)](https://travis-ci.com/IBM/AIX360)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
 
@@ -109,7 +111,7 @@ The `examples` directory contains a diverse collection of jupyter notebooks
 that use AI Explainability 360 in various ways. Both examples and tutorial notebooks illustrate
 working code using AIX360. Tutorials provide additional discussion that walks
 the user through the various steps of the notebook. See the details about
-[tutorials and demos here](examples/README.md)
+tutorials and examples [here](examples/README.md). 
 
 ## Citing AIX360
 
