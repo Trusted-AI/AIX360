@@ -23,6 +23,7 @@ via code, tests, or documentation:
 * Vijay Arya
 * Rachel Bellamy
 * Pin-Yu Chen
+* Payel Das
 * Amit Dhurandar
 * Mike Hind
 * Samuel C. Hoffman
