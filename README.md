@@ -56,10 +56,9 @@ Supported Configurations:
 
 ### (Optional) Create a virtual environment
 
-AIX360 requires specific versions of many Python packages which may conflict
+AI Explainability 360 requires specific versions of many Python packages which may conflict
 with other projects on your system. A virtual environment manager is strongly
-recommended to ensure dependencies may be installed safely. If you have trouble
-installing AIX360, try this first.
+recommended to ensure dependencies may be installed safely. If you have trouble installing the toolkit, try this first.
 
 #### Conda
 
@@ -106,7 +105,7 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (aix360)$ pip install -e .
 ```
 
-## Using AIX360
+## Using AI Explainability 360
 
 The `examples` directory contains a diverse collection of jupyter notebooks
 that use AI Explainability 360 in various ways. Both examples and tutorial notebooks illustrate
@@ -114,6 +113,6 @@ working code using AIX360. Tutorials provide additional discussion that walks
 the user through the various steps of the notebook. See the details about
 tutorials and examples [here](examples/README.md). 
 
-## Citing AIX360
+## Citing AI Explainability 360
 
 * Coming soon. 
