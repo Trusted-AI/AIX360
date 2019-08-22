@@ -16,9 +16,9 @@ the user through the various steps of the notebook.
 - [Proactive Retention](./tutorials/retention.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/tutorials/retention.ipynb)]<br/>Shows how to explain predictions of a model that recommends employees for retention actions from a synthesized human resources dataset.
 
 ## Examples
-- [CEMExplainer using MNIST dataset](./examples/contrastive/CEM-MINST.ipynb)  [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/contrastive/CEM-MNIST.ipynb)]
+- [CEMExplainer using MNIST dataset](./contrastive/CEM-MNIST.ipynb)  [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/contrastive/CEM-MNIST.ipynb)]
 
-- [CEM_MAFImageExplainer using CelabA dataset](./examples/contrastive/CEM-MAF-CelebA.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/contrastive/CEM-MAF-CelebA.ipynb)]
+- [CEM_MAFImageExplainer using CelabA dataset](./contrastive/CEM-MAF-CelebA.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/contrastive/CEM-MAF-CelebA.ipynb)]
 
 - [DIPVAEExplainer using Fashion-MNIST dataset](/dipvae/DIPVAE-FMNIST.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/dipvae/DIPVAE-FMNIST.ipynb)]
 
