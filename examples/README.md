@@ -20,7 +20,7 @@ the user through the various steps of the notebook.
 
 - [CEM_MAFImageExplainer using CelabA dataset](./contrastive/CEM-MAF-CelebA.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/contrastive/CEM-MAF-CelebA.ipynb)]
 
-- [DIPVAEExplainer using Fashion-MNIST dataset](/dipvae/DIPVAE-FMNIST.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/dipvae/DIPVAE-FMNIST.ipynb)]
+- [DIPVAEExplainer using Fashion-MNIST dataset](./dipvae/DIPVAE-FMNIST.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/dipvae/DIPVAE-FMNIST.ipynb)]
 
 - [ProfweightExplainer using CIFAR dataset](./profwt/Prof-Weight.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/profwt/Prof-Weight.ipynb)]
 
