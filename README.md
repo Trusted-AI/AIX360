@@ -40,7 +40,7 @@ We have developed the package with extensibility in mind. This library is still 
 
 
 ## Supported explainability metrics
-- Faithfuless ([Alvarez-Melis and Jaakkola, 2018](https://papers.nips.cc/paper/8003-towards-robust-interpretability-with-self-explaining-neural-networks))
+- Faithfulness ([Alvarez-Melis and Jaakkola, 2018](https://papers.nips.cc/paper/8003-towards-robust-interpretability-with-self-explaining-neural-networks))
 - Monotonicity ([Luss et al., 2019](https://arxiv.org/abs/1905.12698))
 
 ## Setup
