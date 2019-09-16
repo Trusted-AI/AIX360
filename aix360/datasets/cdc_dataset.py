@@ -41,7 +41,9 @@ class CDCDataset():
                 if not os.path.exists(filename):
                     print("Downloading file {}".format(f))
                     file = requests.get(os.path.join(self._cdcweb, f), allow_redirects=True)
-                    open(filename, 'wb').write(file.content)
+                    fp = open(filename, 'wb')
+                    fp.write(file.content)
+                    fp.close()                    
             except IOError as err:
                 print("IOError: {}".format(err))
                 sys.exit(1)
