@@ -13,13 +13,13 @@ install:
 
 script:
   - python3.6 ./tests/contrastive/test_CEM_MAF.py
-  #- python3.6 ./tests/contrastive/test_CEM.py
-  #- python3.6 ./tests/protodash/test_PDASH.py  
-  #- python3.6 ./tests/ted/test_TED_Cartesian.py
-  #- CUDA_VISIBLE_DEVICES="" python3.6 ./tests/dipvae/test_DIPVAE.py
-  #- python3.6 ./tests/rbm/test_Boolean_Rule_CG.py
-  #- python3.6 ./tests/rbm/test_Linear_Rule_Regression.py
-  #- python3.6 ./tests/rbm/test_Logistic_Rule_Regression.py
+  - python3.6 ./tests/contrastive/test_CEM.py
+  - python3.6 ./tests/protodash/test_PDASH.py  
+  - python3.6 ./tests/ted/test_TED_Cartesian.py
+  - CUDA_VISIBLE_DEVICES="" python3.6 ./tests/dipvae/test_DIPVAE.py
+  - python3.6 ./tests/rbm/test_Boolean_Rule_CG.py
+  - python3.6 ./tests/rbm/test_Linear_Rule_Regression.py
+  - python3.6 ./tests/rbm/test_Logistic_Rule_Regression.py
 
 after_success:
 #  - codecov
