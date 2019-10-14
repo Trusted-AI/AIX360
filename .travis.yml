@@ -4,8 +4,8 @@ python:
 
 # command to install dependencies
 install:
-  - pip3.6 install setuptools>=41.0.0
-  - pip3.6 install .
+  - pip3 install setuptools>=41.0.0
+  - pip3 install .
     #- pip3.6 install -r requirements.txt
 
 # commands to run tes
