@@ -28,11 +28,11 @@ setuptools.setup(
 		'numpy',
                 'pandas',
                 'scipy>=0.17',
-                'tensorflow',
+                'tensorflow<2',
                 'xport',
 		'scikit-image',
 		'requests'
-	],
+	], 
         package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
 	include_package_data=True,
 	zip_safe=False
