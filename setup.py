@@ -32,7 +32,8 @@ setuptools.setup(
             'xport',
             'scikit-image',
             'requests',
-            'lime'
+            'lime',
+            'shap'
 	], 
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
     include_package_data=True,
