@@ -21,6 +21,7 @@ script:
   - python3.6 ./tests/rbm/test_Linear_Rule_Regression.py
   - python3.6 ./tests/rbm/test_Logistic_Rule_Regression.py
   - python3.6 ./tests/lime/test_lime.py
+  - python3.6 ./tests/lime/test_shap.py
 
 after_success:
 #  - codecov
