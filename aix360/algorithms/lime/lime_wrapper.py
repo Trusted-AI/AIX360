@@ -9,6 +9,8 @@ from aix360.algorithms.lbbe import LocalBBExplainer
 class LimeTextExplainer(LocalBBExplainer):
     """
     Class that wraps lime_text.LimeTextExplainer
+    For accessing any variables/functions not exposed by this class, please
+    access them via the 'explainer' object variable initialized in '__init__' function.
     """
 
     def __init__(self, *argv, **kwargs):
@@ -37,6 +39,8 @@ class LimeTextExplainer(LocalBBExplainer):
 class LimeImageExplainer(LocalBBExplainer):
     """
     Class that wraps lime_image.LimeImageExplainer
+    For accessing any variables/functions not exposed by this class, please
+    access them via the 'explainer' object variable initialized in '__init__' function.
     """
 
     def __init__(self, *argv, **kwargs):
@@ -65,6 +69,8 @@ class LimeImageExplainer(LocalBBExplainer):
 class LimeTabularExplainer(LocalBBExplainer):
     """
     Class that wraps lime_image.LimeTabularExplainer
+    For accessing any variables/functions not exposed by this class, please
+    access them via the 'explainer' object variable initialized in '__init__' function.
     """
 
     def __init__(self, *argv, **kwargs):
