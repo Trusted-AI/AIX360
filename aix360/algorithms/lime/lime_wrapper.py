@@ -6,9 +6,10 @@ from aix360.algorithms.lbbe import LocalBBExplainer
 
 class LimeTextExplainer(LocalBBExplainer):
     """
-    Class that wraps `LimeTextExplainer <https://lime-ml.readthedocs.io/en/latest/lime.html#module-lime.lime_text>`_.
+    This class wraps the source class `LimeTextExplainer <https://lime-ml.readthedocs.io/en/latest/lime.html#module-lime.lime_text>`_
+    available in the `LIME <https://github.com/marcotcr/lime>` library.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
-    object variable initialized in '__init__' function of this class.
+    object variable that is initialized in '__init__' function of this class.
     """
 
     def __init__(self, *argv, **kwargs):
@@ -36,12 +37,10 @@ class LimeTextExplainer(LocalBBExplainer):
 
 class LimeImageExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_image.LimeImageExplainer [#]_.
-    For accessing any variables/functions not exposed by this class, please
-    access them via the 'explainer' object variable initialized in '__init__' function.
-
-    References:
-        .. [#] `https://github.com/marcotcr/lime`_
+    This class wraps the source class `LimeImageExplainer <https://lime-ml.readthedocs.io/en/latest/lime.html#module-lime.lime_image>`_
+    available in the `LIME <https://github.com/marcotcr/lime>` library.
+    Additional variables or functions from the source class can also be accessed via the 'explainer'
+    object variable that is initialized in '__init__' function of this class.
     """
 
     def __init__(self, *argv, **kwargs):
@@ -69,12 +68,10 @@ class LimeImageExplainer(LocalBBExplainer):
 
 class LimeTabularExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_image.LimeTabularExplainer [#]_.
-    For accessing any variables/functions not exposed by this class, please
-    access them via the 'explainer' object variable initialized in '__init__' function.
-
-    References:
-        .. [#] `https://github.com/marcotcr/lime`_
+    This class wraps the source class `LimeTabularExplainer <https://lime-ml.readthedocs.io/en/latest/lime.html#module-lime.lime_tabular>`_
+    available in the `LIME <https://github.com/marcotcr/lime>` library.
+    Additional variables or functions from the source class can also be accessed via the 'explainer'
+    object variable that is initialized in '__init__' function of this class.
     """
 
     def __init__(self, *argv, **kwargs):
