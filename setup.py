@@ -28,7 +28,7 @@ setuptools.setup(
             'numpy',
             'pandas',
             'scipy>=0.17',
-            'tensorflow<2',
+            'tensorflow==1.14',
             'xport',
             'scikit-image',
             'requests',
