@@ -33,7 +33,7 @@ setuptools.setup(
             'scikit-image',
             'requests',
             'lime',
-            'shap'
+            'shap',
             'xgboost'
 	], 
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
