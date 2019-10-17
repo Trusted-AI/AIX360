@@ -8,7 +8,7 @@ from aix360.algorithms.lwbe import LocalWBExplainer
 class KernelExplainer(LocalBBExplainer):
     """
     This class wraps the source class `KernelExplainer <https://shap.readthedocs.io/>`_
-    available in the `SHAP <https://github.com/slundberg/shap>` library.
+    available in the `SHAP <https://github.com/slundberg/shap>`_ library.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
     object variable that is initialized in '__init__' function of this class.
     """
@@ -37,7 +37,7 @@ class KernelExplainer(LocalBBExplainer):
 class GradientExplainer(LocalWBExplainer):
     """
     This class wraps the source class `GradientExplainer <https://shap.readthedocs.io/>`_
-    available in the `SHAP <https://github.com/slundberg/shap>` library.
+    available in the `SHAP <https://github.com/slundberg/shap>`_ library.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
     object variable that is initialized in '__init__' function of this class.
     """
@@ -67,7 +67,7 @@ class GradientExplainer(LocalWBExplainer):
 class DeepExplainer(LocalWBExplainer):
     """
     This class wraps the source class `DeepExplainer <https://shap.readthedocs.io/>`_
-    available in the `SHAP <https://github.com/slundberg/shap>` library.
+    available in the `SHAP <https://github.com/slundberg/shap>`_ library.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
     object variable that is initialized in '__init__' function of this class.
     """
@@ -97,7 +97,7 @@ class DeepExplainer(LocalWBExplainer):
 class TreeExplainer(LocalWBExplainer):
     """
     This class wraps the source class `TreeExplainer <https://shap.readthedocs.io/>`_
-    available in the `SHAP <https://github.com/slundberg/shap>` library.
+    available in the `SHAP <https://github.com/slundberg/shap>`_ library.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
     object variable that is initialized in '__init__' function of this class.
     """
@@ -127,7 +127,7 @@ class TreeExplainer(LocalWBExplainer):
 class LinearExplainer(LocalWBExplainer):
     """
     This class wraps the source class `Linearexplainer <https://shap.readthedocs.io/>`_
-    available in the `SHAP <https://github.com/slundberg/shap>` library.
+    available in the `SHAP <https://github.com/slundberg/shap>`_ library.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
     object variable that is initialized in '__init__' function of this class.
     """
@@ -151,4 +151,3 @@ class LinearExplainer(LocalWBExplainer):
         Explains an input instance x.
         """
         return (self.explainer.shap_values(*argv, **kwargs))
-
