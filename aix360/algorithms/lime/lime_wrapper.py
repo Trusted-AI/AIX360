@@ -28,7 +28,7 @@ class LimeTextExplainer(LocalBBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one or more input instances.
         """
         self.explanation = self.explainer.explain_instance(*argv, **kwargs)
 
@@ -59,7 +59,7 @@ class LimeImageExplainer(LocalBBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains and input instance x.
+        Explain one or more input instances.
         """
         self.explanation = self.explainer.explain_instance(*argv, **kwargs)
 
@@ -76,7 +76,7 @@ class LimeTabularExplainer(LocalBBExplainer):
 
     def __init__(self, *argv, **kwargs):
         """
-        Initialize lime Image Tabular object
+        Initialize lime Tabular Explainer object
         """
         super(LimeTabularExplainer, self).__init__(*argv, **kwargs)
 
@@ -90,7 +90,7 @@ class LimeTabularExplainer(LocalBBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one or more input instances.
         """
         self.explanation = self.explainer.explain_instance(*argv, **kwargs)
 

@@ -29,7 +29,7 @@ class KernelExplainer(LocalBBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one ore more input instances.
         """
         return (self.explainer.shap_values(*argv, **kwargs))
 
@@ -58,7 +58,7 @@ class GradientExplainer(LocalWBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one or more input instances.
         """
         return (self.explainer.shap_values(*argv, **kwargs))
 
@@ -88,7 +88,7 @@ class DeepExplainer(LocalWBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one or more input instances.
         """
         return (self.explainer.shap_values(*argv, **kwargs))
 
@@ -118,7 +118,7 @@ class TreeExplainer(LocalWBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one or more input instances.
         """
         return (self.explainer.shap_values(*argv, **kwargs))
 
@@ -148,6 +148,6 @@ class LinearExplainer(LocalWBExplainer):
 
     def explain_instance(self, *argv, **kwargs):
         """
-        Explains an input instance x.
+        Explain one or more input instances.
         """
         return (self.explainer.shap_values(*argv, **kwargs))
