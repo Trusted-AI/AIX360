@@ -1,5 +1,3 @@
-# Module that exposes LIME
-
 from __future__ import print_function
 
 from lime import lime_image, lime_text, lime_tabular
@@ -8,9 +6,12 @@ from aix360.algorithms.lbbe import LocalBBExplainer
 
 class LimeTextExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_text.LimeTextExplainer
+    Class that wraps lime_text.LimeTextExplainer [#]_
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
+
+    References:
+        .. [#] `https://github.com/marcotcr/lime`_
     """
 
     def __init__(self, *argv, **kwargs):
@@ -38,9 +39,12 @@ class LimeTextExplainer(LocalBBExplainer):
 
 class LimeImageExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_image.LimeImageExplainer
+    Class that wraps lime_image.LimeImageExplainer [#]_
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
+
+    References:
+        .. [#] `https://github.com/marcotcr/lime`_
     """
 
     def __init__(self, *argv, **kwargs):
@@ -68,9 +72,12 @@ class LimeImageExplainer(LocalBBExplainer):
 
 class LimeTabularExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_image.LimeTabularExplainer
+    Class that wraps lime_image.LimeTabularExplainer [#]_
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
+
+    References:
+        .. [#] `https://github.com/marcotcr/lime`_
     """
 
     def __init__(self, *argv, **kwargs):
