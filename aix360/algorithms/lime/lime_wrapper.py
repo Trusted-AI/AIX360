@@ -6,9 +6,9 @@ from aix360.algorithms.lbbe import LocalBBExplainer
 
 class LimeTextExplainer(LocalBBExplainer):
     """
-    Class that wraps `LimeTextExplainer <https://github.com/marcotcr/lime>`_.
+    Class that wraps `LimeTextExplainer <https://lime-ml.readthedocs.io/en/latest/lime.html#module-lime.lime_text>`_.
     Additional variables or functions from the source class can also be accessed via the 'explainer'
-    object variable initialized in '__init__' function of this class. 
+    object variable initialized in '__init__' function of this class.
     """
 
     def __init__(self, *argv, **kwargs):
