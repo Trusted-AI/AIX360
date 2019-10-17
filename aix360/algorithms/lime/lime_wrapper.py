@@ -6,12 +6,9 @@ from aix360.algorithms.lbbe import LocalBBExplainer
 
 class LimeTextExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_text.LimeTextExplainer [#]_
-    For accessing any variables/functions not exposed by this class, please
-    access them via the 'explainer' object variable initialized in '__init__' function.
-
-    References:
-        .. [#] `https://github.com/marcotcr/lime`_
+    Class that wraps `LimeTextExplainer <https://github.com/marcotcr/lime>`_.
+    Additional variables or functions from the source class can also be accessed via the 'explainer'
+    object variable initialized in '__init__' function of this class. 
     """
 
     def __init__(self, *argv, **kwargs):
@@ -39,7 +36,7 @@ class LimeTextExplainer(LocalBBExplainer):
 
 class LimeImageExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_image.LimeImageExplainer [#]_
+    Class that wraps lime_image.LimeImageExplainer [#]_.
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
 
@@ -72,7 +69,7 @@ class LimeImageExplainer(LocalBBExplainer):
 
 class LimeTabularExplainer(LocalBBExplainer):
     """
-    Class that wraps lime_image.LimeTabularExplainer [#]_
+    Class that wraps lime_image.LimeTabularExplainer [#]_.
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
 

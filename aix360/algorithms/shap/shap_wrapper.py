@@ -7,12 +7,12 @@ from aix360.algorithms.lwbe import LocalWBExplainer
 
 class KernelExplainer(LocalBBExplainer):
     """
-    Class that wraps shap.KernelExplainer [#]_
-    For accessing any variables/functions not exposed by this class, please
-    access them via the 'explainer' object variable initialized in '__init__' function.
+    This class wraps shap.KernelExplainer [#]_.
+    For accessing any variables or functions not exposed by this class, please
+    access them via the 'explainer' object variable initialized in the '__init__' function.
 
     References:
-        .. [#] `https://shap.readthedocs.io/`_
+        .. [#] `<https://shap.readthedocs.io/>`_
     """
 
     def __init__(self, *argv, **kwargs):
@@ -38,12 +38,12 @@ class KernelExplainer(LocalBBExplainer):
 
 class GradientExplainer(LocalWBExplainer):
     """
-    Class that wraps shap.GradientExplainer [#]_
-    For accessing any variables/functions not exposed by this class, please
-    access them via the 'explainer' object variable initialized in '__init__' function.
+    This class that wraps shap.GradientExplainer [#]_.
+    For accessing any variables or functions not exposed by this class, please
+    access them via the 'explainer' object variable initialized in the '__init__' function.
 
     References:
-        .. [#] `https://shap.readthedocs.io/`_
+        .. [#] `<https://shap.readthedocs.io/>`_
     """
 
     def __init__(self, *argv, **kwargs):
@@ -70,12 +70,12 @@ class GradientExplainer(LocalWBExplainer):
 
 class DeepExplainer(LocalWBExplainer):
     """
-    Class that wraps shap.DeepExplainer [#]_
-    For accessing any variables/functions not exposed by this class, please
-    access them via the 'explainer' object variable initialized in '__init__' function.
+    This class that wraps shap.DeepExplainer [#]_.
+    For accessing any variables or functions not exposed by this class, please
+    access them via the 'explainer' object variable initialized in the '__init__' function.
 
     References:
-        .. [#] `https://shap.readthedocs.io/`_
+        .. [#] `<https://shap.readthedocs.io/>`_
     """
 
     def __init__(self, *argv, **kwargs):
@@ -102,12 +102,12 @@ class DeepExplainer(LocalWBExplainer):
 
 class TreeExplainer(LocalWBExplainer):
     """
-    Class that wraps shap.TreeExplainer [#]_
+    Class that wraps shap.TreeExplainer [#]_.
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
 
     References:
-        .. [#] `https://shap.readthedocs.io/`_
+        .. [#] `<https://shap.readthedocs.io/>`_
     """
 
     def __init__(self, *argv, **kwargs):
@@ -134,12 +134,12 @@ class TreeExplainer(LocalWBExplainer):
 
 class LinearExplainer(LocalWBExplainer):
     """
-    Class that wraps shap.Linearexplainer [#]_
+    Class that wraps shap.Linearexplainer [#]_.
     For accessing any variables/functions not exposed by this class, please
     access them via the 'explainer' object variable initialized in '__init__' function.
 
     References:
-        .. [#] `https://shap.readthedocs.io/`_
+        .. [#] `<https://shap.readthedocs.io/>`_
     """
 
     def __init__(self, *argv, **kwargs):
