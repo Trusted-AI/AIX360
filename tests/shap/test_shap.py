@@ -80,6 +80,7 @@ class TestShapExplainer(unittest.TestCase):
         print('Shap Tabular Example')
         print(shapexplainer.explainer.expected_value)
         print(shap_values_single)
+        print("Invoked Shap KernelExplainer")
 
 
     def test_ShapLinearExplainer(self):
@@ -95,11 +96,11 @@ class TestShapExplainer(unittest.TestCase):
 
         shapexplainer = LinearExplainer(model, X_train, feature_dependence="independent")
         shap_values = shapexplainer.explain_instance(X_test)
-        print(shap_values)
+        print("Invoked Shap LinearExplainer")
 
     # comment this test as travis runs out of resources
-    # def test_ShapGradientExplainer(self):
-    #
+    def test_ShapGradientExplainer(self):
+
     #     model = VGG16(weights='imagenet', include_top=True)
     #     X, y = shap.datasets.imagenet50()
     #     to_explain = X[[39, 41]]
@@ -117,8 +118,8 @@ class TestShapExplainer(unittest.TestCase):
     #                           map2layer(preprocess_input(X.copy()), 7))
     #     shap_values, indexes = e.explain_instance(map2layer(to_explain, 7), ranked_outputs=2)
     #
-    #     print(shap_values)
-    
+          print("Skipped Shap GradientExplainer")
+
 
     def test_ShapDeepExplainer(self):
         batch_size = 128
@@ -183,7 +184,7 @@ class TestShapExplainer(unittest.TestCase):
         e = DeepExplainer(model, background)
 
         shap_values = e.explain_instance(x_test[1:5])
-        print(shap_values)
+        print("Invoked Shap DeepExplainer")
 
 
     def test_ShapTreeExplainer(self):
@@ -230,7 +231,7 @@ class TestShapExplainer(unittest.TestCase):
         c_statistic_harrell(model_train.predict(xgb_test, ntree_limit=5000), y_test)
 
         shap_values = TreeExplainer(model).explain_instance(X)
-        print(shap_values)
+        print("Invoked Shap TreeExplainer")
 
 
 if __name__ == '__main__':
