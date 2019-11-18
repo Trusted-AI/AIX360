@@ -21,7 +21,12 @@ def nan_preprocessing(df):
 
 def default_preprocessing(df):
     # Details and preprocessing for FICO dataset
-    x_cols, y_col = df.columns[0:-1], df.columns[-1]
+
+    # minimize dependence on ordering of columns in heloc data
+    # x_cols, y_col = df.columns[0:-1], df.columns[-1]
+    x_cols = list(df.columns.values)
+    x_cols.remove('RiskPerformance')
+    y_col = list(['RiskPerformance'])
 
     # Preprocessing the HELOC dataset
     # Remove all the rows containing -9 in the ExternalRiskEstimate column
@@ -31,7 +36,10 @@ def default_preprocessing(df):
         df[col][df[col].isin([-7, -8, -9])] = 0
     # Get the column names for the covariates and the dependent variable
     df = df[(df[x_cols].T != 0).any()]
-    x = df.values[:, 0:-1]
+
+    # minimize dependence on ordering of columns in heloc data
+    # x = df.values[:, 0:-1]
+    x = df[x_cols].values
 
     # encode target variable ('bad', 'good')
     cat_values = df[y_col].values
