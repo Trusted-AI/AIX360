@@ -266,7 +266,8 @@ def HeuristicSetSelection(X, Y, m, kernelType, sigma):
 
             currK = K2
             if maxGradient <= 0:
-                newCurrOptw = np.vstack((currOptw[:], np.array([0])))
+                #newCurrOptw = np.vstack((currOptw[:], np.array([0])))
+                newCurrOptw = np.append(currOptw, [0], axis=0)
                 newCurrSetValue = currSetValue
             else:
                 [newCurrOptw, value] = runOptimiser(currK, curru, currOptw, maxGradient)

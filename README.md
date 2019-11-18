@@ -19,7 +19,7 @@ We have developed the package with extensibility in mind. This library is still 
 - ProtoDash ([Gurumoorthy et al., 2019](https://arxiv.org/abs/1707.01212))
 - Disentangled Inferred Prior VAE ([Kumar et al., 2018](https://openreview.net/forum?id=H1kG7GZAW))
 
-### Local post-hoc explanation
+### Local post-hoc explanation 
 
 - ProtoDash ([Gurumoorthy et al., 2019](https://arxiv.org/abs/1707.01212))
 - Contrastive Explanations Method ([Dhurandhar et al., 2018](https://papers.nips.cc/paper/7340-explanations-based-on-the-missing-towards-contrastive-explanations-with-pertinent-negatives))
