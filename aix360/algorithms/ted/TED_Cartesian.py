@@ -12,7 +12,7 @@ class TED_CartesianExplainer(DISExplainer):
            Kush R. Varshney, "TED: Teaching AI to Explain its Decisions,"
            AAAI /ACM Conference on Artificial Intelligence, Ethics,
            and Society (AIES-19), 2019.
-           <http://www.aies-conference.com/wp-content/papers/main/AIES-19_paper_128.pdf>`_
+           <https://doi.org/10.1145/3306618.3314273>`_
     """
 
     def __init__(self, model):
