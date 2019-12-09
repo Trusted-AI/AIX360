@@ -124,7 +124,7 @@ class TestShapExplainer(unittest.TestCase):
     def test_ShapDeepExplainer(self):
         batch_size = 128
         num_classes = 10
-        epochs = 5
+        epochs = 2
 
         # input image dimensions
         img_rows, img_cols = 28, 28
