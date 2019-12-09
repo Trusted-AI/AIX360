@@ -91,7 +91,7 @@ class TestShapExplainer(unittest.TestCase):
         X_train = vectorizer.fit_transform(corpus_train)
         X_test = vectorizer.transform(corpus_test)
 
-        model = sklearn.linear_model.LogisticRegression(penalty="l1", C=0.1)
+        model = sklearn.linear_model.LogisticRegression(penalty="l1", C=0.1, solver='liblinear')
         model.fit(X_train, y_train)
 
         shapexplainer = LinearExplainer(model, X_train, feature_dependence="independent")
