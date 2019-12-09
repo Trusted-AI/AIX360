@@ -123,14 +123,14 @@ paper.
 
 ```
 @misc{aix360-sept-2019,
-    title = "One Explanation Does Not Fit All: A Toolkit and Taxonomy of AI Explainability Techniques",
-    author = {Vijay Arya and Rachel K. E. Bellamy and Pin-Yu Chen and Amit Dhurandhar and Michael Hind
+title = "One Explanation Does Not Fit All: A Toolkit and Taxonomy of AI Explainability Techniques",
+author = {Vijay Arya and Rachel K. E. Bellamy and Pin-Yu Chen and Amit Dhurandhar and Michael Hind
 and Samuel C. Hoffman and Stephanie Houde and Q. Vera Liao and Ronny Luss and Aleksandra Mojsilovi\'c
 and Sami Mourad and Pablo Pedemonte and Ramya Raghavendra and John Richards and Prasanna Sattigeri
 and Karthikeyan Shanmugam and Moninder Singh and Kush R. Varshney and Dennis Wei and Yunfeng Zhang},
-    month = sept,
-    year = {2019},
-    url = {https://arxiv.org/abs/1909.03012}
+month = sept,
+year = {2019},
+url = {https://arxiv.org/abs/1909.03012}
 }
 ```
 
