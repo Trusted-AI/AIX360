@@ -47,7 +47,7 @@ def default_preprocessing(df):
     enc.fit(cat_values)
     num_values = enc.transform(cat_values)
     y = np.array(num_values)
-
+    
     return np.hstack((x, y.reshape(y.shape[0], 1)))
 
 
@@ -79,8 +79,10 @@ class HELOCDataset():
         if not self._dirpath:
             self._dirpath = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                 '..', 'data','heloc_data')
-
+	
         self._filepath = os.path.join(self._dirpath, 'heloc_dataset.csv')
+        print("Using Heloc dataset: ", self._filepath)
+        
         try:
             #require access to dataframe
             #df = pd.read_csv(filepath)
@@ -99,9 +101,13 @@ class HELOCDataset():
             #self._data = custom_preprocessing(df)
             self._data = custom_preprocessing(self._df.copy())
 
-    #require access to the dataframe
+    # return a copy of the dataframe with Riskperformance as last column
     def dataframe(self):
-        return(self._df)
+        # First pop and then add 'Riskperformance' column
+        dfcopy = self._df.copy()
+        col = dfcopy.pop('RiskPerformance')
+        dfcopy['RiskPerformance'] = col
+        return(dfcopy)
 
     def data(self):
         return self._data
