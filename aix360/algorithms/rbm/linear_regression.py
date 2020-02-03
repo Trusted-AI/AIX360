@@ -1,13 +1,15 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import Lasso, Ridge
+from sklearn.base import BaseEstimator, RegressorMixin
+
 
 import matplotlib.pyplot as plt
 
 from .beam_search import beam_search_K1
 
 
-class LinearRuleRegression(object):
+class LinearRuleRegression(BaseEstimator, RegressorMixin):
     """Linear Rule Regression is a directly interpretable supervised learning
     method that performs linear regression on rule-based features.
     """
