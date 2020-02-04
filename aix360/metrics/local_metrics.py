@@ -26,7 +26,7 @@ def faithfulness_metric(model, x, coefs, base):
     """
 
     #find predicted class
-    pred_class = model.predict(x.reshape(1,-1))[0]
+    pred_class = np.argmax(model.predict_proba(x.reshape(1,-1)), axis=1)[0]
 
     #find indexs of coefficients in decreasing order of value
     ar = np.argsort(-coefs)  #argsort returns indexes of values sorted in increasing order; so do it for negated array
@@ -63,7 +63,7 @@ def monotonicity_metric(model, x, coefs, base):
         bool: True if the relationship is monotonic.
     """
     #find predicted class
-    pred_class = model.predict(x.reshape(1,-1))[0]
+    pred_class = np.argmax(model.predict_proba(x.reshape(1,-1)), axis=1)[0]
 
     x_copy = base.copy()
 
