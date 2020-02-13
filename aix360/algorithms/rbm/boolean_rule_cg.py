@@ -3,11 +3,12 @@ import numpy as np
 import pandas as pd
 import cvxpy as cvx
 from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.base import BaseEstimator, ClassifierMixin
 
 from .beam_search import beam_search, beam_search_K1
 
 
-class BooleanRuleCG(object):
+class BooleanRuleCG(BaseEstimator, ClassifierMixin):
     """BooleanRuleCG is a directly interpretable supervised learning method
     for binary classification that learns a Boolean rule in disjunctive
     normal form (DNF) or conjunctive normal form (CNF) using column generation (CG).
