@@ -5,70 +5,7 @@ from cvxopt.solvers import qp
 from cvxopt import matrix, spmatrix
 from numpy import array, ndarray
 from scipy.spatial.distance import cdist
-
-
-# solve_qp adapted from https://github.com/stephane-caron/qpsolvers/blob/master/qpsolvers/
-# Added objective function value in return value
-
-def cvxopt_matrix(M):
-    if type(M) is ndarray:
-        return matrix(M)
-    elif type(M) is spmatrix or type(M) is matrix:
-        return M
-    coo = M.tocoo()
-    return spmatrix(
-        coo.data.tolist(), coo.row.tolist(), coo.col.tolist(), size=M.shape)
-
-
-def solve_qp(P, q, G=None, h=None, A=None, b=None, solver=None, initvals=None):
-    """
-    Solve a Quadratic Program defined as:
-        minimize
-            (1/2) * x.T * P * x + q.T * x
-        subject to
-            G * x <= h
-            A * x == b
-    using CVXOPT <http://cvxopt.org/>.
-    Parameters
-    ----------
-    P : numpy.array, cvxopt.matrix or cvxopt.spmatrix
-        Symmetric quadratic-cost matrix.
-    q : numpy.array, cvxopt.matrix or cvxopt.spmatrix
-        Quadratic-cost vector.
-    G : numpy.array, cvxopt.matrix or cvxopt.spmatrix
-        Linear inequality matrix.
-    h : numpy.array, cvxopt.matrix or cvxopt.spmatrix
-        Linear inequality vector.
-    A : numpy.array, cvxopt.matrix or cvxopt.spmatrix
-        Linear equality constraint matrix.
-    b : numpy.array, cvxopt.matrix or cvxopt.spmatrix
-        Linear equality constraint vector.
-    solver : string, optional
-        Set to 'mosek' to run MOSEK rather than CVXOPT.
-    initvals : numpy.array, optional
-        Warm-start guess vector.
-    Returns
-    -------
-    x : array, shape=(n,)
-        Solution to the QP, if found, otherwise ``None``.
-    Note
-    ----
-    CVXOPT only considers the lower entries of `P`, therefore it will use a
-    wrong cost function if a non-symmetric matrix is provided.
-    """
-    args = [cvxopt_matrix(P), cvxopt_matrix(q)]
-    if G is not None:
-        args.extend([cvxopt_matrix(G), cvxopt_matrix(h)])
-        if A is not None:
-            if type(A) is ndarray and A.ndim == 1:
-                A = A.reshape((1, A.shape[0]))
-            args.extend([cvxopt_matrix(A), cvxopt_matrix(b)])
-    sol = qp(*args, solver=solver, initvals=initvals)
-    if 'optimal' not in sol['status']:
-        return (None, None)
-    return (  array(sol['x']).reshape((q.shape[0],)), sol['primal objective']  )
-
-
+from qpsolvers import solve_qp
 
 def runOptimiser(K, u, preOptw, initialValue, maxWeight=10000):
     """
@@ -90,10 +27,20 @@ def runOptimiser(K, u, preOptw, initialValue, maxWeight=10000):
     G = np.vstack((np.identity(d), -1*np.identity(d)))
     h = np.vstack((ub, -1*lb))
 
-    (sol, obj_value) = solve_qp(K, -u, G, h, A=None, b=None, solver=None, initvals=x0)
-    return(sol, obj_value)
+    #     Solve a QP defined as follows:
+    #         minimize
+    #             (1/2) * x.T * P * x + q.T * x
+    #         subject to
+    #             G * x <= h
+    #             A * x == b
+    sol = solve_qp(K, -u, G, h, A=None, b=None, solver='cvxopt', initvals=x0)
 
-
+    # compute objective function value
+    x = sol.reshape(sol.shape[0], 1)
+    P = K
+    q = - u.reshape(u.shape[0], 1)
+    obj_value = 1/2 * np.matmul(np.matmul(x.T, P), x) + np.matmul(q.T, x)
+    return(sol, obj_value[0,0])
 
 
 def get_Processed_NHANES_Data(filename):

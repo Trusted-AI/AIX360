@@ -38,7 +38,8 @@ setuptools.setup(
             'xgboost', 
 	    'bleach>=2.1.0',
 	    'docutils>=0.13.1',
-	    'Pygments'
+	    'Pygments',
+            'qpsolvers'
 	], 
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
     include_package_data=True,
