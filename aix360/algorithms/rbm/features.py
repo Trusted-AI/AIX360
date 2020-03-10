@@ -77,8 +77,7 @@ class FeatureBinarizer(TransformerMixin):
                 enc[c].fit(data[[c]])
 
             # Ordinal column
-            elif np.issubdtype(data[c].dtype, np.dtype(int).type) \
-                | np.issubdtype(data[c].dtype, np.dtype(float).type):
+            elif np.issubdtype(data[c].dtype, np.integer) | np.issubdtype(data[c].dtype, np.floating):
                 # Few unique values
                 if valUniq <= self.numThresh + 1:
                     # Thresholds are sorted unique values excluding maximum
