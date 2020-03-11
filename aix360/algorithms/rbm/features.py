@@ -67,7 +67,7 @@ class FeatureBinarizer(TransformerMixin):
             # Constant or binary column
             if valUniq <= 2:
                 # Mapping to 0, 1
-                maps[c] = pd.Series(range(valUniq), index=np.sort(data[c].unique()))
+                maps[c] = pd.Series(range(valUniq), index=np.sort(data[c].dropna().unique()))
 
             # Categorical column
             elif (c in self.colCateg) or (data[c].dtype == 'object'):
