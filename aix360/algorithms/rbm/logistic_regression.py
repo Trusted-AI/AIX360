@@ -323,7 +323,6 @@ class LogisticRuleRegression(BaseEstimator, ClassifierMixin):
                 strFeat = idxFeat.get_level_values(0) + ' ' + idxFeat.get_level_values(1)\
                     + ' ' + idxFeat.get_level_values(2).to_series()\
                     .apply(lambda x: ('{:.' + str(prec) + 'f}').format(x) if type(x) is float else str(x))
-#                        + ' ' + idxFeat.get_level_values(2).astype(str)
                 # String representation of rule
                 dfExpl.at[row+1, 'rule'] = strFeat.str.cat(sep=' AND ')
 
