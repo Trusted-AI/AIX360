@@ -18,7 +18,7 @@ quality of this branch should never be compromised.
 The remainder of this document details how to merge pull requests to the
 repositories.
 
-## Merge approval
+## Merge Approval
 
 The project maintainers use LGTM (Looks Good To Me) in comments on the pull
 request to indicate acceptance prior to merging. A change requires LGTMs from
@@ -65,7 +65,7 @@ for the feature? If not, ask them to provide that information.
 
 Are new unit tests in place that test all new behaviors introduced? If not, do
 not merge the feature until they are! Is documentation in place for the new
-feature? (See the documentation guidelines). If not do not merge the feature
+feature? (See the documentation guidelines). If not, do not merge the feature
 until it is! Is the feature necessary for general use cases? Try and keep the
 scope of any given component narrow. If a proposed feature does not fit that
 scope, recommend to the user that they maintain the feature on their own, and

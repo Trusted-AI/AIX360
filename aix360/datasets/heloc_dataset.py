@@ -21,7 +21,12 @@ def nan_preprocessing(df):
 
 def default_preprocessing(df):
     # Details and preprocessing for FICO dataset
-    x_cols, y_col = df.columns[0:-1], df.columns[-1]
+
+    # minimize dependence on ordering of columns in heloc data
+    # x_cols, y_col = df.columns[0:-1], df.columns[-1]
+    x_cols = list(df.columns.values)
+    x_cols.remove('RiskPerformance')
+    y_col = list(['RiskPerformance'])
 
     # Preprocessing the HELOC dataset
     # Remove all the rows containing -9 in the ExternalRiskEstimate column
@@ -31,7 +36,10 @@ def default_preprocessing(df):
         df[col][df[col].isin([-7, -8, -9])] = 0
     # Get the column names for the covariates and the dependent variable
     df = df[(df[x_cols].T != 0).any()]
-    x = df.values[:, 0:-1]
+
+    # minimize dependence on ordering of columns in heloc data
+    # x = df.values[:, 0:-1]
+    x = df[x_cols].values
 
     # encode target variable ('bad', 'good')
     cat_values = df[y_col].values
@@ -39,7 +47,7 @@ def default_preprocessing(df):
     enc.fit(cat_values)
     num_values = enc.transform(cat_values)
     y = np.array(num_values)
-
+    
     return np.hstack((x, y.reshape(y.shape[0], 1)))
 
 
@@ -71,8 +79,10 @@ class HELOCDataset():
         if not self._dirpath:
             self._dirpath = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                 '..', 'data','heloc_data')
-
+	
         self._filepath = os.path.join(self._dirpath, 'heloc_dataset.csv')
+        print("Using Heloc dataset: ", self._filepath)
+        
         try:
             #require access to dataframe
             #df = pd.read_csv(filepath)
@@ -91,9 +101,13 @@ class HELOCDataset():
             #self._data = custom_preprocessing(df)
             self._data = custom_preprocessing(self._df.copy())
 
-    #require access to the dataframe
+    # return a copy of the dataframe with Riskperformance as last column
     def dataframe(self):
-        return(self._df)
+        # First pop and then add 'Riskperformance' column
+        dfcopy = self._df.copy()
+        col = dfcopy.pop('RiskPerformance')
+        dfcopy['RiskPerformance'] = col
+        return(dfcopy)
 
     def data(self):
         return self._data

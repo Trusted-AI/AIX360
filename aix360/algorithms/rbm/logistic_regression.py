@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.base import BaseEstimator, ClassifierMixin
 
 from .beam_search import beam_search_K1
 
 
-class LogisticRuleRegression(object):
+class LogisticRuleRegression(BaseEstimator, ClassifierMixin):
     """Logistic Rule Regression is a directly interpretable supervised learning
     method that performs logistic regression on rule-based features.
     """

@@ -1,3 +1,3 @@
-# Guidance on use of AI Explainability 360 algorithms
+# Guidance on use of AI Explainability 360 algorithms 
 
-![Guidance](methods-choice.gif)
+![Guidance](methods-choice-updated.png)

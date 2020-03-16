@@ -88,9 +88,6 @@ class TestDIPVAEExplainer(unittest.TestCase):
         # Fit the generative model.
         loss_epoch_list = dipvaeii_explainer.fit()
 
-        # Testing elbo increase.
-        self.assertGreaterEqual(loss_epoch_list[1], loss_epoch_list[0])
-
         for x, _ in dataset_obj.next_test_batch():
             input_images = x.squeeze().view(-1, np.prod(dataset_obj.data_dims))
             break
