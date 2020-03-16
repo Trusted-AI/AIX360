@@ -68,7 +68,6 @@ class LinearRuleRegression(BaseEstimator, RegressorMixin):
         # Initialize with X itself i.e. singleton conjunctions
         # Feature indicator and conjunction matrices
         z = pd.DataFrame(np.eye(X.shape[1], dtype=int), index=X.columns)
-#        A = X.values
         # Remove negations
         indPos = X.columns.get_level_values(1).isin(['', '<=', '=='])
         z = z.loc[:,indPos]
@@ -87,7 +86,6 @@ class LinearRuleRegression(BaseEstimator, RegressorMixin):
         MADM = np.abs(y - self.mu).mean()
         # Lasso object
         lr = Lasso(alpha=self.lambda0 * MADM / 2, selection='cyclic')
-#        lr = LassoLars(alpha=self.lambda0 * MADM / 2, normalize=False)
 
         # Fit Lasso model
         if self.useOrd:
@@ -164,7 +162,6 @@ class LinearRuleRegression(BaseEstimator, RegressorMixin):
                 if self.debias and len(idxNonzero):
                     # Re-fit Lasso model with effectively no regularization
                     z = z.iloc[:,idxNonzeroRules]
-#                    lr.alpha = self.eps
                     lr = Ridge(alpha=self.eps)
                     lr.fit(B[:,idxNonzero], y)
                     idxNonzero = np.where(np.abs(lr.coef_) > self.eps)[0]
@@ -178,7 +175,6 @@ class LinearRuleRegression(BaseEstimator, RegressorMixin):
                 if self.debias and len(idxNonzero):
                     # Re-fit Lasso model with effectively no regularization
                     z = z.iloc[:,idxNonzero]
-#                    lr.alpha = self.eps
                     lr = Ridge(alpha=self.eps)
                     lr.fit(A[:,idxNonzero], y)
                     idxNonzero = np.where(np.abs(lr.coef_) > self.eps)[0]
@@ -276,7 +272,6 @@ class LinearRuleRegression(BaseEstimator, RegressorMixin):
                 strFeat = idxFeat.get_level_values(0) + ' ' + idxFeat.get_level_values(1)\
                     + ' ' + idxFeat.get_level_values(2).to_series()\
                     .apply(lambda x: ('{:.' + str(prec) + 'f}').format(x) if type(x) is float else str(x))
-#                        + ' ' + idxFeat.get_level_values(2).astype(str)
                 # String representation of rule
                 dfExpl.at[row+1, 'rule'] = strFeat.str.cat(sep=' AND ')
 
