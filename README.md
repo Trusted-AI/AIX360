@@ -139,3 +139,9 @@ url = {https://arxiv.org/abs/1909.03012}
 * Introductory [video](https://www.youtube.com/watch?v=Yn4yduyoQh4) to AI
   Explainability 360 by Vijay Arya and Amit Dhurandhar, September 5, 2019 (35 mins)
 
+## Acknowledgements
+
+AIX360 is built with the help of several open source packages, which are all listed in setup.py. Some of these include: 
+* Tensorflow https://www.tensorflow.org/about/bib
+* Pytorch https://github.com/pytorch/pytorch
+* scikit-learn https://scikit-learn.org/stable/about.html
