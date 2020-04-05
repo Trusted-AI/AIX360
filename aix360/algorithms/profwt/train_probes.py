@@ -59,8 +59,7 @@ def probe_train_eval(probe_train_input,y_train1,num_classes,probe_eval_input,y_t
 
   probe_input=tf.placeholder(tf.float32,shape=(None,columns))
   probe_labels=tf.placeholder(tf.float32,shape=(None,num_classes))
-  #with tf.variable_scope('probe_'+str(j)+'_first')
-  #  probe_first_layer=fully_connected(probe_input,first_layer_dim)
+
   probe_first_layer=probe_input
 
   with tf.variable_scope('probe_logits'):
@@ -104,7 +103,7 @@ def probe_train_eval(probe_train_input,y_train1,num_classes,probe_eval_input,y_t
         batch_x, batch_y = x_t[offset:end,:], y_t[offset:end,:]
         sess.run(probe_train_op,feed_dict={probe_input: batch_x, probe_labels: batch_y})
         global_step=global_step+1
-        #print('Training Step:',global_step)
+
       if (i+1)%100==0:
         saver.save(sess,to_save_probe_model_filename)
     print("Starting to Evaluate Probe Model Confidences and Saving in a File.....")
@@ -128,12 +127,10 @@ def probe_train_eval(probe_train_input,y_train1,num_classes,probe_eval_input,y_t
         array_logits=np.append(np.array(array_logits),np.array(arr_dummy_logits),axis=0) 
         array_pred=np.append(np.array(array_pred),np.array(arr_dummy_pred),axis=0)
       l=l+1
-      #precision=precision+sess.run(probe_precision,feed_dict={probe_input: batch_x, probe_labels: batch_y})
-    #print("Precision on train2",precision/len(range(0, num_examples, batch_size)))
+
   print(array_logits.shape)
   print(array_pred.shape)
-  #np.save(to_save_logits_filename,array_logits)
-  #np.save(to_save_pred_filename,array_pred)
+
   print("Probe Confidences/Logits Saved...")
   tf.reset_default_graph()
   return (array_logits,array_pred)
