@@ -34,7 +34,7 @@ setuptools.setup(
             'scikit-image',
             'requests',
             'lime',
-            'shap',
+            'shap==0.34.0',
             'xgboost', 
 	    'bleach>=2.1.0',
 	    'docutils>=0.13.1',
