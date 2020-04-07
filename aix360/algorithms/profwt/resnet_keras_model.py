@@ -1,5 +1,7 @@
 # COPYRIGHT
 
+# Copyright 2019 by IBM
+
 # All contributions by François Chollet:
 # Copyright (c) 2015 - 2019, François Chollet.
 # All rights reserved.
