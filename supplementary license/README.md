@@ -1,4 +1,4 @@
-All code in this repository is licensed under the Apache 2.0 license, except for the following files, which are licensed either under MIT license or BSD-2 license as indicated on the top of each file:      
+All code in this repository is licensed under the Apache 2.0 license, except for the following files, which are licensed under either MIT license or BSD-2 license as indicated on the top of each of these files:     
 
 aix360/datasets/mnist_dataset.py       
 aix360/algorithms/profwt/resnet_keras_model.py      
