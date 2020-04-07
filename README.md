@@ -1,5 +1,8 @@
+# AI Explainability 360 (v0.2.0)
+
 [![Build Status](https://travis-ci.com/IBM/AIX360.svg?branch=master)](https://travis-ci.com/IBM/AIX360)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://badge.fury.io/py/aix360.svg)](https://badge.fury.io/py/aix360)
 
 The AI Explainability 360 toolkit is an open-source library that supports interpretability and explainability of datasets and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics. 
 
@@ -16,11 +19,13 @@ We have developed the package with extensibility in mind. This library is still 
 - ProtoDash ([Gurumoorthy et al., 2019](https://arxiv.org/abs/1707.01212))
 - Disentangled Inferred Prior VAE ([Kumar et al., 2018](https://openreview.net/forum?id=H1kG7GZAW))
 
-### Local post-hoc explanation
+### Local post-hoc explanation 
 
 - ProtoDash ([Gurumoorthy et al., 2019](https://arxiv.org/abs/1707.01212))
 - Contrastive Explanations Method ([Dhurandhar et al., 2018](https://papers.nips.cc/paper/7340-explanations-based-on-the-missing-towards-contrastive-explanations-with-pertinent-negatives))
 - Contrastive Explanations Method with Monotonic Attribute Functions ([Luss et al., 2019](https://arxiv.org/abs/1905.12698))
+- LIME ([Ribeiro et al. 2016](https://arxiv.org/abs/1602.04938),  [Github](https://github.com/marcotcr/lime))
+- SHAP ([Lundberg, et al. 2017](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions),  [Github](https://github.com/slundberg/shap))
 
 ### Local direct explanation
 
@@ -37,7 +42,7 @@ We have developed the package with extensibility in mind. This library is still 
 
 
 ## Supported explainability metrics
-- Faithfuless ([Alvarez-Melis and Jaakkola, 2018](https://papers.nips.cc/paper/8003-towards-robust-interpretability-with-self-explaining-neural-networks))
+- Faithfulness ([Alvarez-Melis and Jaakkola, 2018](https://papers.nips.cc/paper/8003-towards-robust-interpretability-with-self-explaining-neural-networks))
 - Monotonicity ([Luss et al., 2019](https://arxiv.org/abs/1905.12698))
 
 ## Setup
@@ -53,10 +58,9 @@ Supported Configurations:
 
 ### (Optional) Create a virtual environment
 
-AIX360 requires specific versions of many Python packages which may conflict
+AI Explainability 360 requires specific versions of many Python packages which may conflict
 with other projects on your system. A virtual environment manager is strongly
-recommended to ensure dependencies may be installed safely. If you have trouble
-installing AIX360, try this first.
+recommended to ensure dependencies may be installed safely. If you have trouble installing the toolkit, try this first.
 
 #### Conda
 
@@ -103,15 +107,15 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (aix360)$ pip install -e .
 ```
 
-## Using AIX360
+## Using AI Explainability 360
 
 The `examples` directory contains a diverse collection of jupyter notebooks
 that use AI Explainability 360 in various ways. Both examples and tutorial notebooks illustrate
-working code using AIX360. Tutorials provide additional discussion that walks
+working code using the toolkit. Tutorials provide additional discussion that walks
 the user through the various steps of the notebook. See the details about
-[tutorials and demos here](examples/README.md)
+tutorials and examples [here](examples/README.md). 
 
-## Citing AIX360
+## Citing AI Explainability 360
 
 A technical description of AI Explainability 360 is available in this
 [paper](https://arxiv.org/abs/1909.03012). Below is the bibtex entry for this
@@ -119,14 +123,14 @@ paper.
 
 ```
 @misc{aix360-sept-2019,
-    title = "One Explanation Does Not Fit All: A Toolkit and Taxonomy of AI Explainability Techniques",
-    author = {Vijay Arya and Rachel K. E. Bellamy and Pin-Yu Chen and Amit Dhurandhar and Michael Hind
+title = "One Explanation Does Not Fit All: A Toolkit and Taxonomy of AI Explainability Techniques",
+author = {Vijay Arya and Rachel K. E. Bellamy and Pin-Yu Chen and Amit Dhurandhar and Michael Hind
 and Samuel C. Hoffman and Stephanie Houde and Q. Vera Liao and Ronny Luss and Aleksandra Mojsilovi\'c
 and Sami Mourad and Pablo Pedemonte and Ramya Raghavendra and John Richards and Prasanna Sattigeri
 and Karthikeyan Shanmugam and Moninder Singh and Kush R. Varshney and Dennis Wei and Yunfeng Zhang},
-    month = sept,
-    year = {2019},
-    url = {https://arxiv.org/abs/1909.03012}
+month = sept,
+year = {2019},
+url = {https://arxiv.org/abs/1909.03012}
 }
 ```
 
@@ -135,3 +139,9 @@ and Karthikeyan Shanmugam and Moninder Singh and Kush R. Varshney and Dennis Wei
 * Introductory [video](https://www.youtube.com/watch?v=Yn4yduyoQh4) to AI
   Explainability 360 by Vijay Arya and Amit Dhurandhar, September 5, 2019 (35 mins)
 
+## Acknowledgements
+
+AIX360 is built with the help of several open source packages, which are all listed in setup.py. Some of these include: 
+* Tensorflow https://www.tensorflow.org/about/bib
+* Pytorch https://github.com/pytorch/pytorch
+* scikit-learn https://scikit-learn.org/stable/about.html

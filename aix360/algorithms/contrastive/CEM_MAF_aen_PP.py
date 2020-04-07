@@ -8,7 +8,7 @@
 ## Copyright (C) 2016, Nicholas Carlini <nicholas@carlini.com>.
 ##
 ## This program is licenced under the BSD 2-Clause licence,
-## contained in the LICENCE file in this directory.
+## contained in the LICENCE-BSD file in this directory.
 
 import sys, os
 import tensorflow as tf

@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.base import BaseEstimator, ClassifierMixin
 
 from .beam_search import beam_search_K1
 
 
-class LogisticRuleRegression(object):
+class LogisticRuleRegression(BaseEstimator, ClassifierMixin):
     """Logistic Rule Regression is a directly interpretable supervised learning
     method that performs logistic regression on rule-based features.
     """
@@ -322,7 +323,6 @@ class LogisticRuleRegression(object):
                 strFeat = idxFeat.get_level_values(0) + ' ' + idxFeat.get_level_values(1)\
                     + ' ' + idxFeat.get_level_values(2).to_series()\
                     .apply(lambda x: ('{:.' + str(prec) + 'f}').format(x) if type(x) is float else str(x))
-#                        + ' ' + idxFeat.get_level_values(2).astype(str)
                 # String representation of rule
                 dfExpl.at[row+1, 'rule'] = strFeat.str.cat(sep=' AND ')
 

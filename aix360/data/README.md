@@ -1,6 +1,6 @@
 # Datasets
 
-The datasets supported by the AIX 360 toolkit are listed below. Please follow the instructions for each dataset. 
+The datasets supported by the AI Explainability 360 toolkit are listed below. Please follow the instructions for each dataset. 
 
 
 1. FICO HELOC Dataset

@@ -22,7 +22,7 @@ class dwnld_CEM_MAF_celebA():
         '''
 
         # This is the link where attribute functions are stored
-        cdcweb = 'http://aix360-dev.mybluemix.net/static/CEM-MAF/attr_model/'
+        cdcweb = 'http://aix360.mybluemix.net/static/CEM-MAF/attr_model/'
     
         # Next build list of files to download
         cdcfiles = []
@@ -61,7 +61,7 @@ class dwnld_CEM_MAF_celebA():
         '''
 
         # This is the link where the celebA model is stored
-        cdcweb = 'http://aix360-dev.mybluemix.net/static/CEM-MAF/celebA'
+        cdcweb = 'http://aix360.mybluemix.net/static/CEM-MAF/celebA'
     
         files = []
         
@@ -92,7 +92,7 @@ class dwnld_CEM_MAF_celebA():
         '''
 
         # This is the link where celebA image data is stored
-        cdcweb = 'http://aix360-dev.mybluemix.net/static/CEM-MAF/data/'
+        cdcweb = 'http://aix360.mybluemix.net/static/CEM-MAF/data/'
     
         # Next build list of files to download
         cdcfiles = []

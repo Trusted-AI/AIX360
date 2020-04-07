@@ -7,7 +7,9 @@ class BRCGExplainer(DISExplainer):
     :class:`aix360.algorithms.rbm.boolean_rule_cg.BooleanRuleCG`, which
     implements a directly interpretable supervised learning method
     for binary classification that learns a Boolean rule in disjunctive
-    normal form (DNF) or conjunctive normal form (CNF) using column generation (CG) [#NeurIPS2018]_.
+    normal form (DNF) or conjunctive normal form (CNF) using column generation (CG).
+    AIX360 implements a heuristic beam search version of BRCG that is less 
+    computationally intensive than the published integer programming version [#NeurIPS2018]_.
 
     References:
         .. [#NeurIPS2018] `S. Dash, O. Günlük, D. Wei, "Boolean decision rules via
