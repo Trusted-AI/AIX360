@@ -16,7 +16,7 @@ Med = -2
 High = -3
 Yes = -10   # This is the positive Y label
 No = -11    # This is the negative Y label
-Random = -12  # This signfiies a random choice should be made for the Y label (either Yes or No)                        ]
+Random = -12  # This signifies a random choice should be made for the Y label (either Yes or No)                        ]
 
 # Features, values, and distribution, details below
 featureThresholds = [
@@ -139,7 +139,7 @@ def featuresToString(featureVector) :
     for i in range(0, 2) :   # These features are just ints, Position, Organization
         val += str(featureVector[i])
         val += " "           
-    for i in range(2, 6) :   # show encoding for these: Potential, Rating, Rating Slope, Salary Competiveness
+    for i in range(2, 6) :   # show encoding for these: Potential, Rating, Rating Slope, Salary Competitiveness
         val += ruleValToString(featureVector[i]) 
         val += " "
     for i in range(6, 8) :   # These features are just ints: Tenure and Position Tenure
@@ -175,7 +175,7 @@ def printRules(rules) :
 def chooseRangeValue(thresholds, rangeList):
     """  Generate a random value based on the probability weights (thresholds) and list of ranges passed
     Args: 
-        thresholds : list of probalities for each choice
+        thresholds : list of probabilities for each choice
         rangeList: a list of pair lists giving the lower and upper bounds to choose value from 
     """
 
