@@ -141,7 +141,12 @@ url = {https://arxiv.org/abs/1909.03012}
 
 ## Acknowledgements
 
-AIX360 is built with the help of several open source packages, which are all listed in setup.py. Some of these include: 
+AIX360 is built with the help of several open source packages. All of these are listed in setup.py and some of these include: 
 * Tensorflow https://www.tensorflow.org/about/bib
 * Pytorch https://github.com/pytorch/pytorch
 * scikit-learn https://scikit-learn.org/stable/about.html
+
+## License Information
+
+Please view both the [LICENSE](https://github.com/vijay-arya/AIX360/blob/master/LICENSE) file and the folder [supplementary license](https://github.com/vijay-arya/AIX360/tree/master/supplementary%20license) present in the root directory for license information. 
+
