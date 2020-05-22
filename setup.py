@@ -37,9 +37,9 @@ setuptools.setup(
 	    'bleach>=2.1.0',
 	    'docutils>=0.13.1',
 	    'Pygments',
-            'qpsolvers'	    
+            'qpsolvers',	    
             'lime==0.1.1.37',
-            'shap==0.34.0',
+            'shap==0.34.0'
 	], 
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
     include_package_data=True,
