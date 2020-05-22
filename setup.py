@@ -33,13 +33,13 @@ setuptools.setup(
             'xport',
             'scikit-image',
             'requests',
-            'lime',
-            'shap==0.34.0',
-            'xgboost', 
+            'xgboost==1.0.2', 	    
 	    'bleach>=2.1.0',
 	    'docutils>=0.13.1',
 	    'Pygments',
-            'qpsolvers'
+            'qpsolvers'	    
+            'lime==0.1.1.37',
+            'shap==0.34.0',
 	], 
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
     include_package_data=True,
