@@ -35,8 +35,8 @@ class ProtodashExplainer(DIExplainer):
         Return prototypes for data X, Y.
 
         Args:
-            X (double 2d array): Dataset to select prototypical explanations from.
-            Y (double 2d array): Dataset you want to explain.
+            X (double 2d array): Dataset you want to explain.
+            Y (double 2d array): Dataset to select prototypical explanations from.
             m (int): Number of prototypes
             kernelType (str): Type of kernel (viz. 'Gaussian', / 'other')
             sigma (double): width of kernel
