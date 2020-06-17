@@ -26,5 +26,7 @@ the user through the various steps of the notebook.
 
 - [ProtodashExplainer using NHANES-CDC dataset](./protodash/Protodash-CDC.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/protodash/Protodash-CDC.ipynb)]
 
+- [ProtodashExplainer using UCI SMS dataset](./protodash/Protodash%20Text%20example%20SPAM%20HAM.ipynb) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/blob/master/examples/protodash/Protodash%20Text%20example%20SPAM%20HAM.ipynb)]
+
 - [GLRMExplainer and BRCGExplainer using Boston, Breast-cancer datasets](./rbm) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/tree/master/examples/rbm/)]
 
