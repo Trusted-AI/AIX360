@@ -31,7 +31,7 @@ setuptools.setup(
             'scipy>=0.17',
             'tensorflow==1.14',
             'xport',
-            'scikit-image',
+            'scikit-image', 
             'requests',
             'xgboost==1.0.2', 	    
 	    'bleach>=2.1.0',
