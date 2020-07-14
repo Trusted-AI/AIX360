@@ -94,7 +94,7 @@ deactivate` (`activate aix360` and `deactivate` on Windows).
 Clone the latest version of this repository:
 
 ```bash
-(aix360)$ git clone https://github.com/IBM/AIX360
+(aix360)$ git clone https://github.com/Trusted-AI/AIX360
 ```
 
 If you'd like to run the examples and tutorial notebooks, download the datasets now and place them in
