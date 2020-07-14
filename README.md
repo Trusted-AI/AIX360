@@ -1,6 +1,6 @@
 # AI Explainability 360 (v0.2.0)
 
-[![Build Status](https://travis-ci.com/IBM/AIX360.svg?branch=master)](https://travis-ci.com/IBM/AIX360)
+[![Build Status](https://travis-ci.com/Trusted-AI/AIX360.svg?branch=master)](https://travis-ci.com/Trusted-AI/AIX360)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/aix360.svg)](https://badge.fury.io/py/aix360)
 
