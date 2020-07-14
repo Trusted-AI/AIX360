@@ -24,7 +24,7 @@ setuptools.setup(
             'cvxpy',
             'cvxopt',
             'Image',
-            'keras',
+            'keras==2.3.1',
             'matplotlib',
             'numpy',
             'pandas',
