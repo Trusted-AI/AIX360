@@ -14,7 +14,7 @@ setuptools.setup(
     author_email='aix360@us.ibm.com',
     packages=setuptools.find_packages(),
     license='Apache License 2.0',
-    long_description=open("README.md", 'r').read(),
+    long_description=open('README.md', 'r', encoding='utf-8').read(), 
     long_description_content_type='text/markdown',	
     install_requires=[
             'joblib>=0.11',
