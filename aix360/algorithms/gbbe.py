@@ -14,10 +14,6 @@ class GlobalBBExplainer(ABC):
     Given a source black box model, such explainers generally train a surrogate 
     model that is explainable.
 
-    References:
-        .. [#1] Model Agnostic Multilevel Explanations,
-        Karthikeyan Natesan Ramamurthy, Bhanukiran Vinzamuri, Yunfeng Zhang, Amit Dhurandhar.
-        https://arxiv.org/abs/2003.06005
     """
 
     def __init__(self, *argv, **kwargs):
