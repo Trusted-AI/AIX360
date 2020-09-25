@@ -44,11 +44,11 @@ class CEMExplainer(LocalWBExplainer):
 
     def explain_instance(self, input_X,
                          arg_mode, AE_model, arg_kappa, arg_b,
-                         arg_max_iter, arg_init_const, arg_beta, arg_gamma):
+                         arg_max_iter, arg_init_const, arg_beta, arg_gamma, arg_alpha=0, arg_threshold=1, arg_offset=0):
 
         """
-        Explains an input instance input_X and returns contrastive explanations. 
-        Note that this assumes that the classifier was trained with inputs normalized in [-0.5,0.5] range.
+        Explains an input instance input_X and returns contrastive explanations.
+        Note that this assumes that the classifier was trained with inputs normalized in [-arg_offset, arg_offset] range, where arg_offset is 0 or .5.
 
         Args:
             input_X (numpy.ndarray): input instance to be explained
@@ -60,6 +60,9 @@ class CEMExplainer(LocalWBExplainer):
             arg_init_const (double): Initial weighting of loss function
             arg_beta (double): Weighting of L1 loss
             arg_gamma (double): Weighting of auto-encoder
+            arg_alpha (double): Weighting of L2 loss
+            arg_threshold (double): automatically turn off all features less than arg_threshold since nothing to turn off
+            arg_offset (double): input_X is in [0,1]. we subtract offset when passed to classifier
 
         Returns:
             tuple:
@@ -86,13 +89,18 @@ class CEMExplainer(LocalWBExplainer):
                         mode=arg_mode, AE=AE_model, batch_size=batch_size,
                         kappa=arg_kappa, init_learning_rate=1e-2,
                         binary_search_steps=arg_b, max_iterations=arg_max_iter,
-                        initial_const=arg_init_const, beta=arg_beta, gamma=arg_gamma)
+                        initial_const=arg_init_const, beta=arg_beta, gamma=arg_gamma,
+                        alpha=arg_alpha, threshold=arg_threshold, offset=arg_offset)
 
-        adv_X = attack.attack(input_X, target)
+
+        self._wbmodel.predict(input_X) # helps compile
+        adv_X = attack.attack(input_X + arg_offset, target)
 
         adv_prob, adv_class, adv_prob_str = self._wbmodel.predict_long(adv_X)
 
-        delta_X = input_X - adv_X
+        delta_X = (input_X + arg_offset) - adv_X - arg_offset # add 0.5 to input for attack but subtract 0.5 to get back to [-0.5, 0.5]
+
+        adv_X = adv_X - arg_offset # subtrack arg_offset to get it back to [-arg_offset, arg_offset]
 
         _, delta_class, delta_prob_str = self._wbmodel.predict_long(delta_X)
 
