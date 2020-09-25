@@ -24,7 +24,7 @@ setuptools.setup(
             'cvxpy',
             'cvxopt',
             'Image',
-            'tensorflow==1.14',	    
+            'tensorflow==1.15.4',	    
             'keras==2.3.1',
             'matplotlib',
             'numpy',
