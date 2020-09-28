@@ -141,10 +141,10 @@ def beam_search_K1(r, X, lambda0, lambda1, UB=0, D=10, B=5, wLB=0.5, eps=1e-6, s
             if type(Xp.columns) is pd.MultiIndex: 
                 colKeep = pd.Series(Xp.columns.get_level_values(0) != i[0], index=Xp.columns)
                 if i[1] == '<=':
-                    thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan)
+                    thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan).values
                     colKeep[i[0]] = (Xp[i[0]].columns.get_level_values(0) == '>') & (thresh < i[2])
                 elif i[1] == '>':
-                    thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan)
+                    thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan).values
                     colKeep[i[0]] = (Xp[i[0]].columns.get_level_values(0) == '<=') & (thresh > i[2])
                 elif i[1] == '!=':
                     colKeep[i[0]] = (Xp[i[0]].columns.get_level_values(0) == '!=') & (Xp[i[0]].columns.get_level_values(1) != i[2])
@@ -283,10 +283,10 @@ def beam_search(r, X, lambda0, lambda1, K=1, UB=0, D=10, B=5, wLB=0.5, eps=1e-6,
             # Remove redundant features
             colKeep = pd.Series(Xp.columns.get_level_values(0) != i[0], index=Xp.columns)
             if i[1] == '<=':
-                thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan)
+                thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan).values
                 colKeep[i[0]] = (Xp[i[0]].columns.get_level_values(0) == '>') & (thresh < i[2])
             elif i[1] == '>':
-                thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan)
+                thresh = Xp[i[0]].columns.get_level_values(1).to_series().replace('NaN', np.nan).values
                 colKeep[i[0]] = (Xp[i[0]].columns.get_level_values(0) == '<=') & (thresh > i[2])
             elif i[1] == '!=':
                 colKeep[i[0]] = (Xp[i[0]].columns.get_level_values(0) == '!=') & (Xp[i[0]].columns.get_level_values(1) != i[2])
