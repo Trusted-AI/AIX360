@@ -137,7 +137,7 @@ class FeatureBinarizer(TransformerMixin):
             # Constant or binary column
             if c in maps:
                 # Rename values to 0, 1
-                A[(str(c), '', '')] = data[c].map(maps[c])
+                A[(str(c), '', '')] = data[c].map(maps[c]).astype(int)
                 if self.negations:
                     A[(str(c), 'not', '')] = 1 - A[(str(c), '', '')]
 
