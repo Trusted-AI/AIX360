@@ -105,3 +105,38 @@ class KerasClassifier(BaseClassifier):
 
     def predictsym(self, x):
         return self._model(x)
+
+
+class PytorchClassifier():
+
+    def __init__(self, model):
+
+        self._model = model
+
+        self._nb_classes = model.num_classes
+        self._input_shape = model.input_shape
+
+    def predict(self, x, verbose=0):
+        """
+        Make predictions on batch of vector inputs
+        """
+        return(self._model(x))
+
+    def predict_classes(self, x, verbose=0):
+        """
+        returns classes instead of probabilities
+        """
+        logits = self.predict(x)
+        predicted_class = [torch.argmax(logits).item()]
+
+        return(predicted_class)
+
+    def predict_long(self, x):
+        logits = self.predict(x)
+        predicted_class = torch.argmax(logits).item()
+        logits_np = logits.detach().cpu().numpy()
+        logits_str = np.array2string(logits_np).replace('\n','')
+        return(logits_np, predicted_class, logits_str)
+
+    def predictsym(self, x):
+        return self._model(x)
