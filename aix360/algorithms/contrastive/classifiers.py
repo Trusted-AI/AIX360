@@ -1,7 +1,7 @@
 import abc
 import sys
 import numpy as np
-
+import torch
 
 # compatibility with Python 2 and 3 when using ABCMeta
 if sys.version_info >= (3, 4):
