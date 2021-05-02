@@ -107,6 +107,17 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (aix360)$ pip install -e .
 ```
 
+## PIP Install
+
+If you would like to quickly start using AI explainability 360 without cloning this repository, then you can pip install the toolkit. 
+
+```bash
+(your environment)$ pip install aix360
+```
+
+If you follow this approach, you may need to download the notebooks in the [examples](./examples) folder separately. 
+
+
 ## Using AI Explainability 360
 
 The `examples` directory contains a diverse collection of jupyter notebooks
