@@ -107,9 +107,9 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (aix360)$ pip install -e .
 ```
 
-## PIP Install
+## PIP Installation of AI Explainability 360
 
-If you would like to quickly start using AI explainability 360 without cloning this repository, then you can pip install the toolkit. 
+If you would like to quickly start using the AI explainability 360 toolkit without cloning this repository, then you can install the [aix360 pypi package](https://pypi.org/project/aix360/) as follows. 
 
 ```bash
 (your environment)$ pip install aix360
