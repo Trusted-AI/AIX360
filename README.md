@@ -55,13 +55,6 @@ Supported Configurations:
 | Ubuntu  | 3.6  |
 | Windows | 3.6  |
 
-### Running in Docker
-
-* Under `AIX360` directory build the container image from Dockerfile using `docker build -t aix360_docker .`
-* Start the container image using command `docker run -it -p 8888:8888 aix360_docker:latest bash` assuming port 8888 is free on your machine.
-* Inside the container start jupuyter lab using command `jupyter lab --allow-root --ip 0.0.0.0 --port 8888 --no-browser`
-* Access the sample tutorials on your machine using URL `localhost:8888`
-
 ### (Optional) Create a virtual environment
 
 AI Explainability 360 requires specific versions of many Python packages which may conflict
@@ -112,6 +105,13 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 ```bash
 (aix360)$ pip install -e .
 ```
+
+## Running in Docker
+
+* Under `AIX360` directory build the container image from Dockerfile using `docker build -t aix360_docker .`
+* Start the container image using command `docker run -it -p 8888:8888 aix360_docker:latest bash` assuming port 8888 is free on your machine.
+* Inside the container start jupuyter lab using command `jupyter lab --allow-root --ip 0.0.0.0 --port 8888 --no-browser`
+* Access the sample tutorials on your machine using URL `localhost:8888`
 
 ## PIP Installation of AI Explainability 360
 
