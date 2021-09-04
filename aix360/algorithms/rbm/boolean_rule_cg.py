@@ -96,7 +96,7 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
         # Iteration counter
         self.it = 0
         # Start time
-        self.starttime - time.time()
+        self.starttime = time.time()
 
         # Formulate master LP
         # Variables
@@ -126,7 +126,7 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
         v, zNew, Anew = beam_search(r, X, self.lambda0, self.lambda1,
                                     K=self.K, UB=UB, D=self.D, B=self.B, eps=self.eps)
 
-        while (v < -self.eps).any() and (self.it < self.iterMax) and (time.time()-self.starttime < timeMax):
+        while (v < -self.eps).any() and (self.it < self.iterMax) and (time.time()-self.starttime < self.timeMax):
             # Negative reduced costs found
             self.it += 1
             if not self.silent:
