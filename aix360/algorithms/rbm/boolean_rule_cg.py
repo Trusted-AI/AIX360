@@ -4,6 +4,7 @@ import pandas as pd
 import cvxpy as cvx
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn.base import BaseEstimator, ClassifierMixin
+import time
 
 from .beam_search import beam_search, beam_search_K1
 
@@ -25,6 +26,7 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
         lambda1=0.001,
         CNF=False,
         iterMax=100,
+        timeMax=100,
         K=10,
         D=10,
         B=5,
@@ -38,6 +40,7 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
             lambda1 (float, optional): Complexity - additional cost for each literal
             CNF (bool, optional): CNF instead of DNF
             iterMax (int, optional): Column generation - maximum number of iterations
+            timeMax (int, optional): Column generation - maximum runtime in seconds
             K (int, optional): Column generation - maximum number of columns generated per iteration
             D (int, optional): Column generation - maximum degree
             B (int, optional): Column generation - beam search width
@@ -53,6 +56,7 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
         self.CNF = CNF
         # Column generation parameters
         self.iterMax = iterMax      # maximum number of iterations
+        self.timeMax = timeMax      # maximum runtime in seconds
         self.K = K                  # maximum number of columns generated per iteration
         self.D = D                  # maximum degree
         self.B = B                  # beam search width
@@ -91,6 +95,8 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
         A = np.hstack((np.ones((X.shape[0],1), dtype=int), X))
         # Iteration counter
         self.it = 0
+        # Start time
+        self.starttime = time.time()
 
         # Formulate master LP
         # Variables
@@ -120,7 +126,7 @@ class BooleanRuleCG(BaseEstimator, ClassifierMixin):
         v, zNew, Anew = beam_search(r, X, self.lambda0, self.lambda1,
                                     K=self.K, UB=UB, D=self.D, B=self.B, eps=self.eps)
 
-        while (v < -self.eps).any() and (self.it < self.iterMax):
+        while (v < -self.eps).any() and (self.it < self.iterMax) and (time.time()-self.starttime < self.timeMax):
             # Negative reduced costs found
             self.it += 1
             if not self.silent:
