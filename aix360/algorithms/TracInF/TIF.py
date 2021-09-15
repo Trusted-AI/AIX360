@@ -1,20 +1,13 @@
-import torch
-import argparse
-import os, sys
-from tqdm import tqdm, trange
-import numpy as np
-import pdb
+import os
 
+import torch
+from aix360.algorithms.lwbe import LocalWBExplainer
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 # from pytorch_pretrained_bert import BertAdam, BertForSequenceClassification
 from transformers import \
-    BertForSequenceClassification, BertTokenizer, \
-    RobertaForSequenceClassification, RobertaTokenizer, \
-    AdamW
+    RobertaForSequenceClassification, AdamW
 
 from TIF_utils import DatasetReader, training
-
-from aix360.algorithms.lwbe import LocalWBExplainer
 
 BERT_Model = RobertaForSequenceClassification.from_pretrained(
     'roberta-large', num_labels=3, output_hidden_states=True)
@@ -68,4 +61,4 @@ class TracInFExplainer(LocalWBExplainer):
         ]
         optimizer = AdamW(optimizer_grouped_parameters, lr=1e-4)
 
-        training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output)
+        return training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output)
