@@ -24,11 +24,13 @@ class TracInFExplainer(LocalWBExplainer):
     def explain_instance(self, max_seq_length, BERT_name, data_dir, train_data_name, dev_data_name, batch_size,
                          epochs, model_output):
 
+        # check if gpu processing is available
         use_gpu, device_name = False, 'cpu'
         if torch.cuda.is_available():
             device_name, use_gpu = 'cuda', True
         device = torch.device(device_name)
 
+        # for retrain
         data_reader = DatasetReader(max_seq_length, BERT_name)
         train_dids, train_tids, train_inputs, train_masks, train_labels = data_reader.read_data(
             os.path.join(data_dir, train_data_name),
@@ -41,18 +43,24 @@ class TracInFExplainer(LocalWBExplainer):
             aspect_only_by_rule=False  # args.aspect_only
         )
 
+        # read train data into code
         train_data = TensorDataset(torch.tensor(train_inputs), torch.tensor(train_masks), torch.tensor(train_labels))
         train_sampler = RandomSampler(train_data)
         train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
 
+        # read dev data into code
         dev_data = TensorDataset(torch.tensor(dev_inputs), torch.tensor(dev_masks), torch.tensor(dev_labels))
         dev_sampler = SequentialSampler(dev_data)  # RandomSampler(dev_data)
         dev_dataloader = DataLoader(dev_data, sampler=dev_sampler, batch_size=batch_size)
+
+        print("Data prep finished")
 
         if use_gpu:
             BERT_Model.cuba()
 
         no_decay = ['bias', 'LayerNorm.weight']
+
+        # create AdamW optimizier with focus on BERT model parameters
         optimizer_grouped_parameters = [
             {'params': [p for n, p in BERT_Model.named_parameters() if not any(nd in n for nd in no_decay)],
              'weight_decay': 0.01},
@@ -61,4 +69,5 @@ class TracInFExplainer(LocalWBExplainer):
         ]
         optimizer = AdamW(optimizer_grouped_parameters, lr=1e-4)
 
+        # train model
         return training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output)

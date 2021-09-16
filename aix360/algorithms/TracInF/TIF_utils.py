@@ -173,86 +173,93 @@ def data_loader(filename):
     data = json.load(open(filename, 'r'))
     return data
 
+
 def save_model(net, path):
     torch.save(net.state_dict(), path)
 
-def training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output):
 
-  def flat_accuracy(preds, labels):
+def flat_accuracy(preds, labels):
     pred_flat = np.argmax(preds, axis=1).flatten()
     labels_flat = labels.flatten()
     return np.sum(pred_flat == labels_flat) / len(labels_flat)
 
-  train_loss_set = []
-  for name, param in BERT_Model.base_model.named_parameters():
-    param.requires_grad = False
-    if 'encoder.layer.11' in name or 'encoder.layer.10' in name or 'pooler.dense' in name:
-      param.requires_grad = True
-  for epoch in trange(epochs, desc="Epoch"):
-    # Training
-    # Set our model to training mode (as opposed to evaluation mode)
-    BERT_Model.train()
 
-    # Tracking variables
-    tr_loss = 0
-    nb_tr_examples, nb_tr_steps = 0, 0
-    print()
-    # Train the data for one epoch
-    for step, batch in enumerate(train_dataloader):
-      # Add batch to GPU
-      print("\rEpoch:", epoch, "step:", step, end='')
-      batch = tuple(t.to(device) for t in batch)
-      b_input_ids, b_input_mask, b_labels = batch
-      # Clear out the gradients (by default they accumulate)
-      optimizer.zero_grad()
-      # Forward pass
-      outputs = BERT_Model(
-        b_input_ids,
-        #                token_type_ids=None,
-        attention_mask=b_input_mask,
-        labels=b_labels)
-      train_loss_set.append(float(outputs.loss))
-      # Backward pass
-      outputs.loss.backward()
-      # Update parameters and take a step using the computed gradient
-      optimizer.step()
+def training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output):
+    train_loss_set = []
+    print("Starting training")
 
-      # Update tracking variables
-      tr_loss += float(outputs.loss)
-      nb_tr_examples += b_input_ids.size(0)
-      nb_tr_steps += 1
+    # fine tune only last layer and output layer.
+    for name, param in BERT_Model.base_model.named_parameters():
+        param.requires_grad = False
+        if 'encoder.layer.11' in name or 'encoder.layer.10' in name or 'pooler.dense' in name:
+            param.requires_grad = True
+    for epoch in trange(epochs, desc="Epoch"):
+        # Training
+        # Set our model to training mode (as opposed to evaluation mode)
+        BERT_Model.train()
 
-    print("Train loss: {}".format(tr_loss / nb_tr_steps / nb_tr_examples))
+        # Tracking variables
+        tr_loss = 0
+        nb_tr_examples, nb_tr_steps = 0, 0
+        print()
+        # Train the data for one epoch
+        for step, batch in enumerate(train_dataloader):
+            # Add batch to GPU
+            print("\rEpoch:", epoch, "step:", step, end='')
+            batch = tuple(t.to(device) for t in batch)
+            b_input_ids, b_input_mask, b_labels = batch
+            # Clear out the gradients (by default they accumulate)
+            optimizer.zero_grad()
+            # Forward pass
+            outputs = BERT_Model(
+                b_input_ids,
+                attention_mask=b_input_mask,
+                labels=b_labels)
+            # Bert Model returns a certain loss
+            train_loss_set.append(float(outputs.loss))
+            # Backward pass / backward gradient descent
+            outputs.loss.backward()
+            # Update parameters and take a step using the computed gradient
+            optimizer.step()
 
-    ##### Validation #####
-    # Put model in evaluation mode to evaluate loss on the validation set
-    BERT_Model.eval()
-    # Tracking variables
-    global_eval_accuracy = 0
-    eval_loss, eval_accuracy = 0, 0
-    nb_eval_steps, nb_eval_examples = 0, 0
+            # Update tracking variables
+            tr_loss += float(outputs.loss)
+            nb_tr_examples += b_input_ids.size(0)
+            nb_tr_steps += 1
 
-    # Evaluate data for one epoch
-    for batch in dev_dataloader:
-      # Add batch to GPU
-      batch = tuple(t.to(device) for t in batch)
-      # Unpack the inputs from our dataloader
-      b_input_ids, b_input_mask, b_labels = batch
-      # Telling the model not to compute or store gradients, saving memory and speeding up validation
-      with torch.no_grad():
-        # Forward pass, calculate logit predictions
-        outputs = BERT_Model(
-          b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
+        print("Train loss: {}".format(tr_loss / nb_tr_steps / nb_tr_examples))
 
-      # Move logits and labels to CPU
-      logits = outputs.logits.detach().cpu().numpy()
-      label_ids = b_labels.to('cpu').numpy()
+        ##### Validation #####
+        # calculate overall accuracy in the dev dataset
+        # Put model in evaluation mode to evaluate loss on the validation set
+        BERT_Model.eval()
+        # Tracking variables
+        global_eval_accuracy = 0
+        eval_loss, eval_accuracy = 0, 0
+        nb_eval_steps, nb_eval_examples = 0, 0
 
-      tmp_eval_accuracy = flat_accuracy(logits, label_ids)
-      eval_accuracy += tmp_eval_accuracy
-      nb_eval_steps += 1
+        # Evaluate data for one epoch
+        for batch in dev_dataloader:
+            # Add batch to GPU
+            batch = tuple(t.to(device) for t in batch)
+            # Unpack the inputs from our dataloader
+            b_input_ids, b_input_mask, b_labels = batch
+            # Telling the model not to compute or store gradients, saving memory and speeding up validation
+            with torch.no_grad():
+                # Forward pass, calculate logit predictions
+                outputs = BERT_Model(
+                    b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
 
-    print("Validation Accuracy: {}".format(eval_accuracy / nb_eval_steps))
-    if eval_accuracy > global_eval_accuracy:
-        global_eval_accuracy = eval_accuracy
-        save_model(BERT_Model, BERT_name + '-' + model_output)
+            # Move logits and labels to CPU
+            logits = outputs.logits.detach().cpu().numpy()
+            label_ids = b_labels.to('cpu').numpy()
+
+            tmp_eval_accuracy = flat_accuracy(logits, label_ids)
+            eval_accuracy += tmp_eval_accuracy
+            nb_eval_steps += 1
+
+        print("Validation Accuracy: {}".format(eval_accuracy / nb_eval_steps))
+        # store best BERT model
+        if eval_accuracy > global_eval_accuracy:
+            global_eval_accuracy = eval_accuracy
+            save_model(BERT_Model, BERT_name + '-' + model_output)
