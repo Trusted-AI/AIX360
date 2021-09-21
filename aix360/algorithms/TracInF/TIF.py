@@ -35,6 +35,21 @@ class TracInFExplainer(LocalWBExplainer):
     def explain_instance(self, max_seq_length, BERT_name, data_dir, train_data_name, dev_data_name, batch_size,
                          epochs, model_output):
 
+        """
+        trains various a BERT models depending on epochs and batch size,
+        stores the one with greatest accuracy and returns said accuracy
+
+        :param max_seq_length:
+        :param BERT_name: name of the final model
+        :param data_dir: input data dir; used for training
+        :param train_data_name: input training data name; inside data_dir
+        :param dev_data_name: input dev data name; inside data_dir
+        :param batch_size: Total batch size for training and eval
+        :param epochs: Total number of training epochs to perform
+        :param model_output: The output directory where the model checkpoints saved
+        :return: accuracy of best model
+        """
+
         # check if gpu processing is available
         use_gpu, device_name = False, 'cpu'
         if torch.cuda.is_available():
