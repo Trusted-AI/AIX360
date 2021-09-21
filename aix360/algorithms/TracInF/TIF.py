@@ -1,7 +1,7 @@
-import os
-
-import torch
 from aix360.algorithms.lwbe import LocalWBExplainer
+
+import os
+import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 # from pytorch_pretrained_bert import BertAdam, BertForSequenceClassification
 from transformers import \
@@ -14,6 +14,13 @@ BERT_Model = RobertaForSequenceClassification.from_pretrained(
 
 
 class TracInFExplainer(LocalWBExplainer):
+    """
+    TracInfExplainer can be used to analyze sentiments in a sentence
+
+    References:
+        .. [#] `GUANGNAN YE, YADA ZHU, Zixuan Yuan, Florian Kehl`
+
+    """
     def __init__(self, model):
         super(TracInFExplainer, self).__init__()
         self._wbmodel = model
@@ -21,6 +28,10 @@ class TracInFExplainer(LocalWBExplainer):
     def set_params(self, *argv, **kwargs):
         pass
 
+    """
+    return accuracy indicator for the training of the BERT Model
+    BERT Model with best accuracy is stored in model_output
+    """
     def explain_instance(self, max_seq_length, BERT_name, data_dir, train_data_name, dev_data_name, batch_size,
                          epochs, model_output):
 
@@ -69,5 +80,6 @@ class TracInFExplainer(LocalWBExplainer):
         ]
         optimizer = AdamW(optimizer_grouped_parameters, lr=1e-4)
 
-        # train model
+        # train models and store most accurate model
+        # return accuracy number of stored model
         return training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output)

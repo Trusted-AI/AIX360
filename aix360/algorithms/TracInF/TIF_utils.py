@@ -186,6 +186,7 @@ def flat_accuracy(preds, labels):
 
 def training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, device, optimizer, model_output):
     train_loss_set = []
+    global_eval_accuracy = 0
     print("Starting training")
 
     # fine tune only last layer and output layer.
@@ -263,3 +264,5 @@ def training(BERT_name, BERT_Model, epochs, train_dataloader, dev_dataloader, de
         if eval_accuracy > global_eval_accuracy:
             global_eval_accuracy = eval_accuracy
             save_model(BERT_Model, BERT_name + '-' + model_output)
+
+    return global_eval_accuracy
