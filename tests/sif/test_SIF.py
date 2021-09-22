@@ -98,7 +98,8 @@ class SIF(unittest.TestCase):
 
         # compute SIF value
         model.update_configure(y_contaminate, gammas)
-        sif = model.get_sif(y_contaminate, timesteps, 1, None, 30, verbose=False)
+        # sif = model.get_sif(y_contaminate, timesteps, 1, None, 30, verbose=False)
+        sif = model.explain_instance(y_contaminate, timesteps, 1, None, 30, verbose=False)
         print('SIF = {}'.format(sif))
 
 
