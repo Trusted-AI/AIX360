@@ -5,7 +5,7 @@ python:
 # command to install dependencies
 install:
   - pip3 install --upgrade setuptools==41.0.0
-  - pip3 install .
+  - pip3 install statsmodels
   #- pip3 install -r requirements.txt
 
 # commands to run tes
