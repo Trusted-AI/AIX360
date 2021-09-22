@@ -13,7 +13,7 @@ install:
 # before_script: redis-cli ping
 
 script:
- - cd AIX360/
+ - cd Leo02016/AIX360
 #  - python3.6 ./tests/contrastive/test_CEM_MAF.py
 #  - python3.6 ./tests/contrastive/test_CEM.py
 #  - python3.6 ./tests/protodash/test_PDASH.py
