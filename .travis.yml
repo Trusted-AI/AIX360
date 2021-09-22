@@ -5,8 +5,8 @@ python:
 # command to install dependencies
 install:
   - pip3 install --upgrade setuptools==41.0.0
-  - pip3 install .
-  #- pip3 install -r requirements.txt
+#   - pip3 install .
+  - pip3 install -r requirements.txt
 
 # commands to run tes
 # before_script: redis-cli ping
