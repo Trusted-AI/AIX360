@@ -5,8 +5,9 @@ python:
 # command to install dependencies
 install:
   - pip3 install --upgrade setuptools==41.0.0
-#   - pip3 install .
-  - pip3 install -r Leo02016/AIX360/requirements.txt
+  - pip3 install statsmodels==0.11.1
+  - pip3 install matplotlib.
+#   - pip3 install -r requirements.txt
 
 # commands to run tes
 # before_script: redis-cli ping
