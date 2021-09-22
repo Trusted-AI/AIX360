@@ -13,7 +13,7 @@ install:
 # before_script: redis-cli ping
 
 script:
-#  - python3.6 ./tests/contrastive/test_CEM_MAF.py
+ - python3.6 ./tests/contrastive/test_CEM_MAF.py
 #  - python3.6 ./tests/contrastive/test_CEM.py
 #  - python3.6 ./tests/protodash/test_PDASH.py
 #  - python3.6 ./tests/ted/test_TED_Cartesian.py
