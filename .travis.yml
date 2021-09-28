@@ -5,15 +5,13 @@ python:
 # command to install dependencies
 install:
   - pip3 install --upgrade setuptools==41.0.0
-#  - pip3 install statsmodels
-#  - pip3 install matplotlib
+  - pip3 install .
 #   - pip3 install -r requirements.txt
 
 # commands to run tes
 # before_script: redis-cli ping
 
 script:
-# - cd Leo02016/AIX360
   - python3.6 ./tests/contrastive/test_CEM_MAF.py
   - python3.6 ./tests/contrastive/test_CEM.py
   - python3.6 ./tests/protodash/test_PDASH.py
@@ -24,6 +22,7 @@ script:
   - python3.6 ./tests/rbm/test_Logistic_Rule_Regression.py
   - python3.6 ./tests/lime/test_lime.py
   - python3.6 ./tests/shap/test_shap.py
+  - python3.6 ./tests/sif/test_SIF.py
   - python3.6 ./tests/sif/test_SIF.py
 after_success:
 #  - codecov
