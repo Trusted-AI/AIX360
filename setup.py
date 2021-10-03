@@ -34,7 +34,7 @@ setuptools.setup(
             'xport',
             'scikit-image', 
             'requests',
-            'xgboost==1.0.2', 	    
+            'xgboost==1.1.0', 	    
 	    'bleach>=2.1.0',
 	    'docutils>=0.13.1',
 	    'Pygments',
