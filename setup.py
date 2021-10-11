@@ -21,7 +21,7 @@ setuptools.setup(
             'scikit-learn>=0.21.2',
             'torch',
             'torchvision',
-            'cvxpy',
+            'cvxpy==1.0.31',
             'cvxopt',
             'Image',
             'tensorflow==1.14',
