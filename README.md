@@ -26,7 +26,7 @@ We have developed the package with extensibility in mind. This library is still 
 - Contrastive Explanations Method with Monotonic Attribute Functions ([Luss et al., 2019](https://arxiv.org/abs/1905.12698))
 - LIME ([Ribeiro et al. 2016](https://arxiv.org/abs/1602.04938),  [Github](https://github.com/marcotcr/lime))
 - SHAP ([Lundberg, et al. 2017](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions),  [Github](https://github.com/slundberg/shap))
-
+- SIF ([Jianbo, et al. 2021](https://ojs.aaai.org/index.php/AAAI/article/view/17379/17186))
 ### Local direct explanation
 
 - Teaching AI to Explain its Decisions ([Hind et al., 2019](https://doi.org/10.1145/3306618.3314273)) 
