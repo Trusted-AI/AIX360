@@ -17,9 +17,10 @@ from aix360.algorithms.sif.SIF_utils import hessian_vector_product, hessians, op
 from abc import ABC, abstractmethod
 from aix360.datasets.SIF_dataset import DataSet
 from scipy.stats import linregress
+from aix360.algorithms.lbbe import LocalBBExplainer
 
 
-class SIF_NeuralNet(ABC):
+class SIFExplainer(LocalBBExplainer):
     def __init__(self, **kwargs):
         '''
         Initialize the SIF neural network
@@ -174,6 +175,20 @@ class SIF_NeuralNet(ABC):
         self.n_non_nan_y_cont = 0
         self.non_nan_y_cont_idx = []
         super().__init__()
+
+    def set_params(self, **kwargs):
+        """
+        Optionally, set parameters for the explainer.
+        """
+        pass
+
+    def explain_instance(self, y_contaminate, index, patchy_k, gammas=None, expectation_rep_time=10, verbose=True,
+                         is_ar=False, short_memo=True):
+        """
+        Explain one or more input instances.
+        """
+        sif = self.get_sif(y_contaminate, index, patchy_k, gammas, expectation_rep_time, verbose, is_ar, short_memo)
+        return sif
 
     def update_configure(self, y_contaminate, gammas):
         '''

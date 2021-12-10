@@ -1,0 +1,2 @@
+statsmodels==0.11.1
+matplotlib==3.3.1

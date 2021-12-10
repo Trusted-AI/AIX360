@@ -3,11 +3,11 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import unicode_literals
 import tensorflow as tf
-from aix360.algorithms.sif.SIF import SIF_NeuralNet
+from aix360.algorithms.sif.SIF import SIFExplainer
 from aix360.datasets.SIF_dataset import DataSet
 
 
-class AllAR(SIF_NeuralNet):
+class AllAR(SIFExplainer):
     def __init__(self, x_dim, y_dim, time_steps, share_param, **kwargs):
         self.time_steps = time_steps
         self.x_dim = x_dim
@@ -58,9 +58,9 @@ class AllAR(SIF_NeuralNet):
     def predictions(self, logits):
         preds = logits
         return preds
+    
 
-
-class AllLSTM(SIF_NeuralNet):
+class AllLSTM(SIFExplainer):
     def __init__(self, x_dim, y_dim, time_steps, num_units, share_param, **kwargs):
         self.time_steps = time_steps
         self.x_dim = x_dim
@@ -126,8 +126,7 @@ class AllLSTM(SIF_NeuralNet):
         return preds
 
 
-
-class AllRNN(SIF_NeuralNet):
+class AllRNN(SIFExplainer):
     def __init__(self, x_dim, y_dim, time_steps, num_units, share_param, **kwargs):
         self.time_steps = time_steps
         self.x_dim = x_dim
