@@ -348,15 +348,19 @@ class TestFeatureBinarizerFromTrees(TestCase):
         self.assertTrue(np.all(a == b))
 
         # >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >>
-        # Test NaN, None during transform. Note, these values are not supported during fit.
+        # Test NaN, None during transform.
+        #
+        # In the past, Numpy raised a warning when doing vector comparisons against Nan/None,
+        # but this is no longer the case.
         # >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >>
 
         Xn: DataFrame = self.X_test.copy(True)
         idx = Xn.sample(10).index
         Xn.loc[idx, 'mean radius'] = np.NaN
         Xn.loc[idx, 'cat alpha'] = None
-        with self.assertWarns(RuntimeWarning):
-            T: DataFrame = fbt.transform(Xn)[0]
+        T: DataFrame = fbt.transform(Xn)[0]
+        # For continuous values, the NaN values do not qualify for any range.
         self.assertFalse((T.loc[idx, 'mean radius'] == 1).to_numpy().any())
-        self.assertTrue((T.loc[idx, ('cat alpha', '==')] == 0).to_numpy().any())
-        self.assertTrue((T.loc[idx, ('cat alpha', '!=')] == 1).to_numpy().any())
+        # For categorical values, the None values do not qualify for any comparisons.
+        self.assertTrue((T.loc[idx, ('cat alpha', '==')] == 0).to_numpy().all())
+        self.assertTrue((T.loc[idx, ('cat alpha', '!=')] == 1).to_numpy().all())

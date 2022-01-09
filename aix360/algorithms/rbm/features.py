@@ -207,24 +207,6 @@ class FeatureBinarizerFromTrees(TransformerMixin):
     simplifies rule sets.
     """
 
-    # Listing members here to provide type hints and facilitate code inspection and self-documentation.
-    # The names follow FeatureBinarizer
-    colCateg: list
-    enc: dict
-    features: pd.MultiIndex
-    maps: dict
-    ordinal: list
-    randomState: int
-    returnOrd: bool
-    scaler: StandardScaler
-    thresh: dict
-    threshRound: Union[int, None]
-    threshStr: bool
-    treeDepth: Union[int, None]
-    treeFeatureSelection: Union[str, float, None]
-    treeKwargs: dict
-    treeNum: int
-
     def __init__(self,
                  colCateg: list = None,
                  treeNum: int = 1,
@@ -347,11 +329,15 @@ class FeatureBinarizerFromTrees(TransformerMixin):
             # Constant or binary column
             if valUniq <= 2:
                 # Mapping to 0, 1
-                maps[c] = pd.Series(range(valUniq), index=np.sort(X[c].unique()))
+                maps[c] = pd.Series(range(valUniq), index=np.sort(X[c].dropna().unique()))
                 A[(str(c), '', '')] = X[c].map(maps[c])
 
             # Categorical column
             elif (c in self.colCateg) or (X[c].dtype == 'object'):
+                # In the past, OneHotEncoder did not support NaN. Now it does, but it doesn't logically work for this
+                # scenario. Check for NaNs and throw the same exception manually.
+                if X[[c]].isna().any()[0]:
+                    raise ValueError('Categorical input contains NaN.')
                 # OneHotEncoder object
                 enc[c] = OneHotEncoder(sparse=False, dtype=int, handle_unknown='ignore')
                 # Fit to observed categories
@@ -413,6 +399,11 @@ class FeatureBinarizerFromTrees(TransformerMixin):
         # They will be binarized by extracting splits from the decision tree.
         Xfb = self._fit_transform_like_feature_binarizer(X)
 
+        # Save resulting MultiIndex separately and reset columns. scikit-learn will not support them in version 1.2
+        # during fit().
+        XfbMultiIndex = Xfb.columns.copy()
+        Xfb.columns = range(0, Xfb.shape[1])
+
         # Fit decision trees.
         featuresIdx = np.empty((0,), int)
         thresholds = np.empty((0,), int)
@@ -437,7 +428,7 @@ class FeatureBinarizerFromTrees(TransformerMixin):
             thresholds = thresholds.round(self.threshRound)
 
         # Create frame from column index which contains the relevant features
-        features: DataFrame = Xfb.columns[featuresIdx].to_frame(False)
+        features: DataFrame = XfbMultiIndex[featuresIdx].to_frame(False)
 
         # Set thresholds for ordinal values
         if len(self.ordinal):
@@ -525,7 +516,7 @@ class FeatureBinarizerFromTrees(TransformerMixin):
             result[(feature, test, value)] = v.astype(int)
 
         if self.threshStr:
-            result.columns.set_levels(result.columns.levels[2].astype(str), 'value', inplace=True)
+            result.columns = result.columns.set_levels(levels=result.columns.levels[2].astype(str), level='value')
 
         # This is taken from FeatureBinarizer.
         if self.returnOrd:
