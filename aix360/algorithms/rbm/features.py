@@ -137,9 +137,10 @@ class FeatureBinarizer(TransformerMixin):
             # Constant or binary column
             if c in maps:
                 # Rename values to 0, 1
-                A[(str(c), '', '')] = data[c].map(maps[c]).astype(int)
+                colName = (str(c), '!=', str(maps[c].index[0])) if len(maps[c]) == 1 else (str(c), '==', str(maps[c].index[1]))
+                A[colName] = data[c].map(maps[c]).astype(int)
                 if self.negations:
-                    A[(str(c), 'not', '')] = 1 - A[(str(c), '', '')]
+                    A[(str(c), '==', str(maps[c].index[0]))] = 1 - A[colName]
 
             # Categorical column
             elif c in enc:
