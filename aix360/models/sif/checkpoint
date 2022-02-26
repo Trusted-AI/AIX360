@@ -1,0 +1,4 @@
+model_checkpoint_path: "ar2"
+all_model_checkpoint_paths: "..\\..\\..\\tests\\sif\\arma_output\\ar_test-checkpoint-9999"
+all_model_checkpoint_paths: "..\\..\\..\\tests\\sif\\arma_output\\ar_test-checkpoint-19999"
+all_model_checkpoint_paths: "ar2"
