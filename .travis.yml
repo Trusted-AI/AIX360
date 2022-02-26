@@ -22,6 +22,7 @@ script:
   - python3.6 ./tests/rbm/test_Logistic_Rule_Regression.py
   - python3.6 ./tests/lime/test_lime.py
   - python3.6 ./tests/shap/test_shap.py
+  - python3.6 ./tests/TracInF/test_TracInF.py
 
 after_success:
 #  - codecov
