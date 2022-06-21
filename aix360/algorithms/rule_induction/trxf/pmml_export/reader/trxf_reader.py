@@ -4,7 +4,8 @@ import pandas as pd
 from aix360.algorithms.rule_induction.trxf.classifier import ruleset_classifier
 from aix360.algorithms.rule_induction.trxf.classifier.ruleset_classifier import RuleSetClassifier
 from aix360.algorithms.rule_induction.trxf.core import Conjunction, Relation
-from aix360.algorithms.rule_induction.trxf.pmml_export import models, AbstractReader
+from aix360.algorithms.rule_induction.trxf.pmml_export import models
+from aix360.algorithms.rule_induction.trxf.pmml_export.reader import AbstractReader
 from aix360.algorithms.rule_induction.trxf.pmml_export.models import SimplePredicate, Operator, CompoundPredicate, \
     BooleanOperator
 
