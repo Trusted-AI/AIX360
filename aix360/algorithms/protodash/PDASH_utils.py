@@ -1,47 +1,124 @@
 from __future__ import print_function
 import numpy as np
+from numpy import array, ndarray
 import xport
 from sklearn.preprocessing import OneHotEncoder
-from cvxopt.solvers import qp
-from cvxopt import matrix, spmatrix
-from numpy import array, ndarray
 from scipy.spatial.distance import cdist
-from qpsolvers import solve_qp
+import cvxpy as cp
+from scipy import sparse
+from osqp import OSQP
 
-def runOptimiser(K, u, preOptw, initialValue, maxWeight=10000):
+
+# Removing dependence on cxvopt and qpsolver packages. 
+# from cvxopt.solvers import qp
+# from cvxopt import matrix, spmatrix
+# from qpsolvers import solve_qp
+# def runOptimiser(K, u, preOptw, initialValue, maxWeight=10000):
+#     """
+#     Args:
+#         K (double 2d array): Similarity/distance matrix
+#         u (double array): Mean similarity of each prototype
+#         preOptw (double): Weight vector
+#         initialValue (double): Initialize run
+#         maxWeight (double): Upper bound on weight
+
+#     Returns:
+#         Prototypes, weights and objective values
+#     """
+#     d = u.shape[0]
+#     lb = np.zeros((d, 1))
+#     ub = maxWeight * np.ones((d, 1))
+#     x0 = np.append( preOptw, initialValue/K[d-1, d-1] )
+
+#     G = np.vstack((np.identity(d), -1*np.identity(d)))
+#     h = np.vstack((ub, -1*lb))
+
+#     #     Solve a QP defined as follows:
+#     #         minimize
+#     #             (1/2) * x.T * P * x + q.T * x
+#     #         subject to
+#     #             G * x <= h
+#     #             A * x == b
+#     sol = solve_qp(K, -u, G, h, A=None, b=None, solver='cvxopt', initvals=x0)
+
+#     # compute objective function value
+#     x = sol.reshape(sol.shape[0], 1)
+#     P = K
+#     q = - u.reshape(u.shape[0], 1)
+#     obj_value = 1/2 * np.matmul(np.matmul(x.T, P), x) + np.matmul(q.T, x)
+#     return(sol, obj_value[0,0])
+
+
+def runOptimiser(K, u, preOptw, initialValue, optimizer, maxWeight=10000):
     """
     Args:
         K (double 2d array): Similarity/distance matrix
         u (double array): Mean similarity of each prototype
         preOptw (double): Weight vector
         initialValue (double): Initialize run
+        optimizer (string): qpsolver ('cvxpy' or 'osqp')
         maxWeight (double): Upper bound on weight
-
+        
     Returns:
         Prototypes, weights and objective values
     """
-    d = u.shape[0]
-    lb = np.zeros((d, 1))
-    ub = maxWeight * np.ones((d, 1))
-    x0 = np.append( preOptw, initialValue/K[d-1, d-1] )
-
-    G = np.vstack((np.identity(d), -1*np.identity(d)))
-    h = np.vstack((ub, -1*lb))
-
-    #     Solve a QP defined as follows:
+    
+    #     Standard QP:
     #         minimize
     #             (1/2) * x.T * P * x + q.T * x
     #         subject to
     #             G * x <= h
     #             A * x == b
-    sol = solve_qp(K, -u, G, h, A=None, b=None, solver='cvxopt', initvals=x0)
+    
+    #     QP Solved by Protodash:
+    #         minimize
+    #             (1/2) * x.T * K * x + (-u).T * x
+    #         subject to
+    #             G * x <= h
+    
+    assert (optimizer=='cvxpy' or optimizer=='osqp'), "Please set optimizer as 'cvxpy' or 'osqp'"
+    
+    d = u.shape[0]
+    lb = np.zeros((d, 1))
+    ub = maxWeight * np.ones((d, 1))
+    
+    # x0 = initial value, provided optimizer supports it. 
+    x0 = np.append( preOptw, initialValue/K[d-1, d-1] )
+    
+    G = np.vstack((np.identity(d), -1*np.identity(d)))
+    h = np.vstack((ub, -1*lb)).ravel()
 
-    # compute objective function value
-    x = sol.reshape(sol.shape[0], 1)
+    # variable shapes: K = (d,d), u = (d,) G = (2d, d), h = (2d,)
+        
+    if (optimizer == 'cvxpy'):
+        x = cp.Variable(d)
+        prob = cp.Problem(cp.Minimize((1/2)*cp.quad_form(x, K) + (-u).T@x), [G@x <= h])
+        prob.solve()
+        
+        xv = x.value.reshape(-1, 1)
+        xreturn = x.value
+        
+    elif (optimizer == 'osqp'): 
+        
+        Ks = sparse.csc_matrix(K)
+        Gs = sparse.csc_matrix(G)
+        l_inf = -np.inf * np.ones(len(h))
+        
+        solver = OSQP() 
+        solver.setup(P=Ks, q=-u, A=Gs, l=l_inf, u=h, eps_abs=1e-4, eps_rel=1e-4, polish= True, verbose=False) 
+        solver.warm_start(x=x0) 
+        res = solver.solve() 
+        
+        xv = res.x.reshape(-1, 1) 
+        xreturn = res.x 
+        
+    # compute objective function value        
     P = K
-    q = - u.reshape(u.shape[0], 1)
-    obj_value = 1/2 * np.matmul(np.matmul(x.T, P), x) + np.matmul(q.T, x)
-    return(sol, obj_value[0,0])
+    q = - u.reshape(-1, 1)
+    obj_value = 1/2 * np.matmul(np.matmul(xv.T, P), xv) + np.matmul(q.T, xv)
+    
+    return(xreturn, obj_value[0,0])
+
 
 
 def get_Processed_NHANES_Data(filename):
@@ -100,7 +177,7 @@ def get_Gaussian_Data(nfeat, numX, numY):
 
 # expects X & Y in (observations x features) format
 
-def HeuristicSetSelection(X, Y, m, kernelType, sigma):
+def HeuristicSetSelection(X, Y, m, kernelType, sigma, optimizer):
     """
     Main prototype selection function.
 
@@ -110,6 +187,7 @@ def HeuristicSetSelection(X, Y, m, kernelType, sigma):
         m (double): Number of prototypes
         kernelType (str): Gaussian, linear or other
         sigma (double): Gaussian kernel width
+        optimizer (string): qpsolver ('cvxpy' or 'osqp')
 
     Returns:
         Current optimum, the prototypes and objective values throughout selection
@@ -218,7 +296,7 @@ def HeuristicSetSelection(X, Y, m, kernelType, sigma):
                 newCurrOptw = np.append(currOptw, [0], axis=0)
                 newCurrSetValue = currSetValue
             else:
-                [newCurrOptw, value] = runOptimiser(currK, curru, currOptw, maxGradient)
+                [newCurrOptw, value] = runOptimiser(currK, curru, currOptw, maxGradient, optimizer)
                 newCurrSetValue = -value
 
         currOptw = newCurrOptw
