@@ -1,6 +1,6 @@
 # AI Explainability 360 (v0.2.1) 
 
-[![test aix360 on linux, mac, and windows](https://github.com/Trusted-AI/AIX360/actions/workflows/aix360test.yml/badge.svg)](https://github.com/Trusted-AI/AIX360/actions/workflows/aix360test.yml)
+[![Build](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml/badge.svg)](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/aix360.svg)](https://badge.fury.io/py/aix360)
 
