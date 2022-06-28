@@ -42,3 +42,10 @@ TED Dataset
 
 .. autoclass:: aix360.datasets.TEDDataset
    :members:
+
+eSNLI Dataset
+-------------
+
+.. autoclass:: aix360.datasets.eSNLIDataset
+   :members:
+

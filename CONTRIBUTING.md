@@ -42,3 +42,4 @@ via code, tests, or documentation:
 * Kush Varshney
 * Dennis Wei
 * Yunfeng Zhang
+* Fabian Lim

@@ -25,3 +25,10 @@ SHAP Explainers
 
 .. autoclass:: aix360.algorithms.shap.shap_wrapper.LinearExplainer
    :members:
+
+
+Matching Explainers
+---------------------------
+
+.. autoclass:: aix360.algorithms.matching.order_constraints.OTMatchingExplainer
+   :members:

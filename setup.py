@@ -24,7 +24,7 @@ setuptools.setup(
             'cvxpy>==1.1',
             'Image',
             'tensorflow==1.14',
-	    'h5py<3.0.0',
+            'h5py<3.0.0',
             'keras==2.3.1',
             'matplotlib',
             'numpy',
@@ -34,12 +34,14 @@ setuptools.setup(
             'scikit-image', 
             'requests',
             'xgboost==1.1.0', 	    
-	    'bleach>=2.1.0',
-	    'docutils>=0.13.1',
-	    'Pygments',
+            'bleach>=2.1.0',
+            'docutils>=0.13.1',
+            'Pygments',
             'osqp',	    
             'lime==0.1.1.37',
-            'shap==0.34.0'
+            'shap==0.34.0',
+            'otoc @ git+https://github.com/IBM/otoc@main#egg=otoc'
+
 	], 
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},
     include_package_data=True,

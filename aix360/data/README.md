@@ -51,5 +51,14 @@ The datasets supported by the AI Explainability 360 toolkit are listed below. Pl
 
    No download required, appropriate python code generates the data. 
 
+7. e-SNLI dataset
+
+   Source: https://www.eraserbenchmark.com/zipped/esnli.tar.gz 
+
+   Follow download instructions in the [[nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/tree/master/examples/matching/)]
+
+
+
+
 
 
