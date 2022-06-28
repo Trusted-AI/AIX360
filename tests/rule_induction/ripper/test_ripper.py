@@ -1,13 +1,3 @@
-#
-#
-# IBM Confidential
-# OCO Source Materials
-# 5737-I23
-# Copyright IBM Corp. 1987, 2021
-# The source code for this program is not published or otherwise divested of its trade secrets, irrespective of what
-# has been deposited with the U.S Copyright Office.
-#
-
 import logging
 import sys
 import unittest
@@ -58,7 +48,6 @@ class TestRipper(unittest.TestCase):
 
     def test_fit_pos_value_is_respected(self):
         logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-        logger = logging.getLogger(__name__)
 
         df = create_test_df()
         TARGET_LABEL = 'target'
@@ -69,7 +58,6 @@ class TestRipper(unittest.TestCase):
         estimator = RipperExplainer()
         estimator.fit(x_train, y_train, target_label=POS_VALUE)
         ruleset = estimator.explain()
-        logger.info(str(ruleset))
         actual_pos_value = ruleset.then_part
 
         self.assertEqual(actual_pos_value, POS_VALUE)

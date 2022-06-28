@@ -20,7 +20,7 @@ fp_common: count of false positives based on this and at least one other rule
 fp_unique: count of false positives, i.e. mis-classified instances, based on this rule alone 
 n_correct: count of true positives + true_negatives
 n_records: total number of instances
-laplace_estimate: metric of confidence (https://ibm.ent.box.com/file/797443175413?s=20flb5hby53xau805j7aymfo9553s8k9 pp. 150)
+laplace_estimate: metric of confidence (https://en.wikipedia.org/wiki/Additive_smoothing)
 """
 
 RuleComplexityMetrics = namedtuple('RuleComplexityMetrics',
