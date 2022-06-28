@@ -14,7 +14,7 @@ import unittest
 
 import pandas as pd
 
-from aix360.algorithms.rule_induction.ripper.ripper import Ripper
+from aix360.algorithms.rule_induction.ripper.ripper import RipperExplainer
 from aix360.algorithms.rule_induction.trxf.core.conjunction import Conjunction
 from aix360.algorithms.rule_induction.trxf.core.dnf_ruleset import DnfRuleSet
 from aix360.algorithms.rule_induction.trxf.core.feature import Feature
@@ -66,14 +66,11 @@ class TestRipper(unittest.TestCase):
         x_train = df.drop(columns=[TARGET_LABEL])
         y_train = df[TARGET_LABEL]
 
-        estimator = Ripper()
+        estimator = RipperExplainer()
         estimator.fit(x_train, y_train, target_label=POS_VALUE)
-        classifier = estimator.rule_list_to_pretty_string()
-        logger.info(classifier)
-
-        position = classifier.find('then')
-        offset = len('then') + 1
-        actual_pos_value = classifier[position + offset:position + offset + len(POS_VALUE)]
+        ruleset = estimator.explain()
+        logger.info(str(ruleset))
+        actual_pos_value = ruleset.then_part
 
         self.assertEqual(actual_pos_value, POS_VALUE)
 
@@ -87,7 +84,7 @@ class TestRipper(unittest.TestCase):
         x_train = df.drop(columns=[TARGET_LABEL])
         y_train = df[TARGET_LABEL]
 
-        estimator = Ripper()
+        estimator = RipperExplainer()
         estimator.fit(x_train, y_train, target_label=POS_VALUE)
         actual_rule_set = estimator.explain()
         logger.info(actual_rule_set)
@@ -112,7 +109,7 @@ class TestRipper(unittest.TestCase):
         x_train = df.drop(columns=[TARGET_LABEL])
         y_train = df[TARGET_LABEL]
 
-        estimator = Ripper()
+        estimator = RipperExplainer()
         estimator.fit(x_train, y_train, target_label=POS_VALUE)
 
         actual_rule_set = estimator.explain()
@@ -136,7 +133,7 @@ class TestRipper(unittest.TestCase):
         x_train = df.drop(columns=[TARGET_LABEL])
         y_train = df[TARGET_LABEL]
 
-        estimator = Ripper()
+        estimator = RipperExplainer()
         estimator.fit(x_train, y_train, target_label=POS_VALUE)
 
         actual_rule_set = estimator.explain()

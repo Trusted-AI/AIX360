@@ -2,7 +2,7 @@ from typing import Any
 
 import pandas as pd
 
-from aix360.algorithms.rule_induction.ripper import Ripper
+from aix360.algorithms.rule_induction.ripper import RipperExplainer
 from aix360.algorithms.rule_induction.trxf.core.dnf_ruleset import DnfRuleSet
 from aix360.algorithms.rule_induction.trxf.core.ruleset_generator import RuleSetGenerator
 
@@ -21,6 +21,6 @@ class RipperRuleSetGenerator(RuleSetGenerator):
         random_state:
             The random seed for grow/prune set splitting (default=0)
         """
-        ripper = Ripper(**kwargs)
+        ripper = RipperExplainer(**kwargs)
         ripper.fit(X, y, to_learn)
         return ripper.explain()

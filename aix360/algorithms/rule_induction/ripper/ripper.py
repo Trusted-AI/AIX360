@@ -3,9 +3,6 @@ import logging.config
 from collections import OrderedDict
 
 import numpy as np
-from pandas import DataFrame, Series
-from sklearn.base import BaseEstimator, ClassifierMixin
-
 from aix360.algorithms.dise import DISExplainer
 from aix360.algorithms.rule_induction.ripper.base import _encoding_for_parallel, init_encoder, encode_nominal, \
     _split_instances
@@ -18,27 +15,21 @@ from aix360.algorithms.rule_induction.trxf.core.conjunction import Conjunction
 from aix360.algorithms.rule_induction.trxf.core.dnf_ruleset import DnfRuleSet
 from aix360.algorithms.rule_induction.trxf.core.feature import Feature
 from aix360.algorithms.rule_induction.trxf.core.predicate import Predicate, Relation
+from pandas import DataFrame, Series
 
 print('Importing dev version v0.982 of RIPPER')
 
 
-def _validate_grow_rule_input(pos):
-    if len(pos) == 0:
-        raise AssertionError('pos must not be empty')
-
-
-class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
+class RipperExplainer(DISExplainer):
     """
-    RIPPER implementation using sci-kit learn interface.
+    RIPPER (Repeated Incremental Pruning to Produce Error Reduction) is a heuristic rule induction algorithm
+    based on separate-and-conquer. The explainer outputs a rule set in Disjunctive Normal Form (DNF) for a single
+    target concept.
 
-    d : int
-        The number to bit that a new rule need to gain
-    k : int
-        The number of optimization iteration
-    pruning_threshold : int
-        The minimum number of instances for splitting
-    random_state:
-        Is is the random state for splitting function
+    References:
+        .. [#ML95] `William W Cohen, "Fast Effective Rule Induction"
+            Machine Learning: Proceedings of the Twelfth International Conference, 1995.
+            <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.107.2612&rep=rep1&type=pdf>
     """
 
     def __init__(
@@ -48,6 +39,14 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
             pruning_threshold: int = 20,
             random_state: int = 0,
     ):
+        """
+        Args:
+            d (int): The number of bits that a new rule need to gain. Defaults to 64.
+            k (int): The number of iterations for the optimization loop. Defaults to 2.
+            pruning_threshold (int): The minimum number of instances for splitting. Defaults to 20.
+            random_state (int): The random seed for the splitting function. Defaults to 0.
+        """
+
         super().__init__()
         self.d = d
         self.k = k
@@ -75,21 +74,20 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
         algorithm needs the information of feature name and have to support nominal data type. Only `float` dtypes are
         considered numerical features. All others (including int) are treated as nominal.
 
-        If target_label is given, binary classification is assumed and asserted, and training uses target_label as selection\
+        If target_label is specified, binary classification is assumed and asserted, and training uses target_label as selection\
         of positive examples.
 
         The induction of rules is deterministic by default as all random choices are initialized with self.random_state,
         which is 0 by default.
 
-        Parameters
-        ----------
-            train: pd.DataFrame
-                The features of the training set
-            y: pd.Series
-                The labels of the training set
-            target_label: Any
-                The target label to learn for binary classification, among the unique values of y. If not provided,
-                Ripper will induce a native ruleset with multiple labels/conclusions.
+        Args:
+            train (pd.DataFrame): The features of the training set
+            y (pd.Series): The labels of the training set
+            target_label (Any): The target label to learn for binary classification, among the unique values of y. \
+            If not provided, Ripper will induce a native ordered ruleset with multiple labels/conclusions.
+
+        Returns:
+            self
         """
         logger = logging.getLogger(__name__)
 
@@ -129,14 +127,15 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
         # the label values are sorted according to their occurrence; least frequent value first
         # Set reverse=True for reversing that order
         if (target_label is not None) and (self._labels[0] != target_label):
-            self._labels.reverse()  # reverse value order for binary classification when target_label is not the least frequent
+            # reverse value order for binary classification when target_label is not the least frequent
+            self._labels.reverse()
         self.default_label = self._labels[-1]  # the default value is the last label in the sorting order
         logger.debug('Label value ordering: ' + str(self._labels))
 
         self._condition_mat = _encoding_for_parallel(train, self._column_name_index_map)
         self._gain_n = self._condition_mat[0].shape[0]
 
-        train = train.to_numpy(dtype=np.float64)
+        train = train.to_numpy(dtype=np.dtype(float))
         y = y.values
 
         x_irep_list = train
@@ -202,21 +201,17 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
         The predict function for RIPPER algorithm. Its implementation is limited to DataFrame and Series because the
         RIPPER algorithm needs the information of feature name and have to support nominal data type
 
-        Parameters
-        ----------
-            X: pd.DataFrame
-                DataFrame of features
+        Args:
+            X (pd.DataFrame): DataFrame of features
 
-        Returns
-        ----------
-        np.array
-            predicted labels
+        Returns:
+            np.array: predicted labels
         """
-        test = X.copy()  # prevent that input data frame is changed when running predict, which may cause unwanted side effects
+        test = X.copy()
         encode_nominal(self._nominal_column_encoders, test)
         result_vec = [None for _ in range(len(test))]
 
-        input_arr = test.to_numpy(dtype=np.float64)
+        input_arr = test.to_numpy(dtype=np.dtype(float))
 
         result = {label: _rule_list_predict(input_arr, self._rule_map[label]) for label in self._rule_map.keys()}
 
@@ -238,23 +233,15 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
         """
         The learning phase of RIPPER.
 
-        Parameters
-        ----------
-            pos: np.ndarray
-                Positive instances
-            neg: np.ndarray
-                Negative instances
-            d : int
-                The number to bit that a new rule need to gain
-            ratio : float
-                The percentage of pruning data
-            pruning_threshold : int
-                The minimum number of instances for splitting
+        Args:
+            pos (np.ndarray): Positive instances
+            neg (np.ndarray): Negative instances
+            d (int): The number to bit that a new rule need to gain
+            ratio (float): The percentage of pruning data
+            pruning_threshold (int): The minimum number of instances for splitting
 
-        Returns
-        -------
-        list
-            Rule list learned using IREP* algorithm
+        Returns:
+            list: Rule list learned using IREP algorithm
         """
         neg = _filter_contradicted_instances(pos, neg)
         n = self._gain_n
@@ -450,37 +437,6 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
             i += 1
         return rules
 
-    def decode_rule(self, rule):
-        """
-        Transform one rule to String given its internal presentation
-
-        Parameters
-        ----------
-        rule : list
-            Input rule
-
-        Returns
-        -------
-        str
-            String representation of that rule
-        """
-        res = list()
-        for condition in rule:
-            name = self._column_name_list[condition.name]
-            if condition.op == EQ:
-                res.append({'name': self._column_name_list[condition.name],
-                            'op': '==',
-                            'nom_val': str(self._nominal_column_encoders[name].classes_[condition.nom_val])})
-            elif condition.op == LE:
-                res.append({'name': self._column_name_list[condition.name],
-                            'op': '<=',
-                            'num_val': condition.num_val})
-            else:
-                res.append({'name': self._column_name_list[condition.name],
-                            'op': '>=',
-                            'num_val': condition.num_val})
-        return res
-
     def _rule_to_trxf_conjunction(self, rule):
         """
         Transform one rule to a trxf conjunction given its internal presentation
@@ -495,7 +451,8 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
         trxf conjunction
             String representation of that rule
         """
-        # TODO code duplication with decode_rule should be refactored -> deprecate decode_rule as it should go through trxf
+        # TODO code duplication with decode_rule should be refactored -> deprecate decode_rule as it should go
+        #  through trxf
 
         conjunction = Conjunction([])
 
@@ -516,32 +473,6 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
             conjunction.add_predicate(predicate)
 
         return conjunction
-
-    def _rules_to_string(self, rules, label):
-        """
-        Transform rules to String given their internal presentation and their label
-
-        Parameters
-        ----------
-        rules : list
-            Rules for one target
-        label : str
-            The label of rules
-
-        Returns
-        -------
-        str
-            String representation of rules and their target
-        """
-        res = '\nif{\n'
-        for index, rule in enumerate(rules):
-            res += '\t'
-            if index < len(rules) - 1:
-                res += str(self.decode_rule(rule)) + ' or\n'
-            else:
-                res += str(self.decode_rule(rule))
-        res += '\n}}then {label}'.format(label=label)
-        return res
 
     def _rules_to_trxf_dnf_ruleset(self, rules, label):
         """
@@ -564,51 +495,6 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
             conjunctions.append(conjunction)
         dnf_ruleset = DnfRuleSet(conjunctions, label)
         return dnf_ruleset
-
-    def _pretty_rules_to_string(self, rules, label):
-        """
-        Transform rules to String given their internal presentation and their label
-
-        Parameters
-        ----------
-        rules : list
-            Rules for one target
-        label : str
-            The label of rules
-
-        Returns
-        -------
-        str
-            String representation of rules and their target
-        """
-        res = '\nif {\n'
-        for index, rule in enumerate(rules):
-            res += '\t('
-            rule_as_list = self.decode_rule(rule)
-            for ind, item in enumerate(rule_as_list):
-                res += item['name']
-                op = item['op']
-                res += ' ' + op + ' '
-                if op == '==':
-                    res += item['nom_val']
-                else:
-                    res += str(item['num_val'])
-                if ind < len(rule_as_list) - 1:
-                    res += ' and '
-            if index < len(rules) - 1:
-                res += ') or\n'
-        res += ')\n}} then {label}'.format(label=label)
-        return res
-
-    def rule_list_to_pretty_string(self):
-        """
-        Represent learned rule list in a human friendly way
-        """
-        res = ''
-        for label, rules in self._rule_map.items():
-            res += self._pretty_rules_to_string(rules=rules, label=label)
-        res += '\nelse {label}'.format(label=self.default_label)
-        return res
 
     def _grow_rule(self, pos, neg, predefined_rule=None):
 
@@ -688,7 +574,7 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
                 return self._rules_to_trxf_dnf_ruleset(rules, label)
         raise Exception('No rules found for label: ' + str(self.target_label))
 
-    def export_rules(self):
+    def explain_multiclass(self):
         """
         Export rules to technical interchange format trxf from internal representation
         Returns a list of rule sets.
@@ -710,3 +596,8 @@ class Ripper(BaseEstimator, ClassifierMixin, DISExplainer):
         default_rule = DnfRuleSet([], self.default_label)
         res.append(default_rule)
         return res
+
+
+def _validate_grow_rule_input(pos):
+    if len(pos) == 0:
+        raise AssertionError('pos must not be empty')

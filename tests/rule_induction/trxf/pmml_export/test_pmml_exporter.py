@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from aix360.algorithms.rule_induction.ripper import Ripper
+from aix360.algorithms.rule_induction.ripper import RipperExplainer
 from aix360.algorithms.rule_induction.ripper.ripper_ruleset_generator import RipperRuleSetGenerator
 from aix360.algorithms.rule_induction.trxf.classifier.ruleset_classifier import RuleSetClassifier, RuleSelectionMethod, \
     WeightMetric, ConfidenceMetric
@@ -56,9 +56,9 @@ class TestPmmlExporter(TestCase):
             data.loc[:, col_names[-1]],
             random_state=0
         )
-        estimator = Ripper(d=2, k=2, pruning_threshold=50)
+        estimator = RipperExplainer(d=2, k=2, pruning_threshold=50)
         estimator.fit(x_train, y_train)
-        dnf_rule_set_list = estimator.export_rules()
+        dnf_rule_set_list = estimator.explain_multiclass()
         classifier = RuleSetClassifier(dnf_rule_set_list[:2],
                                        rule_selection_method=RuleSelectionMethod.WEIGHTED_MAX,
                                        confidence_metric=ConfidenceMetric.LAPLACE,
@@ -154,10 +154,10 @@ class TestPmmlExporter(TestCase):
 
         x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=0)
 
-        estimator = Ripper(d=64, k=2, pruning_threshold=20)
+        estimator = RipperExplainer(d=64, k=2, pruning_threshold=20)
 
         estimator.fit(x_train, y_train)
-        dnf_rule_set_list = estimator.export_rules()
+        dnf_rule_set_list = estimator.explain_multiclass()
         classifier = RuleSetClassifier(dnf_rule_set_list[:-1],
                                        rule_selection_method=RuleSelectionMethod.WEIGHTED_MAX,
                                        confidence_metric=ConfidenceMetric.LAPLACE,

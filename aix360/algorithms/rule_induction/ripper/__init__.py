@@ -13,7 +13,7 @@ The :mod:`ripper.Ripper` module includes rule based classifier RIPPER.
 """
 
 
-from .ripper import Ripper
+from .ripper import RipperExplainer
 
 
-__all__ = ['Ripper']
+__all__ = ['RipperExplainer']
