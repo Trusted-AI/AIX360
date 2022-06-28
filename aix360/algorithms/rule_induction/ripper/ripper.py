@@ -222,6 +222,45 @@ class RipperExplainer(DISExplainer):
 
         return np.array([res if res is not None else self.default_label for res in result_vec])
 
+    def explain(self):
+        """
+        Export rule set to technical interchange format trxf from internal representation
+        for the positive value (i.e. label value) it has been fitted for.
+
+        When the internal rule set is empty an empty dnf rule set with the internal pos value
+        is returned.
+
+        Returns:
+            trxf.DnfRuleSet
+        """
+        assert (self.target_label is not None), 'Not fitted or not fitted for a specific pos value. Use export_rules ' \
+                                                'in the latter case. '
+
+        if len(self._rule_map.items()) == 0:
+            return DnfRuleSet([], self.target_label)
+        for label, rules in self._rule_map.items():
+            if label == self.target_label:
+                return self._rules_to_trxf_dnf_ruleset(rules, label)
+        raise Exception('No rules found for label: ' + str(self.target_label))
+
+    def explain_multiclass(self):
+        """
+        Export rules to technical interchange format trxf from internal representation
+        Returns a list of rule sets.
+
+        Returns:
+            list(trxf.DnfRuleSet): -- Ordered list of rulesets
+        """
+        res = list()
+        if len(self._rule_map.items()) == 0:
+            return DnfRuleSet([], self.target_label)
+        for label, rules in self._rule_map.items():
+            dnf_ruleset = self._rules_to_trxf_dnf_ruleset(rules, label)
+            res.append(dnf_ruleset)
+        default_rule = DnfRuleSet([], self.default_label)
+        res.append(default_rule)
+        return res
+
     def _irep_plus_outer_loop(
             self,
             pos: np.ndarray,
@@ -551,51 +590,6 @@ class RipperExplainer(DISExplainer):
             pos = _bind_literal(pos, literal.name, literal.op, literal.num_val, literal.nom_val)
             neg = _bind_literal(neg, literal.name, literal.op, literal.num_val, literal.nom_val)
         return learned_rule
-
-    def explain(self):
-        """
-        Export rule set to technical interchange format trxf from internal representation
-        for the positive value (i.e. label value) it has been fitted for.
-
-        When the internal rule set is empty an empty dnf rule set with the internal pos value
-        is returned.
-
-        Returns
-        -------
-        trxf DnfRuleSet
-        """
-        assert (
-                self.target_label is not None), 'Not fitted or not fitted for a specific pos value. Use export_rules in the latter case.'
-
-        if len(self._rule_map.items()) == 0:
-            return DnfRuleSet([], self.target_label)
-        for label, rules in self._rule_map.items():
-            if label == self.target_label:
-                return self._rules_to_trxf_dnf_ruleset(rules, label)
-        raise Exception('No rules found for label: ' + str(self.target_label))
-
-    def explain_multiclass(self):
-        """
-        Export rules to technical interchange format trxf from internal representation
-        Returns a list of rule sets.
-
-        Parameters
-        ----------
-        None.
-
-        Returns
-        -------
-        list of trxf DnfRuleSet
-        """
-        res = list()
-        if len(self._rule_map.items()) == 0:
-            return DnfRuleSet([], self.target_label)
-        for label, rules in self._rule_map.items():
-            dnf_ruleset = self._rules_to_trxf_dnf_ruleset(rules, label)
-            res.append(dnf_ruleset)
-        default_rule = DnfRuleSet([], self.default_label)
-        res.append(default_rule)
-        return res
 
 
 def _validate_grow_rule_input(pos):
