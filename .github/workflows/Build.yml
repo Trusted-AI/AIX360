@@ -60,3 +60,7 @@ jobs:
         
       - name: Step 12 - Test Logistic Rule Regression
         run: python ./tests/rbm/test_Logistic_Rule_Regression.py      
+
+      - name: Step 13 - Test Matching Explainer
+        run: python ./tests/matching/test_order_constraints.py
+
