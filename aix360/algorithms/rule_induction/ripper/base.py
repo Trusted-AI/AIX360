@@ -1,12 +1,13 @@
+import sys
+
 import numpy as np
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-from aix360.algorithms.rule_induction.ripper.binding import Literal, EQ, LE, GE
+from aix360.algorithms.rule_induction.ripper.binding import EQ, LE, GE
 
-# 2**53 = 9007199254740992. It is the largest integer value that can be expressed in double
-DEFAULT_ENCODING_VALUE = 9007199254740992
+DEFAULT_ENCODING_VALUE = -sys.maxsize - 1
 
 
 def _encoding_for_parallel(
@@ -61,7 +62,7 @@ def encode_nominal(
         label_map = {val: label for label, val in enumerate(label_encoders[col].classes_)}
         data[col] = data[col].map(label_map)
         # fillna and convert to int
-        data[col] = data[col].fillna(DEFAULT_ENCODING_VALUE).astype(int)
+        data[col] = data[col].fillna(DEFAULT_ENCODING_VALUE).astype(np.int64)
 
 
 def _split_instances(
