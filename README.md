@@ -30,7 +30,7 @@ We have developed the package with extensibility in mind. This library is still 
 ### Local direct explanation
 
 - Teaching AI to Explain its Decisions ([Hind et al., 2019](https://doi.org/10.1145/3306618.3314273)) 
-- Order Constraints in Optimal Transport ([Lim et al.,2022](https://arxiv.org/abs/2110.07275), [Github](https://github.com/IBM/otoc)
+- Order Constraints in Optimal Transport ([Lim et al.,2022](https://arxiv.org/abs/2110.07275), [Github](https://github.com/IBM/otoc))
 
 ### Global direct explanation
 
