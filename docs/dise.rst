@@ -27,3 +27,10 @@ Teaching Explanations for Decisions (TED) Cartesian Product Explainer
 
 .. autoclass:: aix360.algorithms.ted.TED_Cartesian.TED_CartesianExplainer
    :members:
+
+RIPPER Explainer
+---------------------------------------------------------------------
+
+.. autoclass:: aix360.algorithms.rule_induction.ripper
+   :members:
+   
