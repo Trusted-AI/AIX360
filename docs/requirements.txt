@@ -1,7 +1,6 @@
 joblib>=0.11
 scikit-learn>=0.21.2
 cvxpy
-cvxopt
 Image
 keras
 matplotlib
@@ -15,3 +14,7 @@ requests
 lime
 shap
 xgboost
+nyoka==5.2.0
+xmltodict==0.12.0
+numba
+otoc @ git+https://github.com/IBM/otoc@main#egg=otoc
