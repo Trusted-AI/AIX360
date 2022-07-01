@@ -31,6 +31,6 @@ Teaching Explanations for Decisions (TED) Cartesian Product Explainer
 RIPPER Explainer
 ---------------------------------------------------------------------
 
-.. autoclass:: aix360.algorithms.rule_induction.ripper
+.. autoclass:: aix360.algorithms.rule_induction.ripper.RipperExplainer
    :members:
    
