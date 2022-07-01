@@ -17,4 +17,3 @@ xgboost
 nyoka==5.2.0
 xmltodict==0.12.0
 numba
-otoc @ git+https://github.com/IBM/otoc@main#egg=otoc
