@@ -10,7 +10,7 @@ The [AI Explainability 360 interactive experience](http://aix360.mybluemix.net/d
 
 There is no single approach to explainability that works best. There are many ways to explain: data vs. model, directly interpretable vs. post hoc explanation, local vs. global, etc. It may therefore be confusing to figure out which algorithms are most appropriate for a given use case. To help, we have created some [guidance material](http://aix360.mybluemix.net/resources#guidance) and a [chart](./aix360/algorithms/README.md) that can be consulted. 
 
-We have developed the package with extensibility in mind. This library is still in development. We encourage the contribution of your explainability algorithms and metrics. To get started as a contributor, please join the [AI Explainability 360 Community on Slack](https://aix360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aix360/shared_invite/enQtNzEyOTAwOTk1NzY2LTM1ZTMwM2M4OWQzNjhmNGRiZjg3MmJiYTAzNDU1MTRiYTIyMjFhZTI4ZDUwM2M1MGYyODkwNzQ2OWQzMThlN2Q). Please review the instructions to contribute code [here](CONTRIBUTING.md).
+We have developed the package with extensibility in mind. This library is still in development. We encourage you to contribute your explainability algorithms, metrics, and use cases. To get started as a contributor, please join the [AI Explainability 360 Community on Slack](https://aix360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aix360/shared_invite/enQtNzEyOTAwOTk1NzY2LTM1ZTMwM2M4OWQzNjhmNGRiZjg3MmJiYTAzNDU1MTRiYTIyMjFhZTI4ZDUwM2M1MGYyODkwNzQ2OWQzMThlN2Q). Please review the instructions to contribute code and python notebooks [here](CONTRIBUTING.md).
 
 ## Supported explainability algorithms
 
