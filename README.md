@@ -162,7 +162,7 @@ url = {https://arxiv.org/abs/1909.03012}
 
 * Put a star on this repository.
 
-* Share your success stories with others in the [AI Explainability 360 Community](https://aix360.slack.com). 
+* Share your success stories with us and others in the [AI Explainability 360 Community](https://aix360.slack.com). 
 
 ## AIX360 Videos
 
