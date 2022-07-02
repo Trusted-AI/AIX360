@@ -108,6 +108,13 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (aix360)$ pip install -e .
 ```
 
+If you face any issues, please try upgrading pip and setuptools and uninstall any previous versions of aix360 before attempting the above step again. 
+
+```bash
+(aix360)$ pip install --upgrade pip setuptools
+(aix360)$ pip uninstall aix360
+```
+
 ## Running in Docker
 
 * Under `AIX360` directory build the container image from Dockerfile using `docker build -t aix360_docker .`
@@ -136,9 +143,9 @@ tutorials and examples [here](examples/README.md).
 
 ## Citing AI Explainability 360
 
-A technical description of AI Explainability 360 is available in this
-[paper](https://arxiv.org/abs/1909.03012). Below is the bibtex entry for this
-paper.
+If you are using AI Explainability 360 for your work, we encourage you to
+
+* Cite the following [paper](https://arxiv.org/abs/1909.03012). The bibtex entry is as follows: 
 
 ```
 @misc{aix360-sept-2019,
@@ -152,6 +159,10 @@ year = {2019},
 url = {https://arxiv.org/abs/1909.03012}
 }
 ```
+
+* Put a star on this repository.
+
+* Share your success stories with others in the [AI Explainability 360 Community](https://aix360.slack.com). 
 
 ## AIX360 Videos
 
