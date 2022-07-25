@@ -30,7 +30,7 @@ class ProtodashExplainer(DIExplainer):
         """
         pass
 
-    def explain(self, X, Y, m, kernelType='other', sigma=2):
+    def explain(self, X, Y, m, kernelType='other', sigma=2, optimizer='cvxpy'):
         """
         Return prototypes for data X, Y.
 
@@ -40,8 +40,9 @@ class ProtodashExplainer(DIExplainer):
             m (int): Number of prototypes
             kernelType (str): Type of kernel (viz. 'Gaussian', / 'other')
             sigma (double): width of kernel
-
+            optimizer (string): qpsolver ('cvxpy' or 'osqp')
+            
         Returns:
             m selected prototypes from X and their (unnormalized) importance weights
         """
-        return( HeuristicSetSelection(X, Y, m, kernelType, sigma) )
+        return( HeuristicSetSelection(X, Y, m, kernelType, sigma, optimizer) )

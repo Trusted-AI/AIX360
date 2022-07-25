@@ -6,3 +6,4 @@ from .cdc_dataset import CDCDataset
 from .cifar_dataset import CIFARDataset
 from .ted_dataset import TEDDataset
 from .fashion_mnist_dataset import FMnistDataset
+from .esnli_dataset import eSNLIDataset

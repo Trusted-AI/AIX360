@@ -1,6 +1,6 @@
 # AI Explainability 360 (v0.2.1) 
 
-[![Build Status](https://travis-ci.com/Trusted-AI/AIX360.svg?branch=master)](https://travis-ci.com/Trusted-AI/AIX360)
+[![Build](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml/badge.svg)](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/aix360.svg)](https://badge.fury.io/py/aix360)
 
@@ -10,7 +10,7 @@ The [AI Explainability 360 interactive experience](http://aix360.mybluemix.net/d
 
 There is no single approach to explainability that works best. There are many ways to explain: data vs. model, directly interpretable vs. post hoc explanation, local vs. global, etc. It may therefore be confusing to figure out which algorithms are most appropriate for a given use case. To help, we have created some [guidance material](http://aix360.mybluemix.net/resources#guidance) and a [chart](./aix360/algorithms/README.md) that can be consulted. 
 
-We have developed the package with extensibility in mind. This library is still in development. We encourage the contribution of your explainability algorithms and metrics. To get started as a contributor, please join the [AI Explainability 360 Community on Slack](https://aix360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aix360/shared_invite/enQtNzEyOTAwOTk1NzY2LTM1ZTMwM2M4OWQzNjhmNGRiZjg3MmJiYTAzNDU1MTRiYTIyMjFhZTI4ZDUwM2M1MGYyODkwNzQ2OWQzMThlN2Q). Please review the instructions to contribute code [here](CONTRIBUTING.md).
+We have developed the package with extensibility in mind. This library is still in development. We encourage you to contribute your explainability algorithms, metrics, and use cases. To get started as a contributor, please join the [AI Explainability 360 Community on Slack](https://aix360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aix360/shared_invite/enQtNzEyOTAwOTk1NzY2LTM1ZTMwM2M4OWQzNjhmNGRiZjg3MmJiYTAzNDU1MTRiYTIyMjFhZTI4ZDUwM2M1MGYyODkwNzQ2OWQzMThlN2Q). Please review the instructions to contribute code and python notebooks [here](CONTRIBUTING.md).
 
 ## Supported explainability algorithms
 
@@ -30,11 +30,13 @@ We have developed the package with extensibility in mind. This library is still 
 ### Local direct explanation
 
 - Teaching AI to Explain its Decisions ([Hind et al., 2019](https://doi.org/10.1145/3306618.3314273)) 
-   
+- Order Constraints in Optimal Transport ([Lim et al.,2022](https://arxiv.org/abs/2110.07275), [Github](https://github.com/IBM/otoc))
+
 ### Global direct explanation
 
 - Boolean Decision Rules via Column Generation (Light Edition) ([Dash et al., 2018](https://papers.nips.cc/paper/7716-boolean-decision-rules-via-column-generation))
 - Generalized Linear Rule Models ([Wei et al., 2019](http://proceedings.mlr.press/v97/wei19a.html))
+- Fast Effective Rule Induction (Ripper) ([William W Cohen, 1995](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.107.2612&rep=rep1&type=pdf))
 
 ### Global post-hoc explanation 
 
@@ -106,6 +108,13 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (aix360)$ pip install -e .
 ```
 
+If you face any issues, please try upgrading pip and setuptools and uninstall any previous versions of aix360 before attempting the above step again. 
+
+```bash
+(aix360)$ pip install --upgrade pip setuptools
+(aix360)$ pip uninstall aix360
+```
+
 ## Running in Docker
 
 * Under `AIX360` directory build the container image from Dockerfile using `docker build -t aix360_docker .`
@@ -134,9 +143,9 @@ tutorials and examples [here](examples/README.md).
 
 ## Citing AI Explainability 360
 
-A technical description of AI Explainability 360 is available in this
-[paper](https://arxiv.org/abs/1909.03012). Below is the bibtex entry for this
-paper.
+If you are using AI Explainability 360 for your work, we encourage you to
+
+* Cite the following [paper](https://arxiv.org/abs/1909.03012). The bibtex entry is as follows: 
 
 ```
 @misc{aix360-sept-2019,
@@ -150,6 +159,10 @@ year = {2019},
 url = {https://arxiv.org/abs/1909.03012}
 }
 ```
+
+* Put a star on this repository.
+
+* Share your success stories with us and others in the [AI Explainability 360 Community](https://aix360.slack.com). 
 
 ## AIX360 Videos
 

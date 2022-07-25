@@ -30,3 +30,4 @@ the user through the various steps of the notebook.
 
 - [GLRMExplainer and BRCGExplainer using Boston, Breast-cancer datasets](./rbm) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/tree/master/examples/rbm/)]
 
+- [OTMatchingExplainer on Sentence Matching in NLP](./matching) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/tree/master/examples/matching/matching-pairs-of-sentences.ipynb)]
