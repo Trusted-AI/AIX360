@@ -14,13 +14,13 @@ class TestFeature(TestCase):
     def test_evaluate_numerical(self):
         feature = Feature('   5 +x1 *    (4-x2)')
         actual = feature.evaluate({'x1': 6.3, 'x2': 3.1})
-        expected = -0.67
+        expected = 5 + 6.3 * (4 - 3.1)
         self.assertAlmostEqual(actual, expected)
 
     def test_evaluate_numerical_starts_with_unary_minus(self):
         feature = Feature('   -x1 *    (4-x2)')
         actual = feature.evaluate({'x1': 6.3, 'x2': 3.1})
-        expected = -5.67
+        expected = -6.3 * (4 - 3.1)
         self.assertAlmostEqual(actual, expected)
 
     def test_evaluate_illegal_assignment_should_raise(self):
