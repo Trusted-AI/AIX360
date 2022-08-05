@@ -52,10 +52,10 @@ class Feature:
         operand_stack = []
         for token in self.reverse_polish_notation:
             if token in OPERATORS:
-                lhs = operand_stack.pop()
-                _validate_number(lhs)
                 rhs = operand_stack.pop()
                 _validate_number(rhs)
+                lhs = operand_stack.pop()
+                _validate_number(lhs)
                 expression = str(lhs) + token + str(rhs)
                 try:
                     operand_stack.append(eval(expression))

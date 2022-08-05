@@ -15,6 +15,8 @@ from Customized_Linear_Classes import CustomizedLinearFunction
 from Customized_Linear_Classes import CustomizedLinear
 from utils import generate_connections
 from utils import process_data
+from aix360.algorithms.die import DIExplainer
+
 
 
         
@@ -86,9 +88,15 @@ class CoFrNet_Model(nn.Module):
 
 
 
-class CoFrNet_Explainer():
+class CoFrNet_Explainer(DIExplainer):
     def __init__(self, cofrnet_model):
         self.model = cofrnet_model
+
+    def set_params(self, *argv, **kwargs):
+        """
+        Set parameters for the explainer.
+        """
+        pass
         
     def print_accuracy(self, xtest, ytest):
 
@@ -107,44 +115,63 @@ class CoFrNet_Explainer():
         print("Accuracy: ", numCorrect/numTotal)
         accuracy = float(numCorrect/numTotal)
 
-    def importances(self):
-        final_layer_weights = vars(self.model.layers[-1])['_parameters']['weight'].data.numpy()
-        weights_by_node = final_layer_weights.T
-        averaged = np.average(weights_by_node, axis = 1)
-        copy_averaged = averaged.copy()
-        print(copy_averaged)
-        num_important_to_print = 3
-        for x in range(0, num_important_to_print):
-            min_idx = np.argmax(copy_averaged)
-            print("The number " + str(x+1) + " most important input feature was the " + str(min_idx+1) + "th one.")
-            copy_averaged[np.argmax(copy_averaged)] = copy_averaged[np.argmin(copy_averaged)]
-            #print(vars(self.model.layers[-1])['_parameters']['weight'].data.numpy().T)
+
+    def explain(self, explain_mode, max_layer_num = 10, var_num = 6):
+        '''
+        Provides Explanations of CoFrNet Model
+
+        Args:
+        explain_mode: either "importances" or "print_co_fr", will raise exception if not one of these two options
+        max_layer_num: For "print_co_fr": Choose Depth of Ladder to Show, Default 10
+        var_num: For "print_co_fr": Variable (index of input feature) for Which to Display Ladder, Default 6
+        '''
+        
+        def importances(self):
+            final_layer_weights = vars(self.model.layers[-1])['_parameters']['weight'].data.numpy()
+            weights_by_node = final_layer_weights.T
+            averaged = np.average(weights_by_node, axis = 1)
+            copy_averaged = averaged.copy()
+            print(copy_averaged)
+            num_important_to_print = 3
+            for x in range(0, num_important_to_print):
+                min_idx = np.argmax(copy_averaged)
+                print("The number " + str(x+1) + " most important input feature was the " + str(min_idx+1) + "th one.")
+                copy_averaged[np.argmax(copy_averaged)] = copy_averaged[np.argmin(copy_averaged)]
+                #print(vars(self.model.layers[-1])['_parameters']['weight'].data.numpy().T)
     
 
-    def print_co_fr(self, max_layer_num = 10, var_num = 6): 
-        #max_layer_num = chosen depth of ladder to show (10 layers, index would be 9)
-        #var_num = variable for which to display ladder
-        thingToPrint = ""
-        for layerNum in range(0, max_layer_num-1):
-            temp = vars(self.model.layers[layerNum])
-            print()
-            print("LayerNum: ", layerNum)
-            val = (temp['_parameters']['weight'].data[var_num][var_num]).numpy()
-            print("Val: ", val)
-            bias = temp['_parameters']['bias'].data[var_num].numpy()
-            print("Bias: ", bias)
-            if (bias > (.01 * val)):
-                print(str(bias))
-                combined = "("+str(val) + "*x + " + str(bias)+")"
-                print("Combined: ", combined)
-                #thingToPrint = "\n 1/("+str(val) + "x + " + str(bias)+")" + thingToPrint
-            else:
-                print("hi")
-                combined = "(" + str(val)+"*x" + "+0)"
-                print("Combined: ", combined)
-                #thingToPrint = "\n 1/(" + str(val)+"x" + "+0)" + thingToPrint
-            print()
-            thingToPrint = "1/(" + combined + " + (" + thingToPrint + "))"
+        def print_co_fr(self, max_layer_num = 10, var_num = 6): 
+            #max_layer_num = chosen depth of ladder to show (10 layers, index would be 9)
+            #var_num = variable for which to display ladder
+            thingToPrint = ""
+            for layerNum in range(0, max_layer_num-1):
+                temp = vars(self.model.layers[layerNum])
+                print()
+                print("LayerNum: ", layerNum)
+                val = (temp['_parameters']['weight'].data[var_num][var_num]).numpy()
+                print("Val: ", val)
+                bias = temp['_parameters']['bias'].data[var_num].numpy()
+                print("Bias: ", bias)
+                if (bias > (.01 * val)):
+                    print(str(bias))
+                    combined = "("+str(val) + "*x + " + str(bias)+")"
+                    print("Combined: ", combined)
+                    #thingToPrint = "\n 1/("+str(val) + "x + " + str(bias)+")" + thingToPrint
+                else:
+                    print("hi")
+                    combined = "(" + str(val)+"*x" + "+0)"
+                    print("Combined: ", combined)
+                    #thingToPrint = "\n 1/(" + str(val)+"x" + "+0)" + thingToPrint
+                print()
+                thingToPrint = "1/(" + combined + " + (" + thingToPrint + "))"
 
-        print(thingToPrint)
-        return thingToPrint
+            print(thingToPrint)
+            return thingToPrint
+
+        if explain_mode == "importances": 
+            importances()
+        elif explain_mode == "print_co_fr": 
+            print_co_fr(max_layer_num, var_num)
+        else:
+            raise Exception("explain_mode must be either 'importances' or 'print_co_fr'")
+        

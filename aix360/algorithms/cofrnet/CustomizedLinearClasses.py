@@ -8,6 +8,7 @@ import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import torch # import main library
 import torch.nn as nn # import modules
+import torch.autograd
 from torch.autograd import Function # import Function to create custom activations
 from torch.nn.parameter import Parameter # import Parameter to create custom activations with learnable parameters
 import torch.nn.functional as F # import torch functions
@@ -39,10 +40,16 @@ class CustomizedLinearFunction(torch.autograd.Function):
     @staticmethod
     # bias, mask is an optional argument
     def forward(ctx, input, weight, bias=None, mask=None):
+        #print("type(input)", type(input))
         if mask is not None:
             # change weight to 0 where mask == 0
             weight = weight * mask
-        output = input.mm(weight.t())
+        weight_t = weight.t()
+        
+        print("(input).shape", input.shape)
+        print("(weight_t).shape", weight_t.shape)
+        output = input.mm(weight_t)
+        #output = torch.matmul(input, weight_t)
         if bias is not None:
             output += bias.unsqueeze(0).expand_as(output)
         ctx.save_for_backward(input, weight, bias, mask)
@@ -75,6 +82,10 @@ class CustomizedLinearFunction(torch.autograd.Function):
         #if bias is not None and ctx.needs_input_grad[2]:
         if ctx.needs_input_grad[2]:
             grad_bias = grad_output.sum(0).squeeze(0)
+
+
+        #grad_bias = torch.Tensor([grad_bias])
+
 
         return grad_input, grad_weight, grad_bias, grad_mask
 
