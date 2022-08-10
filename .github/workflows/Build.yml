@@ -32,7 +32,7 @@ jobs:
           python-version: '${{ matrix.python-version }}'
 
       - name: Step 3 - upgrade setuptools
-        run: pip3 install --upgrade setuptools
+        run: pip3 install pytest nbmake --upgrade setuptools
         
       - name: Step 4 - Install aix360         
         run: pip3 install .
@@ -69,3 +69,6 @@ jobs:
 
       - name: Step 15: Test CoFrNet
         run: bash ./tests/cofrnet/cofrnet_test.py
+
+      - name: Step 15b: Test CoFrNet Notebook
+        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
