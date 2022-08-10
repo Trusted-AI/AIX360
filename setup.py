@@ -44,9 +44,6 @@ setuptools.setup(
             'xmltodict==0.12.0',
             'numba',
             'tqdm',
-            'sklearn',
-            'math',
-            'random',
             'kaggle',
             'otoc @ git+https://github.com/IBM/otoc@main#egg=otoc'
 	],
