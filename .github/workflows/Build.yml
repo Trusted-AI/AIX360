@@ -67,8 +67,8 @@ jobs:
       - name: Step 14 - Test Rule Induction
         run: bash ./tests/rule_induction/test_rule_induction.sh
 
-      - name: Step 15: Test CoFrNet
+      - name: Step 15 - Test CoFrNet
         run: bash ./tests/cofrnet/cofrnet_test.py
 
-      - name: Step 15b: Test CoFrNet Notebook
+      - name: Step 15b - Test CoFrNet Notebook
         run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
