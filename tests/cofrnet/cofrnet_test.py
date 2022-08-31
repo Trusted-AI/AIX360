@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 import torch.optim as optim
 import random
 
-sys.path.append('../../')
+sys.path.append("../../")
 
 from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinearFunction
 from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinear
