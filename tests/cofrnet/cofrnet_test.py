@@ -18,7 +18,7 @@ import torch.optim as optim
 import random
 
 #sys.path.append("../../")
-sys.path.append("AIX360/aix360/algorithms/cofrnet")
+#sys.path.append("AIX360/aix360/algorithms/cofrnet")
 
 from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinearFunction
 from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinear
