@@ -231,7 +231,7 @@ def train(model, dataloader, num_classes, lr = 0.001, momentum = 0.9, epochs = 2
 
             batch['tabular'].requires_grad=True
 
-            print("BATCH TABULAR SHAPE", batch['tabular'].shape)
+            #print("BATCH TABULAR SHAPE", batch['tabular'].shape)
 
             outputs = model(batch['tabular'])
 
@@ -244,8 +244,8 @@ def train(model, dataloader, num_classes, lr = 0.001, momentum = 0.9, epochs = 2
             optimizer.zero_grad()
 
             loss.backward()
-            print("IS BATCH TABULAR GRAD NONE")
-            print(batch['tabular'].grad is None)
+            #print("IS BATCH TABULAR GRAD NONE")
+            #print(batch['tabular'].grad is None)
             optimizer.step()
 
             # print statistics

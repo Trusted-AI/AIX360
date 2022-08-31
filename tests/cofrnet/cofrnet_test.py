@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 import torch.optim as optim
 import random
 
-sys.path.append("../../")
+#sys.path.append("../../")
 
 from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinearFunction
 from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinear
@@ -30,8 +30,7 @@ from aix360.algorithms.cofrnet.CoFrNet import generate_connections
 from aix360.algorithms.cofrnet.CoFrNet import CoFrNet_Explainer
 import kaggle
 
-os.environ['KAGGLE_USERNAME'] = 'ishaopensourceibm' #replace with your Kaggle username
-os.environ['KAGGLE_KEY'] = 'e38322b9c75dc4b64d7198d7c43a598c' #replace with your Kaggle api key
+
 
 
 class TestCoFrNets(unittest.TestCase):
@@ -47,6 +46,9 @@ class TestCoFrNets(unittest.TestCase):
                                                     input_size, 
                                                     output_size, 
                                                     cofrnet_version))
+
+        os.environ['KAGGLE_USERNAME'] = 'ishaopensourceibm' #replace with your Kaggle username
+        os.environ['KAGGLE_KEY'] = 'e38322b9c75dc4b64d7198d7c43a598c' #replace with your Kaggle api key
 
         from kaggle.api.kaggle_api_extended import KaggleApi
         api = KaggleApi()
