@@ -30,6 +30,9 @@ from aix360.algorithms.cofrnet.CoFrNet import generate_connections
 from aix360.algorithms.cofrnet.CoFrNet import CoFrNet_Explainer
 import kaggle
 
+os.environ['KAGGLE_USERNAME'] = 'ishaopensourceibm' #replace with your Kaggle username
+os.environ['KAGGLE_KEY'] = 'e38322b9c75dc4b64d7198d7c43a598c' #replace with your Kaggle api key
+
 
 class TestCoFrNets(unittest.TestCase):
 

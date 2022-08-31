@@ -2,6 +2,7 @@
 author: @ishapuri101
 '''
 
+import sys
 import pandas as pd #loading data in table form  
 import numpy as np # linear algebra
 import torch # import main library
@@ -11,10 +12,18 @@ from torch.nn.parameter import Parameter # import Parameter to create custom act
 import torch.nn.functional as F # import torch functions
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from Customized_Linear_Classes import CustomizedLinearFunction
-from Customized_Linear_Classes import CustomizedLinear
+
+#print(sys.path)
+#sys.path.append('../')
+#print(sys.path)
+
+sys.path.append("/Users/ishapuri/Desktop/Archive/AIX360/aix360/algorithms/cofrnet")
+
 from utils import generate_connections
 from utils import process_data
+from Customized_Linear_Classes import CustomizedLinearFunction
+from Customized_Linear_Classes import CustomizedLinear
+
 from aix360.algorithms.die import DIExplainer
 
 
