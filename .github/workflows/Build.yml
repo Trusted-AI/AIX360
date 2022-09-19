@@ -32,7 +32,7 @@ jobs:
           python-version: '${{ matrix.python-version }}'
 
       - name: Step 3 - upgrade setuptools
-        run: pip3 install pytest nbmake --upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
         
       - name: Step 4 - Install aix360         
         run: pip3 install .
