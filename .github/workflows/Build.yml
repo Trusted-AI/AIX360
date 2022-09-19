@@ -36,6 +36,9 @@ jobs:
         
       - name: Step 4 - Install aix360         
         run: pip3 install .
+
+
+      '''
       
       - name: Step 5 - Test CEM MAF
         run: python ./tests/contrastive/test_CEM_MAF.py
@@ -67,6 +70,7 @@ jobs:
       - name: Step 14 - Test Rule Induction
         run: bash ./tests/rule_induction/test_rule_induction.sh
 
+      '''
       - name: Step 15 - Test CoFrNet
         run: bash ./tests/cofrnet/cofrnet_test.py
 
