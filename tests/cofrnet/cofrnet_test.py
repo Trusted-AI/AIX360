@@ -20,8 +20,8 @@ import random
 
 #sys.path.append("../../")
 
-from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinearFunction
-from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinear
+from aix360.algorithms.cofrnet.CustomizedLinearClasses import CustomizedLinearFunction
+from aix360.algorithms.cofrnet.CustomizedLinearClasses import CustomizedLinear
 from aix360.algorithms.cofrnet.utils import generate_connections
 from aix360.algorithms.cofrnet.utils import process_data
 from aix360.algorithms.cofrnet.utils import train
