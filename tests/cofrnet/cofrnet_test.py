@@ -39,7 +39,7 @@ class TestCoFrNets(unittest.TestCase):
     def test_CoFrNet(self):
 
         network_depth = 13
-        nput_size = 30
+        input_size = 30
         output_size = 2
         cofrnet_version = "diag_ladder_of_ladder_combined"
         model = CoFrNet_Model(generate_connections(network_depth,
