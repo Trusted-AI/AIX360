@@ -17,12 +17,12 @@ from sklearn.model_selection import train_test_split
 #sys.path.append('../')
 #print(sys.path)
 
-sys.path.append("/Users/ishapuri/Desktop/Archive/AIX360/aix360/algorithms/cofrnet")
+#sys.path.append("/Users/ishapuri/Desktop/Archive/AIX360/aix360/algorithms/cofrnet")
 
-from utils import generate_connections
-from utils import process_data
-from Customized_Linear_Classes import CustomizedLinearFunction
-from Customized_Linear_Classes import CustomizedLinear
+from aix360.algorithms.cofrnet.utils import generate_connections
+from aix360.algorithms.cofrnet.utils import process_data
+from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinearFunction
+from aix360.algorithms.cofrnet.Customized_Linear_Classes import CustomizedLinear
 
 from aix360.algorithms.die import DIExplainer
 
