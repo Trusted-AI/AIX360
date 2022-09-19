@@ -15,6 +15,8 @@ import torch.nn.functional as F # import torch functions
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split  
 import torch.optim as optim
+from sklearn.datasets import load_breast_cancer
+
 
 import random
 
