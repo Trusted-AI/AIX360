@@ -13,11 +13,6 @@ import torch.nn.functional as F # import torch functions
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
-#print(sys.path)
-#sys.path.append('../')
-#print(sys.path)
-
-#sys.path.append("/Users/ishapuri/Desktop/Archive/AIX360/aix360/algorithms/cofrnet")
 
 from aix360.algorithms.cofrnet.utils import generate_connections
 from aix360.algorithms.cofrnet.utils import process_data
@@ -165,12 +160,10 @@ class CoFrNet_Explainer(DIExplainer):
                     print(str(bias))
                     combined = "("+str(val) + "*x + " + str(bias)+")"
                     print("Combined: ", combined)
-                    #thingToPrint = "\n 1/("+str(val) + "x + " + str(bias)+")" + thingToPrint
                 else:
                     print("hi")
                     combined = "(" + str(val)+"*x" + "+0)"
                     print("Combined: ", combined)
-                    #thingToPrint = "\n 1/(" + str(val)+"x" + "+0)" + thingToPrint
                 print()
                 thingToPrint = "1/(" + combined + " + (" + thingToPrint + "))"
 

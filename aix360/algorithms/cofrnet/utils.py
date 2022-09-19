@@ -77,9 +77,7 @@ def generate_connections(num_total_layers: int,
             ladderOfLadders[:, 0:i] = 0 
             toAppend = np.append(np.eye(input_size), ladderOfLadders, axis = 1)
             getConns.append(toAppend.tolist())
-        #print(len(getConns[-1][0]))
         getConns.append(np.ones([len(getConns[-1][0]), output_size]).tolist())
-        #getConns.append(np.ones([numLayers_notIncOutput, output_size]).tolist())
 
         return getConns
 
@@ -159,8 +157,6 @@ def process_data(data_filename, first_column_csv, last_column_csv):
     y = df.iloc[:,-1].values.T
 
 
-    #print("x,y", X,y)
-
 
 
     from sklearn.preprocessing import LabelEncoder
@@ -231,7 +227,6 @@ def train(model, dataloader, num_classes, lr = 0.001, momentum = 0.9, epochs = 2
 
             batch['tabular'].requires_grad=True
 
-            #print("BATCH TABULAR SHAPE", batch['tabular'].shape)
 
             outputs = model(batch['tabular'])
 
@@ -244,8 +239,6 @@ def train(model, dataloader, num_classes, lr = 0.001, momentum = 0.9, epochs = 2
             optimizer.zero_grad()
 
             loss.backward()
-            #print("IS BATCH TABULAR GRAD NONE")
-            #print(batch['tabular'].grad is None)
             optimizer.step()
 
             # print statistics

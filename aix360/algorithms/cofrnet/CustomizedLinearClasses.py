@@ -40,14 +40,11 @@ class CustomizedLinearFunction(torch.autograd.Function):
     @staticmethod
     # bias, mask is an optional argument
     def forward(ctx, input, weight, bias=None, mask=None):
-        #print("type(input)", type(input))
         if mask is not None:
             # change weight to 0 where mask == 0
             weight = weight * mask
         weight_t = weight.t()
         
-        print("(input).shape", input.shape)
-        print("(weight_t).shape", weight_t.shape)
         output = input.mm(weight_t)
         #output = torch.matmul(input, weight_t)
         if bias is not None:

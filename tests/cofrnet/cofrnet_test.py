@@ -16,11 +16,11 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split  
 import torch.optim as optim
 from sklearn.datasets import load_breast_cancer
-
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 
 import random
 
-#sys.path.append("../../")
 
 from aix360.algorithms.cofrnet.CustomizedLinearClasses import CustomizedLinearFunction
 from aix360.algorithms.cofrnet.CustomizedLinearClasses import CustomizedLinear
@@ -46,17 +46,18 @@ class TestCoFrNets(unittest.TestCase):
                                                     input_size,
                                                     output_size,
                                                     cofrnet_version))
+
         data = load_breast_cancer()
         X = torch.from_numpy(data['data'])
         y = torch.from_numpy(data['target'])
-        from sklearn.preprocessing import LabelEncoder
+        
         le = LabelEncoder()
         y = le.fit_transform(y)
-        from sklearn.preprocessing import StandardScaler
+        
         sc = MinMaxScaler(feature_range=(0,1))
         X = sc.fit_transform(X)
         X.argmax()
-        from sklearn.model_selection import train_test_split
+        
         X_train, X_test, y_train, y_test = train_test_split(X,
                                                             y,
                                                             test_size = 0.3,
