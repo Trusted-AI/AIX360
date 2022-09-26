@@ -34,6 +34,7 @@ from aix360.algorithms.cofrnet.CoFrNet import CoFrNet_Explainer
 
 
 
+
 class TestCoFrNets(unittest.TestCase):
 
     def test_CoFrNet(self):
