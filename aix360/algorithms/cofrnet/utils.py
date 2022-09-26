@@ -141,14 +141,18 @@ def generate_connections(num_total_layers: int,
 
 
 
-def process_data(data_filename, first_column_csv, last_column_csv):
+def process_data(first_column_csv, last_column_csv, web_link = None, data_filename = None):
     #data_filename: filename of data source
     #first_column_csv: index (starting from 0) of first column to include in dataset
     #last_column_csv: index (starting from 0) of last column to include in dataset. Use -1 if you want to include all of the columns. 
 
     import pandas as pd
-    pathname = data_filename #'datasets/' + data_filename
-    df=pd.read_csv(pathname, sep=',',header=0)   
+
+    if web_link is not None: 
+        pathname = web_link
+    else:
+        pathname = data_filename #'datasets/' + data_filename
+    df=pd.read_csv(pathname, sep=',',header=0, lineterminator='\r')   
     if last_column_csv != -1: 
         last_column_csv = last_column_csv + 1
     df = df.sample(frac = 1)

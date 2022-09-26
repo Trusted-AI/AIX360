@@ -15,11 +15,12 @@ import torch.nn.functional as F # import torch functions
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split  
 import torch.optim as optim
-from sklearn.datasets import load_breast_cancer, load_wine, load_linnerud, load_diabetes, load_iris
+from sklearn.datasets import load_breast_cancer, load_wine, load_linnerud, load_diabetes, load_iris, load_digits
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 
 import random
+import pandas as pd
 
 
 from aix360.algorithms.cofrnet.CustomizedLinearClasses import CustomizedLinearFunction
@@ -39,8 +40,8 @@ class TestCoFrNets(unittest.TestCase):
 
     def test_CoFrNet(self):
 
-        network_depth = 14
-        input_size = 4
+        network_depth = 13
+        input_size = 40
         output_size = 3
         cofrnet_version = "diag_ladder_of_ladder_combined"
         model = CoFrNet_Model(generate_connections(network_depth,
@@ -48,34 +49,15 @@ class TestCoFrNets(unittest.TestCase):
                                                     output_size,
                                                     cofrnet_version))
 
-        data = load_iris() #load_breast_cancer()
-        X = torch.from_numpy(data['data'])
-        y = torch.from_numpy(data['target'])
-        
-        le = LabelEncoder()
-        y = le.fit_transform(y)
-        
-        sc = MinMaxScaler(feature_range=(0,1))
-        X = sc.fit_transform(X)
-        X.argmax()
-        
-        X_train, X_test, y_train, y_test = train_test_split(X,
-                                                            y,
-                                                            test_size = 0.3,
-                                                            random_state = 100,
-                                                            shuffle = True)
-        X_train, X_val, y_train, y_val = train_test_split(X_train,
-                                                            y_train,
-                                                            test_size=0.05,
-                                                            random_state=100,
-                                                            shuffle = True)
-        #CONVERTING TO TENSOR
-        tensor_x_train = torch.Tensor(X_train)
-        tensor_x_val = torch.Tensor(X_val)
-        tensor_x_test = torch.Tensor(X_test)
-        tensor_y_val = torch.Tensor(y_val).long()
-        tensor_y_train = torch.Tensor(y_train).long()
-        tensor_y_test = torch.Tensor(y_test).long()
+
+        first_column_csv = 0
+        last_column_csv = -1
+
+
+        web_link = 'http://www.dropbox.com/s/qtdv1teptf097zl/waveformnoise.csv?dl=1'
+        tensor_x_train, tensor_y_train, tensor_x_val, tensor_y_val, tensor_x_test, y_test = process_data(first_column_csv = first_column_csv, 
+                                                                                                            last_column_csv = last_column_csv, 
+                                                                                                            web_link=web_link)
         
         train_dataset = OnlyTabularDataset(tensor_x_train, 
                                             tensor_y_train)
