@@ -15,7 +15,7 @@ import torch.nn.functional as F # import torch functions
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split  
 import torch.optim as optim
-from sklearn.datasets import load_breast_cancer, load_wine, load_linnerud, load_diabetes
+from sklearn.datasets import load_breast_cancer, load_wine, load_linnerud, load_diabetes, load_iris
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 
@@ -40,15 +40,15 @@ class TestCoFrNets(unittest.TestCase):
     def test_CoFrNet(self):
 
         network_depth = 14
-        input_size = 10
-        output_size = 1
+        input_size = 4
+        output_size = 3
         cofrnet_version = "diag_ladder_of_ladder_combined"
         model = CoFrNet_Model(generate_connections(network_depth,
                                                     input_size,
                                                     output_size,
                                                     cofrnet_version))
 
-        data = load_diabetes() #load_breast_cancer()
+        data = load_iris() #load_breast_cancer()
         X = torch.from_numpy(data['data'])
         y = torch.from_numpy(data['target'])
         
