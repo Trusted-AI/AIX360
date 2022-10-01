@@ -43,6 +43,8 @@ setuptools.setup(
             'nyoka==5.2.0',
             'xmltodict==0.12.0',
             'numba',
+            'tqdm',
+            'kaggle',
             'otoc @ git+https://github.com/IBM/otoc@main#egg=otoc'
 	],
     package_data={'aix360': ['data/*', 'data/*/*', 'data/*/*/*', 'models/*', 'models/*/*', 'models/*/*/*']},

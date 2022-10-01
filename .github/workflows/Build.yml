@@ -32,13 +32,14 @@ jobs:
           python-version: '${{ matrix.python-version }}'
 
       - name: Step 3 - upgrade setuptools
-        run: pip3 install --upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
         
       - name: Step 4 - Install aix360         
         run: pip3 install .
+
       
       - name: Step 5 - Test CEM MAF
-        run: python ./tests/contrastive/test_CEM_MAF.py
+         run: python ./tests/contrastive/test_CEM_MAF.py
         
       - name: Step 6 - Test CEM
         run: python ./tests/contrastive/test_CEM.py
@@ -66,3 +67,9 @@ jobs:
 
       - name: Step 14 - Test Rule Induction
         run: bash ./tests/rule_induction/test_rule_induction.sh
+
+      - name: Step 15 - Test CoFrNet
+        run: python ./tests/cofrnet/cofrnet_test.py
+
+      - name: Step 15b - Test CoFrNet Notebook
+        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
