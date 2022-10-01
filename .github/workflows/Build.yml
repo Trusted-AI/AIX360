@@ -36,10 +36,9 @@ jobs:
         
       - name: Step 4 - Install aix360         
         run: pip3 install .
-
       
       - name: Step 5 - Test CEM MAF
-         run: python ./tests/contrastive/test_CEM_MAF.py
+        run: python ./tests/contrastive/test_CEM_MAF.py
         
       - name: Step 6 - Test CEM
         run: python ./tests/contrastive/test_CEM.py
