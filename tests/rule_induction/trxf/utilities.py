@@ -6,10 +6,11 @@ from aix360.algorithms.rule_induction.trxf.pmml_export import models
 from aix360.algorithms.rule_induction.trxf.pmml_export.models import DataDictionary, DataField, OpType, DataType, \
     MiningSchema, MiningField, MiningFieldUsageType, RuleSet, SimpleRule, CompoundPredicate, SimplePredicate, Operator, \
     BooleanOperator
+from aix360.algorithms.rule_induction.trxf.pmml_export.models.data_dictionary import Value
 
 DATA_DICTIONARY = DataDictionary(
     dataFields=[DataField(name='toto0', optype=OpType.continuous, dataType=DataType.double),
-                DataField(name='toto1', optype=OpType.categorical, dataType=DataType.string),
+                DataField(name='toto1', optype=OpType.categorical, dataType=DataType.string, values=[Value('foo')]),
                 DataField(name='toto2', optype=OpType.categorical, dataType=DataType.boolean),
                 DataField(name='toto3', optype=OpType.ordinal, dataType=DataType.integer)]
 )

@@ -1,3 +1,5 @@
+from typing import Dict
+
 import numpy as np
 import pandas as pd
 
@@ -5,6 +7,7 @@ from aix360.algorithms.rule_induction.trxf.classifier import ruleset_classifier
 from aix360.algorithms.rule_induction.trxf.classifier.ruleset_classifier import RuleSetClassifier
 from aix360.algorithms.rule_induction.trxf.core import Conjunction, Relation
 from aix360.algorithms.rule_induction.trxf.pmml_export import models
+from aix360.algorithms.rule_induction.trxf.pmml_export.models.data_dictionary import Value
 from aix360.algorithms.rule_induction.trxf.pmml_export.reader import AbstractReader
 from aix360.algorithms.rule_induction.trxf.pmml_export.models import SimplePredicate, Operator, CompoundPredicate, \
     BooleanOperator
@@ -38,13 +41,17 @@ class TrxfReader(AbstractReader):
         assert self._data_dictionary is not None
         return models.SimplePMMLRuleSetModel(dataDictionary=self._data_dictionary, ruleSetModel=rule_set_model)
 
-    def load_data_dictionary(self, X: pd.DataFrame):
+    def load_data_dictionary(self, X: pd.DataFrame, values: Dict = None):
         """
         Extract the data dictionary from a feature dataframe, and store it
+
+        @param X: Input dataframe
+        @param values: A dict mapping column name to a list of possible categorical values. It will be inferred from X if not provided.
         """
         dtypes = X.dtypes
         data_fields = []
         for index, value in dtypes.items():
+            vals = None
             if np.issubdtype(value, np.integer):
                 data_type = models.DataType.integer
                 op_type = models.OpType.ordinal
@@ -60,7 +67,9 @@ class TrxfReader(AbstractReader):
             else:
                 data_type = models.DataType.string
                 op_type = models.OpType.categorical
-            data_fields.append(models.DataField(name=str(index), optype=op_type, dataType=data_type))
+                vals = values[index] if values is not None and index in values else list(X[index].unique())
+            wrapped_vals = list(map(lambda v: Value(v), vals)) if vals is not None else vals
+            data_fields.append(models.DataField(name=str(index), optype=op_type, dataType=data_type, values=wrapped_vals))
         self._data_dictionary = models.DataDictionary(data_fields)
 
 

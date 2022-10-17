@@ -2,7 +2,6 @@ import datetime
 import os
 from unittest import TestCase
 
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -43,11 +42,11 @@ class TestPmmlExporter(TestCase):
         data = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',
                            header=None,
                            names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'class_name'],
-                           dtype={'sepal_length': np.float,
-                                  'sepal_width': np.float,
-                                  'petal_length': np.float,
-                                  'petal_width': np.float,
-                                  'class_name': np.str})
+                           dtype={'sepal_length': float,
+                                  'sepal_width': float,
+                                  'petal_length': float,
+                                  'petal_width': float,
+                                  'class_name': str})
 
         col_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'class_name']
 
@@ -75,20 +74,20 @@ class TestPmmlExporter(TestCase):
         self.assertEqual(expected, actual)
 
     def test_ripper_adult(self):
-        data_type = {'age': np.float,
+        data_type = {'age': float,
                      'workclass': str,
-                     'fnlwgt': np.float,
+                     'fnlwgt': float,
                      'education': str,
-                     'education-num': np.float,
+                     'education-num': float,
                      'marital-status': str,
                      'occupation': str,
                      'relationship': str,
                      'race': str,
                      'sex': str,
-                     'capital-gain': np.float,
-                     'capital-loss': np.float,
+                     'capital-gain': float,
+                     'capital-loss': float,
                      'native-country': str,
-                     'hours-per-week': np.float,
+                     'hours-per-week': float,
                      'label': str}
 
         col_names = ['age', 'workclass', 'fnlwgt', 'education',
@@ -140,13 +139,13 @@ class TestPmmlExporter(TestCase):
                            header=None,
                            delimiter='\t',
                            names=['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'Y'],
-                           dtype={'X1': np.float,
-                                  'X2': np.float,
-                                  'X3': np.float,
-                                  'X4': np.float,
-                                  'X5': np.float,
-                                  'X6': np.float,
-                                  'X7': np.float,
+                           dtype={'X1': float,
+                                  'X2': float,
+                                  'X3': float,
+                                  'X4': float,
+                                  'X5': float,
+                                  'X6': float,
+                                  'X7': float,
                                   'Y': str})
 
         x = data.loc[:, ['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7']]
