@@ -1,5 +1,6 @@
 import datetime
 import os
+import sys
 from unittest import TestCase
 
 import pandas as pd
@@ -129,7 +130,8 @@ class TestPmmlExporter(TestCase):
         reader.load_data_dictionary(x_test)
         serializer = NyokaSerializer(TIMESTAMP)
         exporter = PmmlExporter(reader, serializer)
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources/adult.pmml')) as file:
+        filename = 'adult.pmml' if sys.version_info[1] > 6 else 'adult_py36.pmml'
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', filename)) as file:
             expected = file.read()
         actual = exporter.export(classifier)
         self.assertEqual(expected, actual)
