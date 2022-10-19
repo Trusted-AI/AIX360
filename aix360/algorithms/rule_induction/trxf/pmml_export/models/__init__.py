@@ -16,3 +16,6 @@ from .ruleset import RuleSelectionMethod
 from .ruleset import RuleSet
 from .ruleset_model import RuleSetModel
 from .pmml_ruleset_model import SimplePMMLRuleSetModel
+from .scorecard import Scorecard, Output, OutputField
+from .characteristics import Characteristics, Characteristic
+from .attribute import Attribute, ComplexPartialScore
