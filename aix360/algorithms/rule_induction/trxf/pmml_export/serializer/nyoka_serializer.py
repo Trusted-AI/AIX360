@@ -22,6 +22,44 @@ class NyokaSerializer(AbstractSerializer):
         pmml_model.export(outfile=string_io, level=0)
         return string_io.getvalue()
 
+    def serialize_scorecard(self, scorecard: models.Scorecard, timestamp: datetime = None) -> str:
+        pmml_model = self._nyoka_scorecard(scorecard)
+        string_io = io.StringIO()
+        pmml_model.export(outfile=string_io, level=0)
+        return string_io.getvalue()
+
+    def _nyoka_scorecard(self, scorecard: models.Scorecard) -> nyoka_pmml.PMML:
+        return nyoka_pmml.PMML(
+            version=nyoka_constants.PMML_SCHEMA.VERSION,
+            Header=nyoka_pmml.Header(
+                copyright=NyokaSerializer.COPYRIGHT_STRING,
+                description=nyoka_constants.HEADER_INFO.DEFAULT_DESCRIPTION,
+                Timestamp=nyoka_pmml.Timestamp(datetime.datetime.now() if self._timestamp is None else self._timestamp),
+                Application=nyoka_pmml.Application(
+                    name=NyokaSerializer.APPLICATION_NAME, version=version.version)),
+            DataDictionary=None if scorecard.dataDictionary is None else self._nyoka_data_dictionary(
+                scorecard.dataDictionary),
+            Scorecard=None if scorecard is None else [
+                self._nyoka_scorecard_model(scorecard)])
+
+    def _nyoka_scorecard_model(self, scorecard: models.Scorecard) -> nyoka_pmml.Scorecard:
+        return nyoka_pmml.Scorecard(
+            functionName='regression',
+            algorithmName='ScoreCard',
+            MiningSchema=None if scorecard.miningSchema is None else self._nyoka_mining_schema(
+                scorecard.miningSchema),
+            initialScore=scorecard.initialScore,
+            useReasonCodes="false",
+            Output=None if scorecard.output is None else nyoka_pmml.Output(
+                OutputField=[
+                    nyoka_pmml.OutputField(
+                        name=outputField.name,
+                        feature=outputField.feature,
+                        dataType=outputField.dataType.name,
+                        optype=outputField.optype.name) for outputField in scorecard.output.outputFields]),
+            Characteristics=None if scorecard.characteristics is None else self._nyoka_pmml_characteristics(
+                scorecard.characteristics))
+
     def _nyoka_pmml_model(self, simple_pmml_ruleset_model: models.SimplePMMLRuleSetModel) -> nyoka_pmml.PMML:
         timestamp = datetime.datetime.now() if self._timestamp is None else self._timestamp
         return nyoka_pmml.PMML(
@@ -91,3 +129,35 @@ class NyokaSerializer(AbstractSerializer):
             nbCorrect=simple_rule.nbCorrect,
             confidence=simple_rule.confidence,
             weight=simple_rule.weight)
+
+    def _nyoka_pmml_characteristics(self, characteristics: models.Characteristics) -> nyoka_pmml.Characteristics:
+        return nyoka_pmml.Characteristics(
+            Characteristic=[
+                nyoka_pmml.Characteristic(
+                    name=characteristic.name,
+                    Attribute=[self._nyoka_pmml_attributes(attribute) for attribute in characteristic.attributes])
+                for characteristic in characteristics.characteristics])
+
+    def _nyoka_pmml_attributes(self, attribute: models.Attribute) -> nyoka_pmml.Attribute:
+        return nyoka_pmml.Attribute(
+            partialScore=attribute.score if not isinstance(attribute.score, models.ComplexPartialScore) else None,
+            ComplexPartialScore=nyoka_pmml.ComplexPartialScore(
+                Apply=nyoka_pmml.Apply(
+                    function='+',
+                    Apply_member=[nyoka_pmml.Apply(
+                        function='*',
+                        FieldRef=[nyoka_pmml.FieldRef(field=attribute.score.feature_name)],
+                        Constant=[nyoka_pmml.Constant(valueOf_=attribute.score.multiplier)])],
+                    Constant=[nyoka_pmml.Constant(valueOf_=attribute.score.constant)])) if isinstance(
+                        attribute.score, models.ComplexPartialScore) else None,
+            SimplePredicate=None if (attribute.predicate is None or not isinstance(
+                attribute.predicate, models.SimplePredicate)) else nyoka_pmml.SimplePredicate(
+                    field=attribute.predicate.field,
+                    operator=attribute.predicate.operator.name,
+                    value=attribute.predicate.value),
+            CompoundPredicate=None if (attribute.predicate is None or not isinstance(
+                attribute.predicate, models.CompoundPredicate)) else nyoka_pmml.CompoundPredicate(
+                    booleanOperator=attribute.predicate.booleanOperator.name,
+                    SimplePredicate=[
+                        nyoka_pmml.SimplePredicate(field=sp.field, operator=sp.operator.name, value=sp.value)
+                        for sp in attribute.predicate.simplePredicates]))
