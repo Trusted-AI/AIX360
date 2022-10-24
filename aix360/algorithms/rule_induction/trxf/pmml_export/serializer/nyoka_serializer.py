@@ -150,4 +150,6 @@ class NyokaSerializer(AbstractSerializer):
                     booleanOperator=attribute.predicate.booleanOperator.name,
                     SimplePredicate=[
                         nyoka_pmml.SimplePredicate(field=sp.field, operator=sp.operator.name, value=sp.value)
-                        for sp in attribute.predicate.simplePredicates]))
+                        for sp in attribute.predicate.simplePredicates]),
+            True_=None if (attribute.predicate is None or not isinstance(
+                attribute.predicate, models.TruePredicate)) else nyoka_pmml.True_())

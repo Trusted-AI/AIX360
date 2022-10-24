@@ -21,4 +21,4 @@ class ComplexPartialScore:
 @dataclass(frozen=True)
 class Attribute:
     score: typing.Union[str, ComplexPartialScore]
-    predicate: typing.Union[predicate.SimplePredicate, predicate.CompoundPredicate]
+    predicate: typing.Union[predicate.SimplePredicate, predicate.CompoundPredicate, predicate.TruePredicate]
