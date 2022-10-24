@@ -1,3 +1,4 @@
+import typing
 import datetime
 import io
 
@@ -16,64 +17,35 @@ class NyokaSerializer(AbstractSerializer):
     def __init__(self, timestamp: datetime = None):
         self._timestamp = timestamp
 
-    def serialize(self, simple_pmml_ruleset_model: models.SimplePMMLRuleSetModel, timestamp: datetime = None) -> str:
-        pmml_model = self._nyoka_pmml_model(simple_pmml_ruleset_model)
+    def serialize(self, model: typing.Union[models.SimplePMMLRuleSetModel, models.Scorecard]) -> str:
+        if isinstance(model, models.SimplePMMLRuleSetModel):
+            pmml_model = self._nyoka_pmml_model(
+                model,
+                RuleSetModel=None if model.ruleSetModel is None else [self._nyoka_rule_set_model(model.ruleSetModel)])
+        elif isinstance(model, models.Scorecard):
+            pmml_model = self._nyoka_pmml_model(
+                model,
+                Scorecard=None if model is None else [self._nyoka_scorecard_model(model)])
+        else:
+            raise NotImplemented
         string_io = io.StringIO()
         pmml_model.export(outfile=string_io, level=0)
         return string_io.getvalue()
 
-    def serialize_scorecard(self, scorecard: models.Scorecard, timestamp: datetime = None) -> str:
-        pmml_model = self._nyoka_scorecard(scorecard)
-        string_io = io.StringIO()
-        pmml_model.export(outfile=string_io, level=0)
-        return string_io.getvalue()
-
-    def _nyoka_scorecard(self, scorecard: models.Scorecard) -> nyoka_pmml.PMML:
+    def _nyoka_pmml_model(
+            self,
+            model: typing.Union[models.SimplePMMLRuleSetModel, models.Scorecard],
+            **build_args
+    ) -> nyoka_pmml.PMML:
         return nyoka_pmml.PMML(
             version=nyoka_constants.PMML_SCHEMA.VERSION,
             Header=nyoka_pmml.Header(
                 copyright=NyokaSerializer.COPYRIGHT_STRING,
                 description=nyoka_constants.HEADER_INFO.DEFAULT_DESCRIPTION,
                 Timestamp=nyoka_pmml.Timestamp(datetime.datetime.now() if self._timestamp is None else self._timestamp),
-                Application=nyoka_pmml.Application(
-                    name=NyokaSerializer.APPLICATION_NAME, version=version.version)),
-            DataDictionary=None if scorecard.dataDictionary is None else self._nyoka_data_dictionary(
-                scorecard.dataDictionary),
-            Scorecard=None if scorecard is None else [
-                self._nyoka_scorecard_model(scorecard)])
-
-    def _nyoka_scorecard_model(self, scorecard: models.Scorecard) -> nyoka_pmml.Scorecard:
-        return nyoka_pmml.Scorecard(
-            functionName='regression',
-            algorithmName='ScoreCard',
-            MiningSchema=None if scorecard.miningSchema is None else self._nyoka_mining_schema(
-                scorecard.miningSchema),
-            initialScore=scorecard.initialScore,
-            useReasonCodes="false",
-            Output=None if scorecard.output is None else nyoka_pmml.Output(
-                OutputField=[
-                    nyoka_pmml.OutputField(
-                        name=outputField.name,
-                        feature=outputField.feature,
-                        dataType=outputField.dataType.name,
-                        optype=outputField.optype.name) for outputField in scorecard.output.outputFields]),
-            Characteristics=None if scorecard.characteristics is None else self._nyoka_pmml_characteristics(
-                scorecard.characteristics))
-
-    def _nyoka_pmml_model(self, simple_pmml_ruleset_model: models.SimplePMMLRuleSetModel) -> nyoka_pmml.PMML:
-        timestamp = datetime.datetime.now() if self._timestamp is None else self._timestamp
-        return nyoka_pmml.PMML(
-            version=nyoka_constants.PMML_SCHEMA.VERSION,
-            Header=nyoka_pmml.Header(
-                copyright=NyokaSerializer.COPYRIGHT_STRING,
-                description=nyoka_constants.HEADER_INFO.DEFAULT_DESCRIPTION,
-                Timestamp=nyoka_pmml.Timestamp(timestamp),
-                Application=nyoka_pmml.Application(
-                    name=NyokaSerializer.APPLICATION_NAME, version=version.version)),
-            DataDictionary=None if simple_pmml_ruleset_model.dataDictionary is None else self._nyoka_data_dictionary(
-                simple_pmml_ruleset_model.dataDictionary),
-            RuleSetModel=None if simple_pmml_ruleset_model.ruleSetModel is None else [
-                self._nyoka_rule_set_model(simple_pmml_ruleset_model.ruleSetModel)])
+                Application=nyoka_pmml.Application(name=NyokaSerializer.APPLICATION_NAME, version=version.version)),
+            DataDictionary=None if model.dataDictionary is None else self._nyoka_data_dictionary(model.dataDictionary),
+            **build_args)
 
     def _nyoka_data_dictionary(self, data_dictionary: models.DataDictionary) -> nyoka_pmml.DataDictionary:
         return nyoka_pmml.DataDictionary(
@@ -129,6 +101,24 @@ class NyokaSerializer(AbstractSerializer):
             nbCorrect=simple_rule.nbCorrect,
             confidence=simple_rule.confidence,
             weight=simple_rule.weight)
+
+    def _nyoka_scorecard_model(self, scorecard: models.Scorecard) -> nyoka_pmml.Scorecard:
+        return nyoka_pmml.Scorecard(
+            functionName='regression',
+            algorithmName='ScoreCard',
+            MiningSchema=None if scorecard.miningSchema is None else self._nyoka_mining_schema(
+                scorecard.miningSchema),
+            initialScore=scorecard.initialScore,
+            useReasonCodes="false",
+            Output=None if scorecard.output is None else nyoka_pmml.Output(
+                OutputField=[
+                    nyoka_pmml.OutputField(
+                        name=outputField.name,
+                        feature=outputField.feature,
+                        dataType=outputField.dataType.name,
+                        optype=outputField.optype.name) for outputField in scorecard.output.outputFields]),
+            Characteristics=None if scorecard.characteristics is None else self._nyoka_pmml_characteristics(
+                scorecard.characteristics))
 
     def _nyoka_pmml_characteristics(self, characteristics: models.Characteristics) -> nyoka_pmml.Characteristics:
         return nyoka_pmml.Characteristics(

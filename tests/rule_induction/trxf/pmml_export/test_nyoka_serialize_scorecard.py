@@ -52,7 +52,7 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard = dataclasses.replace(self.empty_scorecard, initialScore=initial_score)
 
         # when
-        serialized = xmltodict.parse(self.nyokaSerializer.serialize_scorecard(scorecard))
+        serialized = xmltodict.parse(self.nyokaSerializer.serialize(scorecard))
         scorecard_content = serialized['PMML']['Scorecard']
 
         # assert
@@ -76,7 +76,7 @@ class TestNyokaSerializer(unittest.TestCase):
                     optype=models.OpType.categorical)]))
 
         # when
-        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard))
+        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard))
         output_content = serialized['PMML']['Scorecard']['Output']['OutputField']
 
         # assert
@@ -96,8 +96,8 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard2 = dataclasses.replace(self.empty_scorecard, characteristics=self.characteristics2)
 
         # when
-        serialized1 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard1))
-        serialized2 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard2))
+        serialized1 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard1))
+        serialized2 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard2))
         output_characteristic1 = serialized1['PMML']['Scorecard']['Characteristics']['Characteristic']
         output_characteristic2 = serialized2['PMML']['Scorecard']['Characteristics']['Characteristic']
 
@@ -111,8 +111,8 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard2 = dataclasses.replace(self.empty_scorecard, characteristics=self.characteristics2)
 
         # when
-        serialized1 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard1))
-        serialized2 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard2))
+        serialized1 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard1))
+        serialized2 = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard2))
         attribute1_content = serialized1['PMML']['Scorecard']['Characteristics']['Characteristic']['Attribute']
         attribute2_content = serialized2['PMML']['Scorecard']['Characteristics']['Characteristic']['Attribute']
 
@@ -126,7 +126,7 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard = dataclasses.replace(self.empty_scorecard, characteristics=self.characteristics2)
 
         # when
-        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard))
+        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard))
         interval_content = serialized[
             'PMML']['Scorecard']['Characteristics']['Characteristic']['Attribute']['CompoundPredicate']
         interval_lower = interval_content['SimplePredicate'][0]
@@ -147,7 +147,7 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard = dataclasses.replace(self.empty_scorecard, characteristics=self.characteristics1)
 
         # when
-        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard))
+        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard))
         interval_content = serialized[
             'PMML']['Scorecard']['Characteristics']['Characteristic']['Attribute']
         interval_upper = interval_content['SimplePredicate']
@@ -163,7 +163,7 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard = dataclasses.replace(self.empty_scorecard, characteristics=self.characteristics3)
 
         # when
-        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard))
+        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard))
         set_content = serialized['PMML']['Scorecard']['Characteristics']['Characteristic']['Attribute']
 
         # assert
@@ -183,7 +183,7 @@ class TestNyokaSerializer(unittest.TestCase):
         scorecard = dataclasses.replace(self.empty_scorecard, characteristics=self.characteristics4)
 
         # when
-        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize_scorecard(scorecard))
+        serialized = xmltodict.parse(TestNyokaSerializer.nyokaSerializer.serialize(scorecard))
         score_content = serialized[
             'PMML']['Scorecard']['Characteristics']['Characteristic']['Attribute']['ComplexPartialScore']
 
