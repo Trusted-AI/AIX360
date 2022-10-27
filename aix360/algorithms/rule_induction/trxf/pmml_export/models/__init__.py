@@ -2,6 +2,8 @@ from .data_dictionary import DataDictionary
 from .data_dictionary import DataField
 from .data_dictionary import DataType
 from .data_dictionary import OpType
+from .data_dictionary import Value
+from .data_dictionary import Restriction
 from .mining_schema import MiningField
 from .mining_schema import MiningFieldUsageType
 from .mining_schema import MiningSchema

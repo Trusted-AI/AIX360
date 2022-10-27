@@ -49,10 +49,17 @@ class NyokaSerializer(AbstractSerializer):
 
     def _nyoka_data_dictionary(self, data_dictionary: models.DataDictionary) -> nyoka_pmml.DataDictionary:
         return nyoka_pmml.DataDictionary(
-            numberOfFields=0 if data_dictionary.dataFields is None else len(data_dictionary.dataFields),
-            DataField=None if data_dictionary.dataFields is None else [
-                nyoka_pmml.DataField(name=f.name, optype=f.optype.name, dataType=f.dataType.name)
-                for f in data_dictionary.dataFields])
+            numberOfFields=0 if not data_dictionary.dataFields else len(data_dictionary.dataFields),
+            DataField=None if not data_dictionary.dataFields else [
+                self._nyoka_data_field(f) for f in data_dictionary.dataFields])
+
+    def _nyoka_data_field(self, data_field: models.DataField) -> nyoka_pmml.DataField:
+        return nyoka_pmml.DataField(
+            name=data_field.name,
+            optype=data_field.optype.name,
+            dataType=data_field.dataType.name,
+            Value=None if not data_field.values else [
+                nyoka_pmml.Value(value=val.value, property=val.property.name) for val in data_field.values])
 
     def _nyoka_rule_set_model(self, rule_set_model: models.RuleSetModel) -> nyoka_pmml.RuleSetModel:
         return nyoka_pmml.RuleSetModel(
