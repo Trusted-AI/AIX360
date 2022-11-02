@@ -24,10 +24,16 @@ class OpType(enum.Enum):
 
 
 @dataclass(frozen=True)
+class Value:
+    value: str = field()
+
+
+@dataclass(frozen=True)
 class DataField:
     name: str = field()
     optype: OpType = field()
     dataType: DataType = field()
+    values: typing.Optional[typing.List[Value]] = field(default=None)
 
 
 @dataclass(frozen=True)
