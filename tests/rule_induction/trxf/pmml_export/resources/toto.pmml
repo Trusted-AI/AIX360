@@ -6,7 +6,9 @@
     </Header>
     <DataDictionary numberOfFields="4">
         <DataField name="toto0" optype="continuous" dataType="double"/>
-        <DataField name="toto1" optype="categorical" dataType="string"/>
+        <DataField name="toto1" optype="categorical" dataType="string">
+            <Value value="foo"/>
+        </DataField>
         <DataField name="toto2" optype="categorical" dataType="boolean"/>
         <DataField name="toto3" optype="ordinal" dataType="integer"/>
     </DataDictionary>

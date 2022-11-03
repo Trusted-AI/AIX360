@@ -40,7 +40,7 @@ class DataField:
     name: str = field()
     optype: OpType = field()
     dataType: DataType = field()
-    values: typing.Optional[typing.List[Value]] = field(default_factory=list)
+    values: typing.Optional[typing.List[Value]] = field(default=None)
 
     def __post_init__(self):
         if self.values and \
