@@ -1,4 +1,5 @@
 import abc
+import typing
 
 from .. import models
 
@@ -6,5 +7,5 @@ from .. import models
 class AbstractSerializer(abc.ABC):
 
     @abc.abstractmethod
-    def serialize(self, simple_pmml_ruleset_model: models.SimplePMMLRuleSetModel) -> str:
+    def serialize(self, model: typing.Union[models.SimplePMMLRuleSetModel, models.Scorecard]) -> str:
         raise NotImplementedError

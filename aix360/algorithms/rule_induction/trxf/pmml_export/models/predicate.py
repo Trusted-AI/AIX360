@@ -16,13 +16,19 @@ class Operator(enum.Enum):
     lessOrEqual = 3
     greaterThan = 4
     greaterOrEqual = 5
+    isMissing = 6
 
 
 @dataclass(frozen=True)
 class SimplePredicate:
     operator: Operator = field()
-    value: str = field()
     field: str = field()
+    value: typing.Optional[str] = None
+
+
+@dataclass(frozen=True)
+class TruePredicate:
+    pass
 
 
 # Use functional api to add aliases for `or` and `and`

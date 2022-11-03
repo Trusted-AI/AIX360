@@ -23,9 +23,16 @@ class OpType(enum.Enum):
     continuous = 2
 
 
+class Restriction(enum.Enum):
+    valid = 0
+    invalid = 1
+    missing = 2
+
+
 @dataclass(frozen=True)
 class Value:
     value: str = field()
+    property: Restriction = field(default=Restriction.valid)
 
 
 @dataclass(frozen=True)
@@ -34,6 +41,11 @@ class DataField:
     optype: OpType = field()
     dataType: DataType = field()
     values: typing.Optional[typing.List[Value]] = field(default=None)
+
+    def __post_init__(self):
+        if self.values and \
+                (self.dataType is not DataType.string or self.optype not in (OpType.ordinal, OpType.categorical)):
+            raise ValueError
 
 
 @dataclass(frozen=True)
