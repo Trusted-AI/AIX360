@@ -34,11 +34,11 @@ class TrxfScorecardReader(AbstractReader):
                                 characteristics=characteristics,
                                 initialScore=str(trxf_scorecard.bias))
 
-    def load_data_dictionary(self, X: pd.DataFrame):
+    def load_data_dictionary(self, X: pd.DataFrame, values=None):
         """
         Extract the data dictionary from a feature dataframe, and store it
         """
-        self._data_dictionary = extract_data_dictionary(X)
+        self._data_dictionary = extract_data_dictionary(X, values)
 
 
 def _extract_mining_schema(scorecard_features):
