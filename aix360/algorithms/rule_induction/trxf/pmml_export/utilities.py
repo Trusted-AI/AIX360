@@ -1,20 +1,23 @@
+from typing import Dict
+
 import numpy as np
 import pandas as pd
 from aix360.algorithms.rule_induction.trxf.pmml_export.models import Operator, SimplePredicate, CompoundPredicate, \
-    BooleanOperator
+    BooleanOperator, Value
 
 from aix360.algorithms.rule_induction.trxf.core import Conjunction, Relation
 
 from aix360.algorithms.rule_induction.trxf.pmml_export import models
 
 
-def extract_data_dictionary(X: pd.DataFrame):
+def extract_data_dictionary(X: pd.DataFrame, values: Dict):
     """
     Extract the data dictionary from a feature dataframe
     """
     dtypes = X.dtypes
     data_fields = []
     for index, value in dtypes.items():
+        vals = None
         if np.issubdtype(value, np.integer):
             data_type = models.DataType.integer
             op_type = models.OpType.ordinal
@@ -30,7 +33,9 @@ def extract_data_dictionary(X: pd.DataFrame):
         else:
             data_type = models.DataType.string
             op_type = models.OpType.categorical
-        data_fields.append(models.DataField(name=str(index), optype=op_type, dataType=data_type))
+            vals = values[index] if values is not None and index in values else list(X[index].unique())
+        wrapped_vals = list(map(lambda v: Value(v), vals)) if vals is not None else vals
+        data_fields.append(models.DataField(name=str(index), optype=op_type, dataType=data_type, values=wrapped_vals))
 
     return models.DataDictionary(data_fields)
 

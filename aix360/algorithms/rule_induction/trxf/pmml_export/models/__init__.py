@@ -11,6 +11,7 @@ from .predicate import BooleanOperator
 from .predicate import CompoundPredicate
 from .predicate import Operator
 from .predicate import SimplePredicate
+from .predicate import SimpleSetPredicate
 from .predicate import TruePredicate
 from .rule import SimpleRule
 from .rule import DEFAULT_WEIGHT

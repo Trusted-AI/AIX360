@@ -2,6 +2,8 @@ import pandas as pd
 
 from aix360.algorithms.rule_induction.trxf import scorecard
 from aix360.algorithms.rule_induction.trxf.pmml_export import models
+from aix360.algorithms.rule_induction.trxf.pmml_export.models import SimpleSetPredicate
+from aix360.algorithms.rule_induction.trxf.pmml_export.models.predicate import MembershipOperator
 from aix360.algorithms.rule_induction.trxf.pmml_export.reader import AbstractReader
 from aix360.algorithms.rule_induction.trxf.pmml_export.utilities import extract_data_dictionary, trxf_to_pmml_predicate
 
@@ -55,9 +57,15 @@ def _extract_characteristics(trxf_scorecard):
         feature_name = partition.feature.variable_names[0]
         attributes = []
         for bin in partition.bins:
-            assert isinstance(bin, scorecard.IntervalBin), "Scorecard is only supported for continuous bins"
-            conjunction = bin.to_conjunction()
-            predicate = trxf_to_pmml_predicate(conjunction)
+            if isinstance(bin, scorecard.IntervalBin):
+                conjunction = bin.to_conjunction()
+                predicate = trxf_to_pmml_predicate(conjunction)
+            elif isinstance(bin, scorecard.SetBin):
+                predicate = SimpleSetPredicate(field_=feature_name,
+                                               membershipOperator=MembershipOperator.isIn,
+                                               values=bin.values)
+            else:
+                raise ValueError('Unsupported Bin type {} for feature {}'.format(type(bin), feature_name))
             score = str(bin.sub_score)
             attribute = models.Attribute(score=score, predicate=predicate)
             attributes.append(attribute)

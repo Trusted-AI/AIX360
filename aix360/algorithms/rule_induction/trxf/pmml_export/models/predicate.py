@@ -40,3 +40,13 @@ BooleanOperator = enum.Enum('BooleanOperator',
 class CompoundPredicate:
     simplePredicates: typing.List[SimplePredicate] = field()
     booleanOperator: BooleanOperator = field()
+
+
+MembershipOperator = enum.Enum('MembershipOperator', [('isIn', 0), ('isNotIn', 1)])
+
+
+@dataclass(frozen=True)
+class SimpleSetPredicate:
+    field_: str = field()
+    membershipOperator: MembershipOperator = field()
+    values: typing.Set[str] = field()

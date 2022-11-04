@@ -1,3 +1,5 @@
+from typing import Dict
+
 import pandas as pd
 
 from aix360.algorithms.rule_induction.trxf.classifier import ruleset_classifier
@@ -42,7 +44,7 @@ class TrxfRuleSetReader(AbstractReader):
         @param X: Input dataframe
         @param values: A dict mapping column name to a list of possible categorical values. It will be inferred from X if not provided.
         """
-        self._data_dictionary = extract_data_dictionary(X)
+        self._data_dictionary = extract_data_dictionary(X, values)
 
 
 def _convert_to_simple_rules(trxf_rules):
