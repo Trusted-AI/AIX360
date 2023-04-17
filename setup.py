@@ -23,7 +23,6 @@ setuptools.setup(
             'torchvision',
             'cvxpy>==1.1',
             'Image',
-            'tensorflow==1.14',
             'h5py<3.0.0',
             'keras==2.3.1',
             'matplotlib',
