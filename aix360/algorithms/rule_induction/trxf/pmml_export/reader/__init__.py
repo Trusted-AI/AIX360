@@ -1,2 +1,2 @@
 from .abstract_reader import AbstractReader
-from .trxf_reader import TrxfReader
+from .trxf_ruleset_reader import TrxfRuleSetReader

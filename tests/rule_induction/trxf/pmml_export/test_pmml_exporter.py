@@ -12,7 +12,7 @@ from aix360.algorithms.rule_induction.trxf.classifier.ruleset_classifier import 
     WeightMetric, ConfidenceMetric
 from aix360.algorithms.rule_induction.trxf.pmml_export import NyokaSerializer
 from aix360.algorithms.rule_induction.trxf.pmml_export.pmml_exporter import PmmlExporter
-from aix360.algorithms.rule_induction.trxf.pmml_export.reader.trxf_reader import TrxfReader
+from aix360.algorithms.rule_induction.trxf.pmml_export.reader.trxf_ruleset_reader import TrxfRuleSetReader
 from tests.rule_induction.trxf.utilities import create_test_ruleset, DATA_FRAME
 
 TIMESTAMP = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
@@ -20,7 +20,7 @@ TIMESTAMP = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
 
 class TestPmmlExporter(TestCase):
     def test_export(self):
-        reader = TrxfReader()
+        reader = TrxfRuleSetReader()
         reader.load_data_dictionary(DATA_FRAME)
         serializer = NyokaSerializer(TIMESTAMP)
         exporter = PmmlExporter(reader, serializer)
@@ -32,7 +32,7 @@ class TestPmmlExporter(TestCase):
         self.assertEqual(expected, actual)
 
     def test_export_with_missing_data_dict_should_raise(self):
-        reader = TrxfReader()
+        reader = TrxfRuleSetReader()
         serializer = NyokaSerializer()
         exporter = PmmlExporter(reader, serializer)
 
@@ -65,7 +65,7 @@ class TestPmmlExporter(TestCase):
                                        weight_metric=WeightMetric.CONFIDENCE,
                                        default_label='Iris-virginica')
         classifier.update_rules_with_metrics(x_test, y_test)
-        reader = TrxfReader()
+        reader = TrxfRuleSetReader()
         reader.load_data_dictionary(x_train)
         serializer = NyokaSerializer(TIMESTAMP)
         exporter = PmmlExporter(reader, serializer)
@@ -126,7 +126,7 @@ class TestPmmlExporter(TestCase):
                                        weight_metric=WeightMetric.CONFIDENCE,
                                        default_label='<=50K')
         classifier.update_rules_with_metrics(x_test, y_test)
-        reader = TrxfReader()
+        reader = TrxfRuleSetReader()
         reader.load_data_dictionary(x_test)
         serializer = NyokaSerializer(TIMESTAMP)
         exporter = PmmlExporter(reader, serializer)
@@ -165,7 +165,7 @@ class TestPmmlExporter(TestCase):
                                        weight_metric=WeightMetric.CONFIDENCE,
                                        default_label='4')
         classifier.update_rules_with_metrics(x_test, y_test)
-        reader = TrxfReader()
+        reader = TrxfRuleSetReader()
         reader.load_data_dictionary(x_train)
         serializer = NyokaSerializer(TIMESTAMP)
         exporter = PmmlExporter(reader, serializer)

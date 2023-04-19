@@ -1,7 +1,7 @@
 import abc
 from numbers import Real
 from typing import Dict, Set, Any, Optional
-from aix360.algorithms.rule_induction.trxf.core import Feature
+from aix360.algorithms.rule_induction.trxf.core import Feature, Predicate, Relation, Conjunction
 
 
 class Bin(abc.ABC):
@@ -120,6 +120,17 @@ class LinearIntervalBin(Bin):
             raise ValueError('other must be an instance of LinearIntervalBin or a subclass thereof but it'
                              'is an instance of "{}"'.format(str(other.__class__)))
         return (self.left_end < other.right_end) and (self.right_end > other.left_end)
+
+    def to_conjunction(self):
+        """
+        Converts bin to trxf.Conjunction
+        """
+        left = Predicate(feature=self.feature, relation=Relation.GE, value=self.left_end) if \
+            self.left_end > float('-inf') else None
+        right = Predicate(feature=self.feature, relation=Relation.LT, value=self.right_end) if \
+            self.right_end < float('inf') else None
+        predicates = [p for p in [left, right] if p is not None]
+        return Conjunction(predicates)
 
     def _get_feature_value(self, assignment: Dict[str, Any]) -> Real:
         """
