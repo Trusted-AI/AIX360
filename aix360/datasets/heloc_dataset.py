@@ -2,9 +2,9 @@ import os
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.model_selection import train_test_split
-from keras.utils import to_categorical
+# from keras.utils import to_categorical
 
 def nan_preprocessing(df):
     # Separate and encode target variable as 0,1
@@ -120,7 +120,12 @@ class HELOCDataset():
         y_train = data_train[:, -1]
         y_test = data_test[:, -1]
 
-        y_train_b = to_categorical(y_train)
-        y_test_b = to_categorical(y_test)
+	#y_train_b = to_categorical(y_train)
+	#y_test_b = to_categorical(y_test)
+
+        # convert y_train and y_test into onehot encoded form
+        enc = OneHotEncoder().fit(self._data[:,-1].reshape(-1,1))
+        y_train_b = enc.transform(y_train.reshape(-1,1)).toarray()
+        y_test_b = enc.transform(y_test.reshape(-1,1)).toarray()
 
         return (self._data, x_train, x_test, y_train_b, y_test_b)

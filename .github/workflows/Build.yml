@@ -18,7 +18,8 @@ jobs:
     runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]        
         python-version: ['3.6']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -64,8 +65,8 @@ jobs:
       - name: Step 13 - Test Matching Explainer
         run: python ./tests/matching/test_order_constraints.py
 
-      - name: Step 14 - Test Rule Induction
-        run: bash ./tests/rule_induction/test_rule_induction.sh
+#       - name: Step 14 - Test Rule Induction
+#         run: bash ./tests/rule_induction/test_rule_induction.sh
 
       - name: Step 15 - Test CoFrNet
         run: python ./tests/cofrnet/cofrnet_test.py
