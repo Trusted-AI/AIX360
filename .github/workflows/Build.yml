@@ -6,70 +6,160 @@ name: Build
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
-  build-on-all:  
+  # job to build algorithms that work on python 3.6 and tensorflow 1.14
+  build-on-py36:
     # The type of runner that the job will run on
-    runs-on: '${{ matrix.os }}'
+    runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]        
-        python-version: ['3.6']
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.6"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
         uses: actions/checkout@v3
-      
+
       - name: Step 2 - set up python version
         uses: actions/setup-python@v4
         with:
-          python-version: '${{ matrix.python-version }}'
+          python-version: "${{ matrix.python-version }}"
 
       - name: Step 3 - upgrade setuptools
         run: pip3 install pytest nbmake wheel --upgrade setuptools
-        
-      - name: Step 4 - Install aix360         
+
+      - name: Step 4 - Install aix360
         run: pip3 install .
-      
-      - name: Step 5 - Test CEM MAF
-        run: python ./tests/contrastive/test_CEM_MAF.py
-        
-      - name: Step 6 - Test CEM
-        run: python ./tests/contrastive/test_CEM.py
-        
-      - name: Step 7 - Test Protodash
-        run: python ./tests/protodash/test_PDASH.py
-        
-      - name: Step 8 - Test TED
+
+      - name: Step 5 - Test TED
         run: python ./tests/ted/test_TED_Cartesian.py
-        
-      - name: Step 9 - Test DIPVAE
-        run: python ./tests/dipvae/test_DIPVAE.py
 
-      - name: Step 10 - Test BRCG
-        run: python ./tests/rbm/test_Boolean_Rule_CG.py
-        
-      - name: Step 11 - Test Linear Rule Regression
-        run: python ./tests/rbm/test_Linear_Rule_Regression.py
-        
-      - name: Step 12 - Test Logistic Rule Regression
-        run: python ./tests/rbm/test_Logistic_Rule_Regression.py
+      - name: Step 6 - Install aix360 with tensorflow 1.14 related dependencies
+        run: pip3 install .[tf_1x]
 
-      - name: Step 13 - Test Matching Explainer
+      - name: Step 7 - Test CEM MAF
+        run: python ./tests/contrastive/test_CEM_MAF.py
+
+      - name: Step 8 - Test CEM
+        run: python ./tests/contrastive/test_CEM.py
+
+  # job to build algorithms that work on python 3.10 with default set of dependencies.
+  build-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360
+        run: pip3 install .
+
+      - name: Step 5 - Test TED
+        run: python ./tests/ted/test_TED_Cartesian.py
+
+      - name: Step 6 - Install matching algorithm related dependencies
+        run: pip3 install .[matching]
+
+      - name: Step 7 - Test Matching Explainer
         run: python ./tests/matching/test_order_constraints.py
 
-#       - name: Step 14 - Test Rule Induction
-#         run: bash ./tests/rule_induction/test_rule_induction.sh
+  # job to build algorithms that work on python 3.10 with tensorflow 2.x.
+  # build-tf-deps-on-py310: # this can be enabled when algorithms support tensorflow 2.x
 
-      - name: Step 15 - Test CoFrNet
+  # job to build algorithms that work on python 3.10 with pytorch.
+  build-torch-deps-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with pytorch related dependencies
+        run: pip3 install .[torch]
+
+      - name: Step 5 - Test DIPVAE
+        run: python ./tests/dipvae/test_DIPVAE.py
+
+      - name: Step 6 - Test CoFrNet
         run: python ./tests/cofrnet/cofrnet_test.py
 
-      - name: Step 15b - Test CoFrNet Notebook
+      - name: Step 7 - Test CoFrNet Notebook
         run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
+
+  # job to build algorithms that work on python 3.10 with cvxpy.
+  build-cvxpy-deps-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with cvxpy related dependencies
+        run: pip3 install .[cvxpy]
+
+      - name: Step 5 - Test Protodash
+        run: python ./tests/protodash/test_PDASH.py
+
+      - name: Step 6 - Test BRCG
+        run: python ./tests/rbm/test_Boolean_Rule_CG.py
+
+      - name: Step 7 - Test Linear Rule Regression
+        run: python ./tests/rbm/test_Linear_Rule_Regression.py
+
+      - name: Step 8 - Test Logistic Rule Regression
+        run: python ./tests/rbm/test_Logistic_Rule_Regression.py
+
+      #       - name: Step 14 - Test Rule Induction
+      #         run: bash ./tests/rule_induction/test_rule_induction.sh

@@ -76,8 +76,10 @@ extra_requires = {
     ],
 }
 
-# group algorithms those depend on tensorflow 1.14/x
-extra_requires["tf_1x"] = extra_requires["profwt"] + extra_requires["shap"]
+# group algorithms those depend on tensorflow 1.14/x. This set works only on Python 3.6.
+extra_requires["tf_1x"] = (
+    extra_requires["profwt"] + extra_requires["shap"] + extra_requires["contrastive"]
+)
 
 # group algorithms those depend on tensorflow 2.x.
 extra_requires[
