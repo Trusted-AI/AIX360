@@ -64,6 +64,9 @@ extra_requires = {
         "tensorflow==1.14",
         "requests",
         "scipy>=0.17",
+        "scikit-image",
+        "torch",
+        "h5py<3.0.0",  # to resolve keras error: 'str' object has no attribute 'decode'
     ],
     "shap": [
         "keras==2.3.1",
