@@ -79,26 +79,6 @@ extra_requires = {
     ],
 }
 
-# group algorithms those depend on tensorflow 1.14/x. This set works only on Python 3.6.
-extra_requires["tf_1x"] = (
-    extra_requires["profwt"] + extra_requires["shap"] + extra_requires["contrastive"]
-)
-
-# group algorithms those depend on tensorflow 2.x.
-extra_requires[
-    "tf_2x"
-] = []  # This can be updated as algorithms upgrade to use tensorflow 2.x.
-
-# group algorithms those depend on pytorch.
-extra_requires["torch"] = extra_requires["cofrnet"] + extra_requires["dipvae"]
-
-# group algorithms those depend on cvxpy.
-extra_requires["cvxpy"] = (
-    extra_requires["rbm"]
-    + extra_requires["rule_induction"]
-    + extra_requires["protodash"]
-)
-
 # minimal dependencies in install_requires
 install_requires = extra_requires["default"]  # ted is supported by default.
 
