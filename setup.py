@@ -77,6 +77,10 @@ extra_requires = {
         "shap",
         "tqdm",
     ],
+    "nncontrastive": [
+        "pandas<=1.4.3",
+        "tensorflow==2.9.3",
+    ],
 }
 
 # minimal dependencies in install_requires
