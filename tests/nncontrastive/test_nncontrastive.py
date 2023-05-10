@@ -24,7 +24,7 @@ class TestNearestNeighborContrastiveExplainer(unittest.TestCase):
         dataset = load_breast_cancer()
         X = dataset["data"]
         y = dataset["target"]
-        target_names = dataset["target_names"]
+
         feature_names = dataset["feature_names"]
 
         xx_train, xx_test, y_train, y_test = train_test_split(
@@ -51,7 +51,7 @@ class TestNearestNeighborContrastiveExplainer(unittest.TestCase):
             [1 - y_test[:, np.newaxis], y_test[:, np.newaxis]], axis=1
         ).astype("float32")
 
-        # load model
+        # train example model
         self.model = RandomForestClassifier(n_estimators=2, random_state=10)
         self.model.fit(self.xx_train, y_train)
 
@@ -94,12 +94,6 @@ class TestNearestNeighborContrastiveExplainer(unittest.TestCase):
         self.assertIn("distances", explanation)
         self.assertEquals(len(explanation["neighbors"]), neighbors)
         self.assertEquals(len(explanation["distances"]), neighbors)
-
-        # test plots
-
-        # save plot to a test file
-
-        # remove the test file
 
     def test_single_instance_with_model(self):
 
@@ -147,13 +141,8 @@ class TestNearestNeighborContrastiveExplainer(unittest.TestCase):
             np.array([neighbor_prediction], dtype=int).reshape(-1)
         )[0]
 
+        # validate that the explanation is contrastive
         self.assertNotEqual(prediction, neighbor_prediction)
-
-        # test plots
-
-        # save plot to a test file
-
-        # remove the test file
 
     def test_multiple_instances(self):
 
@@ -196,12 +185,6 @@ class TestNearestNeighborContrastiveExplainer(unittest.TestCase):
         self.assertIn("distances", explanation)
         self.assertEquals(len(explanation["neighbors"]), neighbors)
         self.assertEquals(len(explanation["distances"]), neighbors)
-
-        # test plots
-
-        # save plot to a test file
-
-        # remove the test file
 
 
 if __name__ == "__main__":
