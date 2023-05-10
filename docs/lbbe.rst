@@ -20,3 +20,8 @@ LIME Explainers
 .. autoclass:: aix360.algorithms.lime.lime_wrapper.LimeTextExplainer
    :members:
 
+Nearest Neighbor Contrastive Explainer
+-------------------------------------------
+
+.. autoclass:: aix360.algorithms.nncontrastive.nncontrastive.NearestNeighborContrastiveExplainer
+   :members:

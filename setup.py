@@ -80,7 +80,6 @@ extra_requires = {
     "nncontrastive": [
         "pandas<=1.4.3",
         "tensorflow==2.9.3",
-        "scikit-learn",
     ],
 }
 
