@@ -2,7 +2,7 @@ import abc
 import numpy as np
 
 from aix360.algorithms.lbbe import LocalBBExplainer
-from aix360.algorithms.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsframe import tsFrame
 
 
 class TSLocalBBExplainer(LocalBBExplainer):
