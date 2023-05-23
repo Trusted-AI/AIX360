@@ -62,109 +62,86 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
         """
         Constructor method, initializes the explainer
 
-        Parameters
-        ----------
-        model: Callable
-            Classification Model which will be used for contrastive explanation.
-        n_classes: int
-            Number of classes the classification produces.
-        metric: str
-            Distance metric for neighborhood finding. This metric is used to find neighborhood
-            in the embedding space. The implementation internally uses Scipy KDTree for neighborhood
-            search. See the documentation of scipy.spatial.distance and the metrics listed in
-            distance_metrics for more information. Default = euclidean
-        neighbors: int
-            Number of neighbors to fetch for producing the explanation. The NearestNeighborContrastiveExplainer
-            uses these neighbors to produce explanation. In order to understand the variety in
-            the neighborhood profile, higher value is suggested for this parameter, which impacts
-            the size of the explanation produced. For fast greedy explanation lower value is suggested
-            for this parameter. Default = 3
-        embedding_type: Union[str, EmbeddingType]
-            This parameter controls the nature of the embedding produced. It can be set to supervised
-            (EmbeddingType.SUPERVISED) or unsupervised (EmbeddingType.UNSUPERVISED). The unsupervised
-            embedding ensures data distribution compliance, while supervised embedding allow imposing
-            further structural constraints to the embedding by provided business tags during the model
-            fit step. Default = EmbeddingType.UNSUPERVISED
-        embedding_dim: int
-            Dimension of the produced embedding. Lower dimension allows faster search, while at the cost
-            of lossy reconstruction. An appropriate emebedding_dim selection depends of the data complexity
-            and available data. Default = 8,
-        category_enc_dim: int
-            Autoencoder handles categorical variable as embedding/one hot encoding. This parameter defines
-            the internal dimension to be used by the auto-encoder to derive the categorical embedding.
-            Default = 3,
-        category_encoding: str
-            Strategy specification for categorical variable handling. Supported values are 'ohe'
-            (One hot encoding) and 'label' (Uses embedding). Default = "ohe",
-        numeric_scaling: str
-            Data scaling to be used on numeric columns for computational stability. This uses global scaling,
-            i.e., applied uniformly over the entire training batch for all numeric columns. Supported values
-            are minmax, standard, quantile. Default = None
-        layers_config: List[int]
-            This is auto-encoder internals specification. Autoencoder uses MLP layers to derive the embedding,
-            this parameter specifies number of hidden layers in the embedding, and their respective dimensions.
-            Default = [16, 16]
-        encoder_activation: str
-            Activation function used by the auto-encoder encoding layers. Supports all activation function
-            as enabled by tensorflow framework. Default = "relu",
-        decoder_activation: str
-            Activation function used by the auto-encoder decoding layers. Support all activation functions as
-            supported by the tensorflow framework. Default = "relu",
-        embedding_activation: str
-            This is embedding layer activation, this can be separately specified than hidden layer activation.
-            Support all tensorflow activation function. Default = "tanh",
-        encoder_kernel_regularizer: str
-            Regularization for the encoder MLP kernel. Regularization results in stable prediction model.
-            Default = "l1",
-        encoder_kernel_initializer: str
-            Initialization algorithm for the MLP kernel. Default = "glorot_uniform",
-        encoder_bias_initializer: str
-            Initialization algorithm for the MLP bias. Default = "zeros",
-        encoder_activity_regularizer: str
-            (Optional) Encoder activity regularizer for MLP layers. Default = None,
-        decoder_kernel_regularizer: str
-            Kernel regularizer for the decoder MLP layer. All tensorflow regularizer algorithm are supported.
-            Default = "l1",
-        decoder_kernel_initializer: str
-            Decoder MLP kernel weight initializer algorithm. All tensorflow initializer algorithms are supported.
-            Default = "glorot_uniform",
-        decoder_bias_initializer: str
-            Decoder MLP bias initializer algorithm. All tensorflow initializer algorithms are supported.
-            Default = "zeros",
-        decoder_activity_regularizer: str
-            Decoder activity regularization algorithm. All tensorflow regularizer algorithms are supported.
-            Default = None,
-        decoder_last_layer_activation: str
-            Decoder last layer activation. This layer produces the input reconstruction. Supports all tensorflow
-            supported activation function.
-            Default = "linear",
-        embedding_activity_regularizer: str
-            Embedding activity regularization method. Uses default tensorflow framework, support all activity regularizer
-            algorithm.
-            Default = None,
-        classifier_layers: List[int]
-            Supervised auto-encoder uses classification layer for the structural constraint on the embedding.
-            MLP layer for this classification task. This specifies the dimension of the MLP layer for this
-            classification task.
-            Default = [16],
-        classifier_activation: str
-            Supervised auto-encoder uses classification layer for the structural constraint on the embedding.
-            For supervised auto-encoder activation of MLP layer classification layer.
-            Default = "relu",
-        classifier_kernel_regularizer: str
-            Supervised auto-encoder uses classification layer for the structural constraint on the embedding.
-            This parameter describes the kernel regularization for supervised auto-encoder MLP layer for
-            classification.
-            Default = None,
-        classifier_kernel_initilizer: str
-            Supervised auto-encoder uses classification layer for the structural constraint on the embedding.
-            This parameter describes the kernel initialization algorithm for supervised auto-encoder MLP layer
-            for the classification.
-            Default = "glorot_uniform",
-        classifier_bias_initializer: str
-            Describes the MLP bias initialization algorithm, for the classification layer of supervised
-            auto-encoder.
-            Default = "zeros",
+        Args:
+            model (Callable): Classification Model which will be used for contrastive
+                explanation.
+            n_classes (int): Number of classes the classification produces.
+            metric (str): Distance metric for neighborhood finding. This metric is used
+                to find neighborhood in the embedding space. The implementation internally
+                uses Scipy KDTree for neighborhood search. See the documentation of
+                scipy.spatial.distance and the metrics listed in distance_metrics for more
+                information. Defaults to euclidean.
+            neighbors (int): Number of neighbors to fetch for producing the explanation.
+                The NearestNeighborContrastiveExplainer uses these neighbors to produce
+                explanation. In order to understand the variety in the neighborhood profile,
+                higher value is suggested for this parameter, which impacts the size of the
+                explanation produced. For fast greedy explanation lower value is suggested
+                for this parameter. Defaults to 3.
+            embedding_type (Union[str, EmbeddingType]): This parameter controls the nature of
+                the embedding produced. It can be set to supervised (EmbeddingType.SUPERVISED)
+                or unsupervised (EmbeddingType.UNSUPERVISED). The unsupervised embedding ensures
+                data distribution compliance, while supervised embedding allow imposing further
+                structural constraints to the embedding by provided business tags during the model
+                fit step. Defaults to EmbeddingType.UNSUPERVISED.
+            embedding_dim (int): Dimension of the produced embedding. Lower dimension allows faster
+                search, while at the cost of lossy reconstruction. An appropriate emebedding_dim
+                selection depends of the data complexity and available data. Defaults to 8.
+            category_enc_dim (int): Autoencoder handles categorical variable as embedding/one hot
+                encoding. This parameter defines the internal dimension to be used by the auto-encoder
+                to derive the categorical embedding. Defaults to 3.
+            category_encoding (str): Strategy specification for categorical variable handling.
+                Supported values are 'ohe' (One hot encoding) and 'label' (Uses embedding).
+                Defaults to "ohe".
+            numeric_scaling (str): Data scaling to be used on numeric columns for computational
+                stability. This uses global scaling, i.e., applied uniformly over the entire training
+                batch for all numeric columns. Supported values are minmax, standard, quantile.
+                Defaults to None.
+            layers_config (List[int]): This is auto-encoder internals specification. Autoencoder
+                uses MLP layers to derive the embedding, this parameter specifies number of hidden
+                layers in the embedding, and their respective dimensions. Defaults to [16, 16].
+            encoder_activation (str): Activation function used by the auto-encoder encoding layers.
+                Supports all activation function as enabled by tensorflow framework. Defaults to "relu".
+            decoder_activation (str): Activation function used by the auto-encoder decoding layers.
+                Support all activation functions as supported by the tensorflow framework. Defaults to
+                "relu".
+            embedding_activation (str): This is embedding layer activation, this can be separately
+                specified than hidden layer activation. Support all tensorflow activation function.
+                Defaults to "tanh".
+            encoder_kernel_regularizer (str): Regularization for the encoder MLP kernel. Regularization
+                results in stable prediction model. Defaults to "l1".
+            encoder_kernel_initializer (str): Initialization algorithm for the MLP kernel. Defaults to
+                "glorot_uniform".
+            encoder_bias_initializer (str): Initialization algorithm for the MLP bias. Defaults to "zeros".
+            encoder_activity_regularizer (str): Encoder activity regularizer for MLP layers. Defaults to
+                None.
+            decoder_kernel_regularizer (str): Kernel regularizer for the decoder MLP layer. All tensorflow
+                regularizer algorithm are supported. Defaults to "l1".
+            decoder_kernel_initializer (str): Decoder MLP kernel weight initializer algorithm. All
+                tensorflow initializer algorithms are supported. Defaults to "glorot_uniform".
+            decoder_bias_initializer (str): Decoder MLP bias initializer algorithm. All tensorflow
+                initializer algorithms are supported. Defaults to "zeros".
+            decoder_activity_regularizer (str): Decoder activity regularization algorithm. All tensorflow
+                regularizer algorithms are supported. Defaults to None.
+            decoder_last_layer_activation (str): Decoder last layer activation. This layer produces the
+                input reconstruction. Supports all tensorflow supported activation function. Defaults
+                to "linear".
+            embedding_activity_regularizer (str): Embedding activity regularization method. Uses default
+                tensorflow framework, support all activity regularizer algorithm. Defaults to None.
+            classifier_layers (List[int]): Supervised auto-encoder uses classification layer for the
+                structural constraint on the embedding. MLP layer for this classification task. This
+                specifies the dimension of the MLP layer for this classification task. Defaults to [16].
+            classifier_activation (str): Supervised auto-encoder uses classification layer for
+                the structural constraint on the embedding. For supervised auto-encoder activation
+                of MLP layer classification layer. Defaults to "relu".
+            classifier_kernel_regularizer (str): Supervised auto-encoder uses classification layer for
+                the structural constraint on the embedding. This parameter describes the kernel
+                regularization for supervised auto-encoder MLP layer for classification. Defaults to None.
+            classifier_kernel_initilizer (str): Supervised auto-encoder uses classification layer for the
+                structural constraint on the embedding. This parameter describes the kernel initialization
+                algorithm for supervised auto-encoder MLP layer for the classification. Defaults to
+                "glorot_uniform".
+            classifier_bias_initializer (str): Describes the MLP bias initialization algorithm, for the
+                classification layer of supervised auto-encoder. Defaults to "zeros".
         """
         super(NearestNeighborContrastiveExplainer, self).__init__()
         self._config = dict(
@@ -276,42 +253,31 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
         **kwargs,
     ):
         """
-        Parameters
-        ----------
-        x: pd.DataFrame,
-            training data.
-        y: np.ndarray
-            This is an optional input. If provided these data labels is used
-            for training supervised auto-encoder. This labels need not be same as data
-            target classes from target class label. Default = None
-        features: List[str]
-            Names of the features to be used. If not specified all the columns in the
-            training data will be used as features. Default = None,
-        categorical_features: List[str]
-            Names of the categorical features in the data. This must match the column
-            names. Default = [],
-        categorical_values: dict
-            Lookup dictionary for all categorical variables, list of possible categorical
-            values. Default = {},
-        epochs: int
-            Number of epochs to be used for auto-encoder training.
-            Default = 5,
-        batch_size: int
-            Batch-size for the auto-encoder training. Should be smaller than the available
-            data in training data. Default = 128,
-        verbose: int
-            Log verbosity. Default = 0,
-        shuffle: bool
-            Shuffle batch per epoch. Default = True,
-        validation_fraction: float
-            Fraction specifying the validation split during encoder training. Default = 0,
-        max_training_records: int
-            Maximum number of records to be used for the auto-encoder training. Enables
-            explainer performance optimization. Default = 10000,
-        exemplars: pd.DataFrame
-            Exemplar neighbors to be used to compute explanations.
-        random_seed: int
-            Random seed to fit auto encoder. Default = None
+        Fit the explainer.
+
+        Args:
+            x (pd.DataFrame): Training data.
+            y (np.ndarray): If provided these data labels is used for training supervised
+                auto-encoder. This labels need not be same as data target classes from target
+                class label. Defaults to None.
+            features (List[str]): Names of the features to be used. If not specified all the
+                columns in the training data will be used as features. Defaults to None.
+            categorical_features (List[str]): Names of the categorical features in the data.
+                This must match the column names. Defaults to [].
+            categorical_values (dict): Lookup dictionary for all categorical variables, list
+                of possible categorical values. Defaults to {}.
+            epochs (int): Number of epochs to be used for auto-encoder training. Defaults to 5.
+            batch_size (int): Batch-size for the auto-encoder training. Should be smaller than
+                the available data in training data. Defaults to 128.
+            verbose (int): Log verbosity. Defaults to 0.
+            shuffle (bool): Shuffle batch per epoch. Defaults to True.
+            validation_fraction (float): Fraction specifying the validation split during encoder
+                training. Defaults to 0.
+            max_training_records (int): Maximum number of records to be used for the auto-encoder
+                training. Enables explainer performance optimization. Defaults to 10000.
+            exemplars (pd.DataFrame): Exemplar neighbors to be used to compute explanations. If
+                None, training dataset will be used as exemplars. Defaults to None.
+            random_seed (int): Random seed to fit auto encoder. Defaults to None
 
         """
         opts = self._embedding_args(**kwargs)
@@ -349,10 +315,9 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
         """
         Set user provided exemplars to guide contrastive exploration.
 
-        Parameters
-        ----------
-        x : Union[pd.DataFrame, np.ndarray]
-            Exemplar neighbors to be used to compute explanations.
+        Args:
+            x (Union[pd.DataFrame, np.ndarray]): Exemplar neighbors to be used to compute
+                explanations.
 
         """
         if not self.is_fitted:
@@ -400,15 +365,12 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
     def explain_instance(self, x, **kwargs):
         """Explain the model prediction for an instance (local explanation).
 
-        Parameters
-        ----------
-        x : Union[pd.DataFrame, np.ndarray]
-            input instance to be explained.
+        Args:
+            x (Union[pd.DataFrame, np.ndarray]): input instance to be explained.
 
-        Additional Parameters
-        ---------------------
-        neighbors : int
-            Overrides neighbors parameter provided in the init method of NearestNeighborContrastiveExplainer.
+        Additional Parameters:
+            neighbors (int): Overrides neighbors parameter provided in the init method
+                of NearestNeighborContrastiveExplainer.
 
         """
         if not self.is_fitted:
