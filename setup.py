@@ -88,6 +88,7 @@ extra_requires = {
         "plotly",  # required for example notebook
         "ipython",  # required for example notebook
         "kaleido",  # required for example notebook
+        "requests",  # for dataset
     ],
 }
 
