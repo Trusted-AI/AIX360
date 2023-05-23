@@ -72,7 +72,7 @@ Miniconda](https://conda.io/docs/user-guide/install/download.html#anaconda-or-mi
 if you are curious) and can be installed from
 [here](https://conda.io/miniconda.html) if you do not already have it.
 
-Then, to create a new Python 3.6 environment, run:
+Then, to create a new Python 3.6(or any of the supported python versions) environment, run:
 
 ```bash
 conda create --name aix360 python=3.6
@@ -110,6 +110,8 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 ```
 
 If you face any issues, please try upgrading pip and setuptools and uninstall any previous versions of aix360 before attempting the above step again. 
+
+With the new setup.py, `pip install .` installs [dependencies of TED algorithm](https://github.com/Trusted-AI/AIX360/blob/462c4d575bfc71c5cbfd32ceacdb3df96a8dc2d1/setup.py#L32) only. To install dependencies of multiple algorithms, use `pip install .[algo1, algo2]`. An example is `pip install .[dipvae,cofrnet,tsice]`.
 
 ```bash
 (aix360)$ pip install --upgrade pip setuptools
