@@ -293,7 +293,7 @@ class TSICEExplainer(TSLocalBBExplainer):
                 This can be generated using :py:mod:`aix360.algorithms.tsframe.tsFrame`.
                 A ``tsFrame`` is a pandas ``DataFrame`` indexed by ``Timestamp`` objects
                 (that is ``DatetimeIndex``). Each column corresponds to a target to forecast.
-            ts_related_train (tsFrame, optional): The related time series ``tsFrame`` containing
+            ts_related (tsFrame, optional): The related time series ``tsFrame`` containing
                 the external regressors. A ``tsFrame`` is a pandas ``DataFrame`` indexed by
                 ``Timestamp`` objects (that is ``DatetimeIndex``). Each column corresponds to a
                 related external regressor. Defaults to None.
