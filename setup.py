@@ -81,6 +81,14 @@ extra_requires = {
         "pandas<=1.4.3",
         "tensorflow==2.9.3",
     ],
+    "tsice": [
+        "pandas<=1.4.3",
+        "scikit-learn",
+        "scipy",
+        "plotly",  # required for example notebook
+        "ipython",  # required for example notebook
+        "kaleido",  # required for example notebook
+    ],
 }
 
 # minimal dependencies in install_requires
