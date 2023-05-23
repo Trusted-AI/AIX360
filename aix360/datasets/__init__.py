@@ -42,3 +42,8 @@ try:
     from .esnli_dataset import eSNLIDataset
 except:
     pass
+
+try:
+    from .sunspots_dataset import SunspotDataset
+except:
+    pass
