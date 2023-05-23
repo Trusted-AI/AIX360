@@ -6,10 +6,10 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-from aix360.algorithms.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsframe import tsFrame
 from aix360.datasets import SunspotDataset
 from aix360.algorithms.tsice import TSICEExplainer
-from aix360.algorithms.tsice.tsperturbers import BlockBootstrapPerturber
+from aix360.algorithms.tsutils.tsperturbers import BlockBootstrapPerturber
 
 # transform a time series dataset into a supervised learning dataset
 # below sample forecaster is from: https://machinelearningmastery.com/random-forest-for-time-series-forecasting/

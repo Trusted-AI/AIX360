@@ -1,9 +1,14 @@
 import numpy as np
 import pandas as pd
 from typing import Union
-from aix360.algorithms.tsframe import tsFrame
-from aix360.algorithms.tsice.tsperturbers.tsperturber import BlockSelector, TSPerturber
-from aix360.algorithms.tsice.tsperturbers.perturber_utils import ts_split_mean_residual
+from aix360.algorithms.tsutils.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsperturbers.tsperturber import (
+    BlockSelector,
+    TSPerturber,
+)
+from aix360.algorithms.tsutils.tsperturbers.perturber_utils import (
+    ts_split_mean_residual,
+)
 
 
 class BlockBootstrapPerturber(TSPerturber):

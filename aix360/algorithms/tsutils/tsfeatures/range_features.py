@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Union
-from aix360.algorithms.tsframe import tsFrame, to_np_array
-from aix360.algorithms.tsice.tsfeatures.tsfeatures import TSFeatures
+from aix360.algorithms.tsutils.tsframe import tsFrame, to_np_array
+from aix360.algorithms.tsutils.tsfeatures.tsfeatures import TSFeatures
 
 SUPPORTED_STATS = [
     "median",

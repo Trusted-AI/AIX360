@@ -1,38 +1,44 @@
 import numpy as np
 import pandas as pd
 from typing import Union
-from aix360.algorithms.tsframe import tsFrame
-from aix360.algorithms.tsice.tsperturbers.tsperturber import BlockSelector, TSPerturber
-from aix360.algorithms.tsice.tsperturbers.perturber_utils import ts_split_mean_residual
+from aix360.algorithms.tsutils.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsperturbers.tsperturber import (
+    BlockSelector,
+    TSPerturber,
+)
+from aix360.algorithms.tsutils.tsperturbers.perturber_utils import (
+    ts_split_mean_residual,
+)
 
 
-class MovingAveragePerturber(TSPerturber):
-    """MovingAveragePerturber maintains the moving mean of the time series
-    data as computed using specified window length, but add perturbed noise
-    with similar distribution as the data with MA structure.
+class FrequencyPerturber(TSPerturber):
+    """FrequencyPerturber performs FFT on the noise structure of the time series
+    data, and removes high frequencies to from the spectra, and reconstruct the
+    residual (noise) and added it back to the signal (mean) for generating the
+    perturbed instance. Number of frequencies to be removed is specified by the
+    truncate_frequencies argument.
     """
 
     def __init__(
         self,
         window_length: int = 5,
-        lag: int = 5,
+        truncate_frequencies: int = 5,
         block_length: int = 5,
     ):
-        """
-        MovingAveragePerturber initialization
+        """FrequencyPerturber initialization
 
         Args:
-            window_length (int): window length for mean and residual estimation. Defaults to 5.
-            lag (int): lag parameter for MA noise generation. Defaults to 5.
+            window_length (int): window length for noise estimation. Defaults to 5.
+            truncate_frequencies (int): number of frequencies to truncate. Defaults to 4.
             block_length (int): length of the contiguous time window (block) to perturb. Defaults to 5.
         """
-        super(MovingAveragePerturber, self).__init__()
+        super(FrequencyPerturber, self).__init__()
         self._mean = None
         self._residual = None
         self._data_length = None
         self._parameters = dict()
         self._parameters["window_length"] = window_length
-        self._parameters["lag"] = lag
+        self._parameters["truncate_frequencies"] = truncate_frequencies
         self._parameters["block_length"] = block_length
 
     def get_params(self):
@@ -58,7 +64,7 @@ class MovingAveragePerturber(TSPerturber):
         n_perturbations: int = 1,
         block_selector: BlockSelector = None,
     ):
-        lag = self._parameters.get("lag")
+        rem_frequency = self._parameters.get("truncate_frequencies")
         block_length = self._parameters.get("block_length")
 
         x_res = self._residual.copy()
@@ -66,28 +72,21 @@ class MovingAveragePerturber(TSPerturber):
             x_res = x_res.values.T
         else:
             x_res = x_res.T
+        x_res = [np.fft.fft(x) for x in x_res]
+        sel_p = np.asarray([np.abs(np.real(x)) for x in x_res])
+        sel_p = np.abs(sel_p)
+        sel_p = sel_p / np.sum(np.abs(sel_p), axis=1, keepdims=True)
 
-        params = np.asarray(
-            [
-                np.corrcoef(
-                    np.asarray([np.roll(x, shift=-i) for i in range(lag)])[:, :-lag]
-                )[0]
-                for x in x_res
-            ]
-        )
-        ranges = np.asarray([[np.min(x), np.max(x)] for x in x_res]) / np.sqrt(lag)
         n_res = []
-        f = 1.0 / np.sqrt(lag)
         for i in range(n_perturbations):
             r_seq = []
             for j, _ in enumerate(x_res):
-                f_r = (
-                    f
-                    * (2 * np.random.random(self._data_length) - 1)
-                    * (ranges[j, 1] - ranges[j, 0])
+                f_idx = np.random.choice(
+                    np.arange(self._data_length), rem_frequency, p=sel_p[j]
                 )
-                x_r = np.convolve(f_r, params[j], "same")
-                r_seq.append(x_r)
+                x_f = x_res[j].copy()
+                x_f[f_idx] = complex(0, 0)
+                r_seq.append(np.real(np.fft.ifft(x_f)))
             r_seq = np.asarray(r_seq).T
             if isinstance(self._mean, pd.DataFrame):
                 r_seq = pd.DataFrame(

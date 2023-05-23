@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from typing import Tuple, Union
-from aix360.algorithms.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsframe import tsFrame
 
 
 def ts_rolling_mean(

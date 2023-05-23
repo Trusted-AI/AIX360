@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Union, List
 from abc import ABC, abstractmethod
-from aix360.algorithms.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsframe import tsFrame
 
 
 class TSFeatures(ABC):

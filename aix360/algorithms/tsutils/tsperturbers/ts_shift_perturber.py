@@ -2,44 +2,42 @@ import numpy as np
 import pandas as pd
 from typing import Union
 from scipy.interpolate import interp1d
-from aix360.algorithms.tsframe import tsFrame, to_np_array
-from aix360.algorithms.tsice.tsperturbers.tsperturber import BlockSelector, TSPerturber
+from aix360.algorithms.tsutils.tsframe import tsFrame, to_np_array
+from aix360.algorithms.tsutils.tsperturbers.tsperturber import (
+    BlockSelector,
+    TSPerturber,
+)
 
 
-class TSImputePerturber(TSPerturber):
-    """TSImputePerturber removes random block from the time series data, and imputes
-    the value with specified interpolation method.
+class TSShiftPerturber(TSPerturber):
+    """TSShiftPerturber adds random lag in a time continuous block of the
+    time series data. The lag introduction cause gap in the data, which is
+    imputed using the specified interpolation function.
     """
 
     def __init__(
         self,
+        max_shift: int = 2,
         block_length: int = 5,
         n_blocks: int = 1,
-        sparsity: float = 1.0,
-        padding: int = 5,
         interpolation_kind: str = "linear",
-        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html
     ):
-        """TSImputePerturber initialization
+        """TSShiftPerturber initialization
 
         Args:
-            block_length (int): length of the block size, continuous time window length over
-                which perturbation will be performed. Defaults to 5.
+            max_shift (int): maximum allowed lag. Defaults to 2.
+            block_length (int): block size lag is introduced in selected blocks. Defaults to 5.
             n_blocks (int): number of blocks to perturb. Defaults to 1.
-            sparsity (float): sparsity controls data sampling, there by creating across data
-                sparse sampling, Defaults to 1.0.
-            padding (int): this parameter is used smoothen the imputation boundaries. Defaults to 5.
             interpolation_kind (str): interpolation method for data imputation. Refer to
-                https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html
-                for possible values. Defaults to linear.
+                https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html.
+                Defaults to "linear".
         """
-        super(TSImputePerturber, self).__init__()
+        super(TSShiftPerturber, self).__init__()
         self._data = None
         self._parameters = dict()
         self._parameters["block_length"] = block_length
+        self._parameters["max_shift"] = max_shift
         self._parameters["n_blocks"] = n_blocks
-        self._parameters["sparsity"] = sparsity
-        self._parameters["padding"] = padding
         self._parameters["interpolation_kind"] = interpolation_kind
 
     def get_params(self):
@@ -61,44 +59,39 @@ class TSImputePerturber(TSPerturber):
         n_perturbations: int = 1,
         block_selector: BlockSelector = None,
     ):
-        padding = self._parameters.get("padding")
         n_blocks = self._parameters.get("n_blocks")
-        sparsity = self._parameters.get("sparsity")
+        max_shift = self._parameters.get("max_shift")
         block_length = self._parameters.get("block_length")
         interpolation_kind = self._parameters.get("interpolation_kind")
 
         data = to_np_array(self._data)
-        x_data = np.arange(data.shape[0])
+        x_data = np.arange(data.shape[0]).astype("float32")
         length, dim = data.shape
 
         perturbed_data = []
+        margin = length - max(max_shift, block_length)
 
         for i in range(n_perturbations):
             p_data = np.zeros_like(data)
             for j in range(dim):
                 y_data = data[:, j]
-                margin = length - block_length - padding
+                px_data = x_data.copy()
+
                 if block_selector is None:
-                    blocks = np.random.randint(padding, margin, n_blocks)
+                    blocks = np.random.randint(max_shift, margin, n_blocks)
                 else:
                     blocks = block_selector.select_start_point(
                         x=self._data, n=n_blocks, margin=margin
                     )
-                block = []
                 for b in blocks:
-                    block = block + list(range(b, b + block_length))
-                block = np.unique(block)
-                index = list(set(x_data).difference(block))
-                n = int((len(index) - 2 * padding) * sparsity)
-                index = (
-                    index[:padding]
-                    + sorted(
-                        np.random.choice(index[padding:-padding], n, replace=False)
+                    shift = (2 * np.random.random() - 1) * max_shift
+                    px_data[b : (b + block_length)] = (
+                        x_data[b : (b + block_length)] + shift
                     )
-                    + index[-padding:]
-                )
+
+                ix = np.argsort(px_data)
                 poly = interp1d(
-                    x_data[index], y_data[index], kind=interpolation_kind, copy=True
+                    px_data[ix], y_data[ix], kind=interpolation_kind, copy=True
                 )
                 p_data[:, j] = poly(x_data)
             if isinstance(self._data, pd.DataFrame):

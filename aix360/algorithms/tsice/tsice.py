@@ -2,14 +2,17 @@ import warnings
 import numpy as np
 import pandas as pd
 from typing import List, Union, Callable
-from aix360.algorithms.tsframe import tsFrame, to_np_array
 from aix360.algorithms.tslbbe import TSLocalBBExplainer
-from aix360.algorithms.tsice.tsperturbers.tsperturber import TSPerturber, BlockSelector
-from aix360.algorithms.tsice.tsperturbers.perturbed_data_generator import (
+from aix360.algorithms.tsutils.tsframe import tsFrame, to_np_array
+from aix360.algorithms.tsutils.tsperturbers.tsperturber import (
+    TSPerturber,
+    BlockSelector,
+)
+from aix360.algorithms.tsutils.tsperturbers.perturbed_data_generator import (
     PerturbedDataGenerator,
 )
-from aix360.algorithms.tsice.tsfeatures.latest_features import LatestFeature
-from aix360.algorithms.tsice.tsfeatures.range_features import RangeFeature
+from aix360.algorithms.tsutils.tsfeatures.latest_features import LatestFeature
+from aix360.algorithms.tsutils.tsfeatures.range_features import RangeFeature
 
 
 class TSICEExplainer(TSLocalBBExplainer):

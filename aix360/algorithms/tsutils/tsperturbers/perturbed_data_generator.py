@@ -1,15 +1,18 @@
 import numpy as np
 from collections import Counter
 from typing import List, Union
-from aix360.algorithms.tsframe import tsFrame
-from aix360.algorithms.tsice.tsperturbers import (
+from aix360.algorithms.tsutils.tsframe import tsFrame
+from aix360.algorithms.tsutils.tsperturbers import (
     BlockBootstrapPerturber,
     FrequencyPerturber,
     MovingAveragePerturber,
     TSShiftPerturber,
     TSImputePerturber,
 )
-from aix360.algorithms.tsice.tsperturbers.tsperturber import BlockSelector, TSPerturber
+from aix360.algorithms.tsutils.tsperturbers.tsperturber import (
+    BlockSelector,
+    TSPerturber,
+)
 
 
 class PerturbedDataGenerator:
