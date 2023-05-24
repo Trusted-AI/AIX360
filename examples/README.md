@@ -31,3 +31,7 @@ the user through the various steps of the notebook.
 - [GLRMExplainer and BRCGExplainer using Boston, Breast-cancer datasets](./rbm) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/tree/master/examples/rbm/)]
 
 - [OTMatchingExplainer on Sentence Matching in NLP](./matching) [[on nbviewer](https://nbviewer.jupyter.org/github/IBM/AIX360/tree/master/examples/matching/matching-pairs-of-sentences.ipynb)]
+
+- [NearestNeighborContrastiveExplainer using Breast Cancer wisconsin dataset](./nncontrastive/nncontrastive_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/nncontrastive/nncontrastive_demo.ipynb)]
+
+- [TSICEExplainer using Sunspots dataset](./tsice/tsice_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tsice/tsice_demo.ipynb)]

@@ -233,7 +233,6 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
         os: [ubuntu-20.04, macos-latest, windows-latest]
         python-version: ["3.10"]
 
@@ -255,3 +254,31 @@ jobs:
 
       - name: Step 5 - Test NearestNeighborContrastiveExplainer
         run: python ./tests/nncontrastive/test_nncontrastive.py
+
+  # job to build tsice algorithm on python 3.10.
+  build-tsice-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with tsice algorithm related dependencies
+        run: pip3 install .[tsice]
+
+      - name: Step 5 - Test NearestNeighborContrastiveExplainer
+        run: python ./tests/tsice/test_tsice.py
