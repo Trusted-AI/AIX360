@@ -302,10 +302,13 @@ jobs:
         with:
           python-version: "${{ matrix.python-version }}"
 
-      - name: Step 3 - upgrade setuptools
+      - name: Step 3 - Install graphviz related things
+        run: sudo apt-get install python3-dev graphviz libgraphviz-dev pkg-config
+
+      - name: Step 4 - upgrade setuptools
         run: pip3 install pytest nbmake wheel --upgrade setuptools
 
-      - name: Step 4 - Install aix360 with cofrnet algorithm related dependencies
+      - name: Step 5 - Install aix360 with imd algorithm related dependencies
         run: pip3 install .[imd]
 
 #      - name: Step 5 - Test IMD
