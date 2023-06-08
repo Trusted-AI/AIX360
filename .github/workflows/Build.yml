@@ -322,7 +322,6 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
         os: [macos-latest]
         python-version: ["3.8"]
 
@@ -336,10 +335,13 @@ jobs:
         with:
           python-version: "${{ matrix.python-version }}"
 
-      - name: Step 3 - upgrade setuptools
+      - name: Step 3 - Install graphviz related things
+        run: brew install graphviz
+
+      - name: Step 4 - upgrade setuptools
         run: pip3 install pytest nbmake wheel --upgrade setuptools
 
-      - name: Step 4 - Install aix360 with imd algorithm related dependencies
+      - name: Step 5 - Install aix360 with imd algorithm related dependencies
         run: pip3 install .[imd]
 
 #      - name: Step 5 - Test IMD
