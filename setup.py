@@ -90,6 +90,14 @@ extra_requires = {
         "kaleido",  # required for example notebook
         "requests",  # for dataset
     ],
+    "imd": [
+        "numpy",
+        "pandas",
+        "scikit-learn",
+        "matplotlib",
+        "networkx",
+        "pygraphviz",  # for creating graph visualization
+    ],
 }
 
 # minimal dependencies in install_requires
