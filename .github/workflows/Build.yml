@@ -283,15 +283,15 @@ jobs:
 #      - name: Step 5 - Test NearestNeighborContrastiveExplainer
 #        run: python ./tests/tsice/test_tsice.py
 
-  build-imd-on-py38-ubuntu-windows:
+  build-imd-on-py38-ubuntu:
     # The type of runner that the job will run on
     runs-on: "${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, windows-latest]
-        python-version: ["3.8"]
+        os: [ubuntu-20.04]
+        python-version: ["3.8", "3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -310,6 +310,38 @@ jobs:
         run: pip3 install pytest nbmake wheel --upgrade setuptools
 
       - name: Step 5 - Install aix360 with imd algorithm related dependencies
+        run: pip3 install .[imd]
+
+#      - name: Step 5 - Test IMD
+#        run: python ./tests/cofrnet/cofrnet_test.py
+#
+#      - name: Step 6 - Test CoFrNet Notebook
+#        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
+
+  build-imd-on-py38-windows:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [windows-latest]
+        python-version: ["3.8", "3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with imd algorithm related dependencies
         run: pip3 install .[imd]
 
 #      - name: Step 5 - Test IMD
