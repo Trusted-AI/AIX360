@@ -312,11 +312,11 @@ jobs:
       - name: Step 5 - Install aix360 with imd algorithm related dependencies
         run: pip3 install .[imd]
 
-#      - name: Step 5 - Test IMD
-#        run: python ./tests/cofrnet/cofrnet_test.py
-#
-#      - name: Step 6 - Test CoFrNet Notebook
-#        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
+      - name: Step 5 - Test IMD
+        run: python ./tests/imd/test_imd.py
+
+      - name: Step 6 - Test IMD Notebook
+        run: pytest --nbmake ./examples/imd/imd_example.ipynb
 
   build-imd-on-py38-310-macos:
     # The type of runner that the job will run on
@@ -345,8 +345,8 @@ jobs:
       - name: Step 5 - Install aix360 with imd algorithm related dependencies
         run: pip3 install .[imd]
 
-#      - name: Step 5 - Test IMD
-#        run: python ./tests/cofrnet/cofrnet_test.py
-#
-#      - name: Step 6 - Test CoFrNet Notebook
-#        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
+      - name: Step 5 - Test IMD
+        run: python ./tests/imd/test_imd.py
+
+      - name: Step 6 - Test IMD Notebook
+        run: pytest --nbmake ./examples/imd/imd_example.ipynb
