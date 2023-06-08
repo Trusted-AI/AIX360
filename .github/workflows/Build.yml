@@ -283,7 +283,7 @@ jobs:
 #      - name: Step 5 - Test NearestNeighborContrastiveExplainer
 #        run: python ./tests/tsice/test_tsice.py
 
-  build-imd-on-py38-ubuntu:
+  build-imd-on-py38-310-ubuntu:
     # The type of runner that the job will run on
     runs-on: "${{ matrix.os }}"
     strategy:
@@ -318,13 +318,13 @@ jobs:
 #      - name: Step 6 - Test CoFrNet Notebook
 #        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
 
-  build-imd-on-py38-macos:
+  build-imd-on-py38-310-macos:
     # The type of runner that the job will run on
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
         os: [macos-latest]
-        python-version: ["3.8"]
+        python-version: ["3.8", "3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
