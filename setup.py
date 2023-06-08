@@ -96,6 +96,7 @@ extra_requires = {
         "scikit-learn",
         "matplotlib",
         "networkx",
+        "graphviz",
         "pygraphviz",  # for creating graph visualization
     ],
 }
