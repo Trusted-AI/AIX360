@@ -6,3 +6,9 @@ Time Series Individual Conditional Expectation (TSICE) Explainer
 
 .. autoclass:: aix360.algorithms.tsice.tsice.TSICEExplainer
    :members:
+
+Time Series Saliency (TSSaliency) Explainer
+-------------------------------------------------
+
+.. autoclass:: aix360.algorithms.tssaliency.tssaliency.TSSaliencyExplainer
+   :members:

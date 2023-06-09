@@ -35,3 +35,7 @@ the user through the various steps of the notebook.
 - [NearestNeighborContrastiveExplainer using Breast Cancer wisconsin dataset](./nncontrastive/nncontrastive_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/nncontrastive/nncontrastive_demo.ipynb)]
 
 - [TSICEExplainer using Sunspots dataset](./tsice/tsice_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tsice/tsice_demo.ipynb)]
+
+- [TSSaliencyExplainer using FordA dataset](./tssaliency/tssaliency_univariate_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tssaliency/tssaliency_univariate_demo.ipynb)]
+
+- [TSSaliencyExplainer using Climate dataset](./tssaliency/tssaliency_multivariate_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tssaliency/tssaliency_multivariate_demo.ipynb)]
