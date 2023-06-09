@@ -255,8 +255,8 @@ jobs:
       - name: Step 5 - Test NearestNeighborContrastiveExplainer
         run: python ./tests/nncontrastive/test_nncontrastive.py
 
-  # job to build tsice algorithm on python 3.10.
-  build-tsice-on-py310:
+  # job to build tsice and tssaliency algorithms on python 3.10.
+  build-tsice-tssaliency-on-py310:
     # The type of runner that the job will run on
     runs-on: "${{ matrix.os }}"
     strategy:
@@ -280,5 +280,9 @@ jobs:
       - name: Step 4 - Install aix360 with tsice algorithm related dependencies
         run: pip3 install .[tsice]
 
-      - name: Step 5 - Test NearestNeighborContrastiveExplainer
+      - name: Step 5 - Test TSICEExplainer
         run: python ./tests/tsice/test_tsice.py
+
+      # tssaliency deps are already satisfied.
+      - name: Step 6 - Test TSSaliencyExplainer
+        run: python ./tests/tssaliency/test_tssaliency.py
