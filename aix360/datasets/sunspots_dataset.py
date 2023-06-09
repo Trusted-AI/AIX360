@@ -1,5 +1,3 @@
-""" Monthly US unemployment rate since 1948.
-"""
 import os
 import math
 from io import StringIO
