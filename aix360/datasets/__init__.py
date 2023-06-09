@@ -47,3 +47,13 @@ try:
     from .sunspots_dataset import SunspotDataset
 except:
     pass
+
+try:
+    from .ford_dataset import FordDataset
+except:
+    pass
+
+try:
+    from .climate_dataset import ClimateDataset
+except:
+    pass
