@@ -150,7 +150,7 @@ def common_trunk_tree_to_digraph(root: dict):
             else:
                 # leaf node
                 label = 'label={}\n#samples={}'.format(root['val'], root['dist'])
-                T.add_node(vnum, label=label, shape="box", style='filled', fillcolor=leaf_colors[root['val']])
+                T.add_node(vnum, label=label, pred=root['val'], shape="box", style='filled', fillcolor=leaf_colors[root['val']])
 
         if parentid is not None:
             if direction in ['1', '2']:
