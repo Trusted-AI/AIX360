@@ -90,6 +90,9 @@ extra_requires = {
         "kaleido",  # required for example notebook
         "requests",  # for dataset
     ],
+    "tssaliency": [
+        "pandas<=1.4.3",
+    ],
 }
 
 # minimal dependencies in install_requires
