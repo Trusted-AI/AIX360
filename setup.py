@@ -90,6 +90,9 @@ extra_requires = {
         "kaleido",  # required for example notebook
         "requests",  # for dataset
     ],
+    "tssaliency": [
+        "pandas<=1.4.3"
+    ],
     "imd": [
         "numpy",
         "pandas",
@@ -97,8 +100,8 @@ extra_requires = {
         "matplotlib",
         "networkx",
         "graphviz",
-        "pygraphviz",  # for creating graph visualization
-    ],
+        "pygraphviz"  # for creating graph visualization
+    ]
 }
 
 # minimal dependencies in install_requires
