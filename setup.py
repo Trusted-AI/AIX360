@@ -91,8 +91,17 @@ extra_requires = {
         "requests",  # for dataset
     ],
     "tssaliency": [
-        "pandas<=1.4.3",
+        "pandas<=1.4.3"
     ],
+    "imd": [
+        "numpy",
+        "pandas",
+        "scikit-learn",
+        "matplotlib",
+        "networkx",
+        "graphviz",
+        "pygraphviz"  # for creating graph visualization
+    ]
 }
 
 # minimal dependencies in install_requires

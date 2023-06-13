@@ -34,6 +34,7 @@ We have developed the package with extensibility in mind. This library is still 
 
 ### Global direct explanation
 
+- Interpretable Model Differencing (IMD) ([Haldar et al., 2023](https://arxiv.org/abs/2306.06473))
 - CoFrNets (Continued Fraction Nets) ([Puri et al., 2021](https://papers.nips.cc/paper/2021/file/b538f279cb2ca36268b23f557a831508-Paper.pdf))
 - Boolean Decision Rules via Column Generation (Light Edition) ([Dash et al., 2018](https://papers.nips.cc/paper/7716-boolean-decision-rules-via-column-generation))
 - Generalized Linear Rule Models ([Wei et al., 2019](http://proceedings.mlr.press/v97/wei19a.html))
