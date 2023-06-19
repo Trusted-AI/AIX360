@@ -83,15 +83,13 @@ extra_requires = {
     ],
     "tsice": [
         "pandas<=1.4.3",
-        "scikit-learn",
         "scipy",
-        "plotly",  # required for example notebook
-        "ipython",  # required for example notebook
-        "kaleido",  # required for example notebook
-        "requests",  # for dataset
+        "plotly",  # required for units
+        "ipython",  # required for units
+        "kaleido",  # required for units
     ],
     "tssaliency": [
-        "pandas<=1.4.3"
+        "pandas<=1.4.3",
     ],
     "imd": [
         "numpy",
@@ -100,8 +98,12 @@ extra_requires = {
         "matplotlib",
         "networkx",
         "graphviz",
-        "pygraphviz"  # for creating graph visualization
-    ]
+        "pygraphviz",  # for creating graph visualization
+    ],
+    "tslime": [
+        "pandas<=1.4.3",
+        "scipy",
+    ],
 }
 
 # minimal dependencies in install_requires

@@ -39,3 +39,7 @@ the user through the various steps of the notebook.
 - [TSSaliencyExplainer using FordA dataset](./tssaliency/tssaliency_univariate_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tssaliency/tssaliency_univariate_demo.ipynb)]
 
 - [TSSaliencyExplainer using Climate dataset](./tssaliency/tssaliency_multivariate_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tssaliency/tssaliency_multivariate_demo.ipynb)]
+
+- [TSLimeExplainer using FordA dataset](./tslime/tslime_univariate_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tslime/tslime_univariate_demo.ipynb)]
+
+- [TSLimeExplainer using Climate dataset](./tslime/tslime_multivariate_demo.ipynb)[[on nbviewer](https://nbviewer.org/github/Trusted-AI/AIX360/blob/master/examples/tslime/tslime_multivariate_demo.ipynb)]
