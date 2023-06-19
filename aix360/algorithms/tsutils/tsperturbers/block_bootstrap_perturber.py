@@ -68,7 +68,7 @@ class BlockBootstrapPerturber(TSPerturber):
         block_swap = self._parameters.get("block_swap")
 
         x_res = [self._residual.copy() for _ in range(n_perturbations)]
-        margin = self._residual.shape[0] - block_length
+        margin = self._residual.shape[0] - block_length + 1
         for _ in range(block_swap):
             if block_selector is None:
                 from_point = np.random.randint(
