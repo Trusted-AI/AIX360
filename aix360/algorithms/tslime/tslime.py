@@ -18,7 +18,7 @@ from aix360.algorithms.tsutils.tsperturbers.tsperturber import (
 
 
 class TSLimeExplainer(TSLocalBBExplainer):
-    """Time Series Local Interpretable Model-agnostic(TSLime) is a model-agnostic local time series
+    """Time Series Local Interpretable Model-agnostic Explainer (TSLime) is a model-agnostic local time series
     explainer. LIME (Locally interpretable Model agnostic explainer) is a popular algorithm for local
     explanation. LIME explains the model behavior by approximating the model response with linear models.
     LIME algorithm specifically assumes tabular data format, where each row is a data point, and columns
