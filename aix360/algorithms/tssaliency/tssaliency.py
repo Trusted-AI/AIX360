@@ -115,7 +115,7 @@ class TSSaliencyExplainer(TSLocalBBExplainer):
 
     def _explain_instance(
         self,
-        ts: Union["tsFrame", np.ndarray],
+        ts: tsFrame,
         **explain_params,
     ):
         # fix seed for consistent results
