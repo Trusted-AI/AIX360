@@ -18,6 +18,7 @@ extra_requires = {
         "scipy>=0.17",
         "scikit-learn<1.2.0",
         "cvxpy>=1.1",
+        "numpy<=1.24.3",
     ],
     "profwt": [
         "keras==2.3.1",
