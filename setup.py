@@ -87,9 +87,11 @@ extra_requires = {
         "plotly",  # required for units
         "ipython",  # required for units
         "kaleido",  # required for units
+        "requests",  # required for dataset and units
     ],
     "tssaliency": [
         "pandas<=1.4.3",
+        "requests",  # required for dataset and units
     ],
     "imd": [
         "numpy",
@@ -103,6 +105,7 @@ extra_requires = {
     "tslime": [
         "pandas<=1.4.3",
         "scipy",
+        "requests",  # required for dataset and units
     ],
 }
 
