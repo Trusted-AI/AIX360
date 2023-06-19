@@ -161,7 +161,7 @@ class TSLimeExplainer(TSLocalBBExplainer):
 
     def _explain_instance(
         self,
-        ts: Union["tsFrame"],
+        ts: tsFrame,
         **explain_params,
     ):
         # for consistent results. Is it possible here?
