@@ -18,6 +18,7 @@ class SunspotDataset:
         New York: Springer-Verlag, 1985.
         .. [#2] https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/sunspots.html
         .. [#3] https://r-data.pmagunia.com/dataset/r-dataset-package-datasets-sunspots
+        .. [#4] https://github.com/PacktPublishing/Practical-Time-Series-Analysis/
 
     """
 
@@ -30,16 +31,17 @@ class SunspotDataset:
         self.data_file = os.path.realpath(
             os.path.join(self.data_folder, "sunspots.csv")
         )
-        sunspots_url = (
-            "https://r-data.pmagunia.com/system/files/datasets/dataset-61024.csv"
-        )
+        sunspots_url = "https://raw.githubusercontent.com/PacktPublishing/Practical-Time-Series-Analysis/master/Data%20Files/monthly-sunspot-number-zurich-17.csv"
 
         if not os.path.exists(self.data_file):
             response = requests.get(sunspots_url)
-            data = pd.read_csv(StringIO(response.text))
-            data["time"] = pd.to_datetime(
-                data["time"].apply(self._convert_to_date), format="%Y-%m"
+            data = pd.read_csv(
+                StringIO(response.text),
+                skiprows=0,
+                nrows=2820,
             )
+            data.columns = ["time", "sunspots"]
+            data["time"] = pd.to_datetime(data["time"], format="%Y-%m")
 
             data.to_csv(self.data_file, index=False)
 
