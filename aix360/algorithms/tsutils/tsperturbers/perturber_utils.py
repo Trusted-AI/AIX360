@@ -25,11 +25,11 @@ def ts_rolling_mean(
     if isinstance(ts, np.ndarray):
         if len(ts.shape) == 1:
             ts = ts.reshape(-1, 1)
-        ts = ts.astype("float32")
+        ts = ts.astype("float")
         n_obs, n_vars = ts.shape
         den = np.convolve(
-            np.ones(n_obs), np.ones(window_size, dtype="float32"), "same"
-        ).astype("float32")
+            np.ones(n_obs), np.ones(window_size, dtype="float"), "same"
+        ).astype("float")
         df = np.asarray(
             [
                 np.convolve(ts[:, i], np.ones(window_size), "same") / den
@@ -51,8 +51,8 @@ def ts_split_mean_residual(
     format.
 
     Args:
-        ts (Union[tsFrame, numpy ndarray]): input time series as dataframe or numpy array
-        window_size (int): numer of observation for averaging.
+        ts (Union[tsFrame, numpy ndarray]): input time series as tsFrame or numpy array
+        window_size (int): number of observations for averaging.
 
     Returns:
         tuple (Union[Tuple[numpy ndarray, numpy ndarray], Tuple[tsFrame, tsFrame]]): depending

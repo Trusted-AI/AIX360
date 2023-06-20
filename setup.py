@@ -18,6 +18,7 @@ extra_requires = {
         "scipy>=0.17",
         "scikit-learn<1.2.0",
         "cvxpy>=1.1",
+        "numpy<=1.24.3",
     ],
     "profwt": [
         "keras==2.3.1",
@@ -83,15 +84,15 @@ extra_requires = {
     ],
     "tsice": [
         "pandas<=1.4.3",
-        "scikit-learn",
         "scipy",
-        "plotly",  # required for example notebook
-        "ipython",  # required for example notebook
-        "kaleido",  # required for example notebook
-        "requests",  # for dataset
+        "plotly",  # required for units
+        "ipython",  # required for units
+        "kaleido",  # required for units
+        "requests",  # required for dataset and units
     ],
     "tssaliency": [
-        "pandas<=1.4.3"
+        "pandas<=1.4.3",
+        "requests",  # required for dataset and units
     ],
     "imd": [
         "numpy",
@@ -100,8 +101,13 @@ extra_requires = {
         "matplotlib",
         "networkx",
         "graphviz",
-        "pygraphviz"  # for creating graph visualization
-    ]
+        "pygraphviz",  # for creating graph visualization
+    ],
+    "tslime": [
+        "pandas<=1.4.3",
+        "scipy",
+        "requests",  # required for dataset and units
+    ],
 }
 
 # minimal dependencies in install_requires
