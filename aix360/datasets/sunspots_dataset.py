@@ -14,11 +14,12 @@ class SunspotDataset:
 
     References:
         .. [#1] Andrews, D. F. and Herzberg, A. M., "Data: A Collection of Problems from
-        Many Fields for the Student and Research Worker,"
-        New York: Springer-Verlag, 1985.
+            Many Fields for the Student and Research Worker,"
+            New York: Springer-Verlag, 1985.
         .. [#2] https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/sunspots.html
         .. [#3] https://r-data.pmagunia.com/dataset/r-dataset-package-datasets-sunspots
-        .. [#4] https://github.com/PacktPublishing/Practical-Time-Series-Analysis/
+        .. [#4] Avishek Pal, PKS Prakash, "Practical Time Series Analysis"
+            https://github.com/PacktPublishing/Practical-Time-Series-Analysis/
 
     """
 
