@@ -108,6 +108,12 @@ extra_requires = {
         "scipy",
         "requests",  # required for dataset and units
     ],
+    "gce": [
+        "pandas<=1.4.3",
+        "shap",
+        "numba<=0.56",
+        "requests",  # required for dataset and units
+    ],
 }
 
 # minimal dependencies in install_requires
