@@ -25,6 +25,8 @@ via code, tests, or documentation:
 * Pin-Yu Chen
 * Payel Das
 * Amit Dhurandar
+* Giridhar Ganapavarapu
+* Natalia Martinez Gil
 * Mike Hind
 * Samuel C. Hoffman
 * Stephanie Houde
@@ -33,12 +35,15 @@ via code, tests, or documentation:
 * Sameep Mehta
 * Saška Mojsilović
 * Sami Mourad
+* Sumanta Mukherjee
 * Pablo Pedemonte
 * John T. Richards
+* Kanthi Sarpatwar
 * Prasanna Sattigeri
 * Karthikeyan Shanmugam
 * Moninder Singh
 * Animesh Singh
+* Roman Vaculin
 * Kush Varshney
 * Dennis Wei
 * Yunfeng Zhang
