@@ -53,11 +53,26 @@ We have developed the package with extensibility in mind. This library is still 
 
 Supported Configurations:
 
-| OS      | Python version |
-| ------- | -------------- |
-| macOS   | 3.6  |
-| Ubuntu  | 3.6  |
-| Windows | 3.6  |
+| Explainer      | OS                            | Python version |
+| ---------------| ------------------------------| -------------- |
+| cofrnet        | macOS, Ubuntu, Windows        | 3.10 |
+| contrastive    | macOS, Ubuntu, Windows        | 3.6  |
+| dipvae         | macOS, Ubuntu, Windows        | 3.10 |
+| gce            | macOS, Ubuntu, Windows        | 3.10 |
+| imd            | macOS, Ubuntu                 | 3.10 |
+| lime           | macOS, Ubuntu, Windows        | 3.10 |
+| matching       | macOS, Ubuntu, Windows        | 3.10 |
+| nncontrastive  | macOS, Ubuntu, Windows        | 3.10 |
+| profwt         | macOS, Ubuntu, Windows        | 3.6  |
+| protodash      | macOS, Ubuntu, Windows        | 3.10 |
+| rbm            | macOS, Ubuntu, Windows        | 3.10 |
+| rule_induction | macOS, Ubuntu, Windows        | 3.10 |
+| shap           | macOS, Ubuntu, Windows        | 3.6  |
+| ted            | macOS, Ubuntu, Windows        | 3.10 |
+| tsice          | macOS, Ubuntu, Windows        | 3.10 |
+| tslime         | macOS, Ubuntu, Windows        | 3.10 |
+| tssaliency     | macOS, Ubuntu, Windows        | 3.10 |
+
 
 ### (Optional) Create a virtual environment
 
@@ -73,10 +88,10 @@ Miniconda](https://conda.io/docs/user-guide/install/download.html#anaconda-or-mi
 if you are curious) and can be installed from
 [here](https://conda.io/miniconda.html) if you do not already have it.
 
-Then, to create a new Python 3.6(or any of the supported python versions) environment, run:
+Then, to create a new Python 3.10(or any of the supported python versions) environment, run:
 
 ```bash
-conda create --name aix360 python=3.6
+conda create --name aix360 python=3.10
 conda activate aix360
 ```
 
@@ -112,7 +127,7 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 
 If you face any issues, please try upgrading pip and setuptools and uninstall any previous versions of aix360 before attempting the above step again. 
 
-With the new setup.py, `pip install .` installs [dependencies of TED algorithm](https://github.com/Trusted-AI/AIX360/blob/462c4d575bfc71c5cbfd32ceacdb3df96a8dc2d1/setup.py#L32) only. To install dependencies of multiple algorithms, use `pip install .[algo1, algo2]`. An example is `pip install .[dipvae,cofrnet,tsice]`.
+With the new setup.py, `pip install .` installs [default dependencies](https://github.com/Trusted-AI/AIX360/blob/462c4d575bfc71c5cbfd32ceacdb3df96a8dc2d1/setup.py#L9) only. To install dependencies of required algorithms, use `pip install .[algo1, algo2]`. An example is `pip install .[dipvae,cofrnet,tsice]`.
 
 ```bash
 (aix360)$ pip install --upgrade pip setuptools
