@@ -1,7 +1,4 @@
-import os
 import unittest
-import numpy as np
-import pandas as pd
 from aix360.datasets import DiabetesDataset
 from sklearn.ensemble import RandomForestRegressor
 from aix360.algorithms.gce.gce import GroupedCEExplainer
