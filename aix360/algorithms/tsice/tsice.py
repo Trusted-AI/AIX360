@@ -17,9 +17,15 @@ from aix360.algorithms.tsutils.tsfeatures.range_features import RangeFeature
 
 class TSICEExplainer(TSLocalBBExplainer):
     """TSICEExplainer extends the Individual Conditional Expectation for correlated
-    timeseries data. It uses TSFeatures to derive time series structural features,
-    and uses data perturber(TSPerturber) for generating simulated data. TSICEExplainer
-    explains the trend in the model forecast change with time series derived features.
+    timeseries data (higher dimensions). It uses TSFeatures to derive time series
+    structural features, and uses data perturber(TSPerturber) for generating simulated
+    data. TSICEExplainer explains the trend in the model forecast change with time series
+    derived features.
+
+    References:
+        .. [##] Goldstein et al. 'Peeking Inside the Black Box: Visualizing Statistical
+            Learning with Plots of Individual Conditional Expectation'
+            https://arxiv.org/abs/1309.6392
     """
 
     def __init__(

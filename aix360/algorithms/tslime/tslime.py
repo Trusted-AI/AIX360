@@ -30,7 +30,7 @@ class TSLimeExplainer(TSLocalBBExplainer):
     The explanation weights produced by the TSLime explanation indicates model local sensitivity.
 
     References:
-        .. [##] Marco Tulio Ribeiro et al. '"Why Should I Trust You?": Explaining the Predictions of Any Classifier'
+        .. [##] Ribeiro et al. '"Why Should I Trust You?": Explaining the Predictions of Any Classifier'
             https://arxiv.org/abs/1602.04938
     """
 

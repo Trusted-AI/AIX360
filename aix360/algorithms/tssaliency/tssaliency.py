@@ -19,8 +19,8 @@ class TSSaliencyExplainer(TSLocalBBExplainer):
     temporal resolution.
 
     References:
-        [Section 3] Mukund Sundararajan et al . "Axiomatic Attribution for Deep Networks"
-        https://arxiv.org/pdf/1703.01365.pdf
+        .. [Section 3] Mukund Sundararajan et al. "Axiomatic Attribution for Deep Networks"
+            https://arxiv.org/pdf/1703.01365.pdf
     """
 
     def __init__(
