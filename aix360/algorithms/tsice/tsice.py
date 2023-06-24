@@ -23,9 +23,9 @@ class TSICEExplainer(TSLocalBBExplainer):
     derived features.
 
     References:
-        .. [##] Goldstein et al. 'Peeking Inside the Black Box: Visualizing Statistical
+        .. [#0] `Goldstein et al. 'Peeking Inside the Black Box: Visualizing Statistical
             Learning with Plots of Individual Conditional Expectation'
-            https://arxiv.org/abs/1309.6392
+            <https://arxiv.org/abs/1309.6392>`_
     """
 
     def __init__(

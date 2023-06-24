@@ -11,8 +11,8 @@ def mc_gradient_compute(
     Monte Carlo Gradient computation.
 
     References:
-        [Section 3] Sijia Liu et al. "Zeroth-Order Stochastic Variance Reduction for
-        Nonconvex Optimization". https://arxiv.org/pdf/1906.00117.pdf
+        .. [#0] `Sijia Liu et al. "Zeroth-Order Stochastic Variance Reduction for
+        Nonconvex Optimization". <https://arxiv.org/pdf/1906.00117.pdf>`_
     """
 
     ### 1- Sample Directions in the uniform ball

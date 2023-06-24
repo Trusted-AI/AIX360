@@ -17,9 +17,9 @@ class BlockBootstrapPerturber(TSPerturber):
     and added to the signal (mean) between randomly selected blocks.
 
     References:
-        .. [#BB1] `Bühlmann, Peter. "Bootstraps for time series."
+        .. [#0] `Bühlmann, Peter. "Bootstraps for time series."
             Statistical science (2002): 52-72.
-            https://projecteuclid.org/journals/statistical-science/volume-17/issue-1/Bootstraps-for-Time-Series/10.1214/ss/1023798998.full`_
+            <https://projecteuclid.org/journals/statistical-science/volume-17/issue-1/Bootstraps-for-Time-Series/10.1214/ss/1023798998.full>`_
     """
 
     def __init__(
