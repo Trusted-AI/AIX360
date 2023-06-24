@@ -60,7 +60,7 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
         classifier_bias_initializer: str = "zeros",
     ):
         """
-        Constructor method, initializes the explainer
+        NearestNeighborContrastiveExplainer initialization.
 
         Args:
             model (Callable): Classification Model which will be used for contrastive

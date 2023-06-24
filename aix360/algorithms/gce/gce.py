@@ -31,6 +31,7 @@ class GroupedCEExplainer(LocalBBExplainer):
         **kwargs,
     ):
         """GroupedCEExplainer initialization.
+
         Args:
             model (Callable): model prediction (predict/predict_proba) function that
                 results a real value like probability or regressed value.
