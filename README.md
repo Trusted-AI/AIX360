@@ -4,7 +4,7 @@
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/aix360.svg)](https://badge.fury.io/py/aix360)
 
-The AI Explainability 360 toolkit is an open-source library that supports interpretability and explainability of datasets and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics.           
+The AI Explainability 360 toolkit is an open-source library that supports interpretability and explainability of datasets and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics. In addition to tabular, text and images, AIX360 is now expanded to support time series modality as well.           
 
 The [AI Explainability 360 interactive experience](http://aix360.mybluemix.net/data) provides a gentle introduction to the concepts and capabilities by walking through an example use case for different consumer personas. The [tutorials and example notebooks](./examples) offer a deeper, data scientist-oriented introduction. The complete API is also available. 
 
@@ -24,8 +24,16 @@ We have developed the package with extensibility in mind. This library is still 
 - ProtoDash ([Gurumoorthy et al., 2019](https://arxiv.org/abs/1707.01212))
 - Contrastive Explanations Method ([Dhurandhar et al., 2018](https://papers.nips.cc/paper/7340-explanations-based-on-the-missing-towards-contrastive-explanations-with-pertinent-negatives))
 - Contrastive Explanations Method with Monotonic Attribute Functions ([Luss et al., 2019](https://arxiv.org/abs/1905.12698))
+- Exemplar based Contrastive Explanations Method
+- Grouped Conditional Expectation (Adaptation of Individual Conditional Expectation Plots by [Goldstein et al.](https://arxiv.org/abs/1309.6392) to higher dimension )
 - LIME ([Ribeiro et al. 2016](https://arxiv.org/abs/1602.04938),  [Github](https://github.com/marcotcr/lime))
 - SHAP ([Lundberg, et al. 2017](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions),  [Github](https://github.com/slundberg/shap))
+
+### Time-Series local post-hoc explanation
+
+- Time Series Saliency Maps using Integrated Gradients (Inspired by [Sundararajan et al.](https://arxiv.org/pdf/1703.01365.pdf) )
+- Time Series LIME (Time series adaptation of the classic paper by [Ribeiro et al. 2016](https://arxiv.org/abs/1602.04938) )
+- Time Series Individual Conditional Expectation (Time series adaptation of Individual Conditional Expectation Plots [Goldstein et al.](https://arxiv.org/abs/1309.6392) )
 
 ### Local direct explanation
 
@@ -53,11 +61,26 @@ We have developed the package with extensibility in mind. This library is still 
 
 Supported Configurations:
 
-| OS      | Python version |
-| ------- | -------------- |
-| macOS   | 3.6  |
-| Ubuntu  | 3.6  |
-| Windows | 3.6  |
+| Explainer      | OS                            | Python version |
+| ---------------| ------------------------------| -------------- |
+| cofrnet        | macOS, Ubuntu, Windows        | 3.10 |
+| contrastive    | macOS, Ubuntu, Windows        | 3.6  |
+| dipvae         | macOS, Ubuntu, Windows        | 3.10 |
+| gce            | macOS, Ubuntu, Windows        | 3.10 |
+| imd            | macOS, Ubuntu                 | 3.10 |
+| lime           | macOS, Ubuntu, Windows        | 3.10 |
+| matching       | macOS, Ubuntu, Windows        | 3.10 |
+| nncontrastive  | macOS, Ubuntu, Windows        | 3.10 |
+| profwt         | macOS, Ubuntu, Windows        | 3.6  |
+| protodash      | macOS, Ubuntu, Windows        | 3.10 |
+| rbm            | macOS, Ubuntu, Windows        | 3.10 |
+| rule_induction | macOS, Ubuntu, Windows        | 3.10 |
+| shap           | macOS, Ubuntu, Windows        | 3.6  |
+| ted            | macOS, Ubuntu, Windows        | 3.10 |
+| tsice          | macOS, Ubuntu, Windows        | 3.10 |
+| tslime         | macOS, Ubuntu, Windows        | 3.10 |
+| tssaliency     | macOS, Ubuntu, Windows        | 3.10 |
+
 
 ### (Optional) Create a virtual environment
 
@@ -73,10 +96,10 @@ Miniconda](https://conda.io/docs/user-guide/install/download.html#anaconda-or-mi
 if you are curious) and can be installed from
 [here](https://conda.io/miniconda.html) if you do not already have it.
 
-Then, to create a new Python 3.6(or any of the supported python versions) environment, run:
+Then, to create a new Python 3.10(or any of the supported python versions) environment, run:
 
 ```bash
-conda create --name aix360 python=3.6
+conda create --name aix360 python=3.10
 conda activate aix360
 ```
 
@@ -112,7 +135,7 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 
 If you face any issues, please try upgrading pip and setuptools and uninstall any previous versions of aix360 before attempting the above step again. 
 
-With the new setup.py, `pip install .` installs [dependencies of TED algorithm](https://github.com/Trusted-AI/AIX360/blob/462c4d575bfc71c5cbfd32ceacdb3df96a8dc2d1/setup.py#L32) only. To install dependencies of multiple algorithms, use `pip install .[algo1, algo2]`. An example is `pip install .[dipvae,cofrnet,tsice]`.
+With the new setup.py, `pip install .` installs [default dependencies](https://github.com/Trusted-AI/AIX360/blob/462c4d575bfc71c5cbfd32ceacdb3df96a8dc2d1/setup.py#L9) only. To install dependencies of required algorithms, use `pip install .[algo1, algo2]`. An example is `pip install .[dipvae,cofrnet,tsice]`.
 
 ```bash
 (aix360)$ pip install --upgrade pip setuptools

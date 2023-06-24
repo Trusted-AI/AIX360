@@ -57,3 +57,8 @@ try:
     from .climate_dataset import ClimateDataset
 except:
     pass
+
+try:
+    from .diabetes_dataset import DiabetesDataset
+except:
+    pass

@@ -110,3 +110,4 @@ venv.bak/
 **/sunspots.csv
 **/ford_data/Ford*
 **/climate_data/*.csv
+**/diabetes.csv

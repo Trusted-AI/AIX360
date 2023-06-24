@@ -41,10 +41,8 @@ class FordDataset:
         )
 
         self.category = "A" if category_a else "B"
-        ford_data_url = (
-            "http://timeseriesclassification.com/Downloads/Ford{}.zip".format(
-                self.category
-            )
+        ford_data_url = "http://timeseriesclassification.com/ClassificationDownloads/Ford{}.zip".format(
+            self.category
         )
 
         self.input_length = 500
