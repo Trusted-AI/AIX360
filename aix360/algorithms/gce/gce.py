@@ -219,7 +219,11 @@ class GroupedCEExplainer(LocalBBExplainer):
             instance (Union[pd.DataFrame, np.ndarray]): input instance to be explained.
 
         Returns:
-            explanation (Union[List[Dict], Dict]): Dictionary
+            dict: explanation object
+                Dictionary with feature_name, feature_value, ice_value, current_value
+                for ICE explanation. Dictionary with gce_values, x_grid, y_pred,
+                current_values for GCE explanation.
+
         """
 
         np.random.seed(self.random_seed)

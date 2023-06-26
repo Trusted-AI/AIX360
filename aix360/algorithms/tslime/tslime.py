@@ -145,7 +145,7 @@ class TSLimeExplainer(TSLocalBBExplainer):
         """Explain the prediction made by the time series model at a certain point in time
         (**local explanation**).
 
-        Args
+        Args:
             ts (tsFrame): Input time series signal in ``tsFrame`` format. This can
                 be generated using :py:mod:`aix360.algorithms.tsframe.tsFrame`.
                 A ``tsFrame`` is a pandas ``DataFrame`` indexed by ``Timestamp`` objects
@@ -153,8 +153,9 @@ class TSLimeExplainer(TSLocalBBExplainer):
             explain_params: Arbitrary explainer parameters.
 
         Returns:
-            explanation (Union[List[Dict], Dict]): Dictionary with keys: input_data, history_weights,
-                model_prediction, surrogate_prediction, x_perturbations, y_perturbations.
+            Dict: explanation object
+                Dictionary with keys: input_data, history_weights, model_prediction,
+                surrogate_prediction, x_perturbations, y_perturbations.
         """
         return super(TSLimeExplainer, self).explain_instance(
             ts=ts, ts_related=None, **explain_params

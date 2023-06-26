@@ -98,7 +98,7 @@ class TSSaliencyExplainer(TSLocalBBExplainer):
         """Explain the prediction made by the time series model at a certain point in time
         (**local explanation**).
 
-        Args
+        Args:
             ts (tsFrame): Input time series signal in ``tsFrame`` format. This can
                 be generated using :py:mod:`aix360.algorithms.tsframe.tsFrame`.
                 A ``tsFrame`` is a pandas ``DataFrame`` indexed by ``Timestamp`` objects
@@ -106,8 +106,9 @@ class TSSaliencyExplainer(TSLocalBBExplainer):
             explain_params: Arbitrary explainer parameters.
 
         Returns:
-            explanation (Union[List[Dict], Dict]): Dictionary with keys: input_data, saliency,
-                feature_names, timestamps, base_value, instance_prediction, base_value_prediction.
+            Dict: explanation object
+                Dictionary with input_data, saliency, feature_names, timestamps, base_value,
+                instance_prediction, base_value_prediction.
         """
         return super(TSSaliencyExplainer, self).explain_instance(
             ts=ts, ts_related=None, **explain_params

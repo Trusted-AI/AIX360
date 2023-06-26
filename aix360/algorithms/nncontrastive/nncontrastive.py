@@ -369,8 +369,8 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
             x (Union[pd.DataFrame, np.ndarray]): input instance to be explained.
 
         Additional Parameters:
-            neighbors (int): Overrides neighbors parameter provided in the init method
-                of NearestNeighborContrastiveExplainer.
+            neighbors (int): Number of neighbors
+                Overrides neighbors parameter provided in the initializer.
 
         """
         if not self.is_fitted:
