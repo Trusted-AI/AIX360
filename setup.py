@@ -15,7 +15,7 @@ extra_requires = {
     "rbm": [
         "matplotlib",
         "pandas<=1.4.3",
-        "scipy>=0.17",
+        "scipy>=0.17,<=1.10.1",
         "scikit-learn<1.2.0",
         "cvxpy>=1.1",
         "numpy<=1.24.3",
@@ -57,6 +57,7 @@ extra_requires = {
     "protodash": [
         "scikit-learn",
         "xport",
+        "scipy>=0.17,<=1.10.1",        
         "cvxpy",
         "requests",
     ],
