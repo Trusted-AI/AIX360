@@ -106,7 +106,7 @@ class TSSaliencyExplainer(TSLocalBBExplainer):
             explain_params: Arbitrary explainer parameters.
 
         Returns:
-            Dict: explanation object
+            dict: explanation object
                 Dictionary with input_data, saliency, feature_names, timestamps, base_value,
                 instance_prediction, base_value_prediction.
         """

@@ -153,7 +153,7 @@ class TSLimeExplainer(TSLocalBBExplainer):
             explain_params: Arbitrary explainer parameters.
 
         Returns:
-            Dict: explanation object
+            dict: explanation object
                 Dictionary with keys: input_data, history_weights, model_prediction,
                 surrogate_prediction, x_perturbations, y_perturbations.
         """

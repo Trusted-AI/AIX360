@@ -309,7 +309,7 @@ class TSICEExplainer(TSLocalBBExplainer):
             explain_params: Arbitrary explainer parameters.
 
         Returns:
-            Dict: explanation object
+            dict: explanation object
                 Dictionary with data_x, feature_names, feature_values, signed_impact, total_impact,
                 current_forecast, current_feature_values, perturbations and forecasts_on_perturbations.
 
