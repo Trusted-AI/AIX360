@@ -363,14 +363,19 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
         return self._config.copy()
 
     def explain_instance(self, x, **kwargs):
-        """Explain the model prediction for an instance (local explanation).
+        """Explain (local explanation) the model prediction for provided instance(s).
 
         Args:
             x (Union[pd.DataFrame, np.ndarray]): input instance to be explained.
 
         Additional Parameters:
-            neighbors (int): Overrides neighbors parameter provided in the init method
-                of NearestNeighborContrastiveExplainer.
+            neighbors (int): Number of neighbors
+                Overrides neighbors parameter provided in the initializer.
+
+        Returns:
+            Union(List[dict], dict): explanation object
+                Dictionary or list of dictionaries with keys: features,
+                categorical_features, query, neighbors, distances.
 
         """
         if not self.is_fitted:
