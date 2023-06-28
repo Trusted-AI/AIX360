@@ -33,4 +33,10 @@ RIPPER Explainer
 
 .. autoclass:: aix360.algorithms.rule_induction.ripper.RipperExplainer
    :members:
-   
+
+IMD Explainer
+---------------------------------------------------------------------
+
+.. autoclass:: aix360.algorithms.imd.imd.IMDExplainer
+   :members:
+
