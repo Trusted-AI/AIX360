@@ -1,4 +1,4 @@
-# AI Explainability 360 (v0.2.1) 
+# AI Explainability 360 (v0.3.0) 
 
 [![Build](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml/badge.svg)](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
