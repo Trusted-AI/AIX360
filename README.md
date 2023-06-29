@@ -152,10 +152,10 @@ If you face any issues, please try upgrading pip and setuptools and uninstall an
 If you would like to quickly start using the AI explainability 360 toolkit without cloning this repository, then you can install the [aix360 pypi package](https://pypi.org/project/aix360/) as follows. 
 
 ```bash
-(your environment)$ pip install aix360 .[<algo1>, <algo2>, ...]
+(your environment)$ pip install aix360
 ```
 
-If you follow this approach, you will need to download the notebooks available in the [examples](./examples) folder separately. 
+This will install v0.2.1 which includes a subset of algorithms. This will be updated soon. If you follow this approach, you will need to download the notebooks available in the [examples](./examples) folder separately. 
 
 ## Running in Docker
 
