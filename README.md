@@ -96,7 +96,7 @@ Miniconda](https://conda.io/docs/user-guide/install/download.html#anaconda-or-mi
 if you are curious) and can be installed from
 [here](https://conda.io/miniconda.html) if you do not already have it.
 
-Then, create a new python environment based on the explainability algorithms you wish to use by referring to the [table](https://github.com/Trusted-AI/AIX360/edit/master/README.md#supported-configurations) above. For example, for python 3.10, use the following command:
+Then, create a new python environment based on the explainability algorithms you wish to use by referring to the [table](https://github.com/Trusted-AI/AIX360/tree/master#supported-configurations) above. For example, for python 3.10, use the following command:
 
 ```bash
 conda create --name aix360 python=3.10
@@ -132,7 +132,7 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 ```bash
 (aix360)$ pip install -e .[<algo1>,<algo2>, ...]
 ```
-The above command installs packages required by specific algorithms. Here `<algo>` refers to the installation keyword in [table](https://github.com/Trusted-AI/AIX360/edit/master/README.md#supported-configurations) above. For instance to install packages needed by BRCG, DIPVAE, and TSICE algorithms, one could use
+The above command installs packages required by specific algorithms. Here `<algo>` refers to the installation keyword in [table](https://github.com/Trusted-AI/AIX360/tree/master#supported-configurations) above. For instance to install packages needed by BRCG, DIPVAE, and TSICE algorithms, one could use
 ```bash
 (aix360)$ pip install -e .[rbm,dipvae,tsice]
 ```
@@ -169,7 +169,7 @@ If you follow either of these two options, you will need to download the noteboo
 
 AI Explainability 360 toolkit is tested on Windows, MacOS, and Linux [here](https://github.com/Trusted-AI/AIX360/blob/master/.github/workflows/Build.yml). However, if you still face installation issues due to package dependencies, please try installing the corresponding package via conda (e.g. conda install package-name) and then install the toolkit by following the usual steps. For example, if you face issues related to pygraphviz during installation, use `conda install pygraphviz` and then install the toolkit.
 
-Please use the right python environment based on the [table](https://github.com/Trusted-AI/AIX360/edit/master/README.md#supported-configurations) above.
+Please use the right python environment based on the [table](https://github.com/Trusted-AI/AIX360/tree/master#supported-configurations) above.
 
 ## Running in Docker
 
