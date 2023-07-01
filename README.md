@@ -167,7 +167,7 @@ If you follow either of these two options, you will need to download the noteboo
 
 ## Dealing with installation errors
 
-AI Explainability 360 toolkit is tested on Windows, MacOS, and Linux [here](https://github.com/Trusted-AI/AIX360/blob/master/.github/workflows/Build.yml). However, if you still face installation issues due to package dependencies, please try installing the corresponding package via conda (e.g. conda install package-name) and then install the toolkit by following the usual steps. For example, if you face issues related to pygraphviz during installation, use `conda install pygraphviz` and then install the toolkit.
+AI Explainability 360 toolkit is [tested](https://github.com/Trusted-AI/AIX360/blob/master/.github/workflows/Build.yml) on Windows, MacOS, and Linux. However, if you still face installation issues due to package dependencies, please try installing the corresponding package via conda (e.g. conda install package-name) and then install the toolkit by following the usual steps. For example, if you face issues related to pygraphviz during installation, use `conda install pygraphviz` and then install the toolkit.
 
 Please use the right python environment based on the [table](https://github.com/Trusted-AI/AIX360/tree/master#supported-configurations) above.
 
