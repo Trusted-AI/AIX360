@@ -61,25 +61,25 @@ We have developed the package with extensibility in mind. This library is still 
 
 ### Supported Configurations:
 
-| Explainer      | OS                            | Python version |
-| ---------------| ------------------------------| -------------- |
-| cofrnet        | macOS, Ubuntu, Windows        | 3.10 |
-| contrastive    | macOS, Ubuntu, Windows        | 3.6  |
-| dipvae         | macOS, Ubuntu, Windows        | 3.10 |
-| gce            | macOS, Ubuntu, Windows        | 3.10 |
-| imd            | macOS, Ubuntu                 | 3.10 |
-| lime           | macOS, Ubuntu, Windows        | 3.10 |
-| matching       | macOS, Ubuntu, Windows        | 3.10 |
-| nncontrastive  | macOS, Ubuntu, Windows        | 3.10 |
-| profwt         | macOS, Ubuntu, Windows        | 3.6  |
-| protodash      | macOS, Ubuntu, Windows        | 3.10 |
-| rbm            | macOS, Ubuntu, Windows        | 3.10 |
-| rule_induction | macOS, Ubuntu, Windows        | 3.10 |
-| shap           | macOS, Ubuntu, Windows        | 3.6  |
-| ted            | macOS, Ubuntu, Windows        | 3.10 |
-| tsice          | macOS, Ubuntu, Windows        | 3.10 |
-| tslime         | macOS, Ubuntu, Windows        | 3.10 |
-| tssaliency     | macOS, Ubuntu, Windows        | 3.10 |
+| Installation keyword | Explainer(s)      | OS                            | Python version |
+| ---------------|---------------| ------------------------------| -------------- |
+| cofrnet        |cofrnet        | macOS, Ubuntu, Windows        | 3.10 |
+| contrastive    |cem, cem_maf    | macOS, Ubuntu, Windows        | 3.6  |
+| dipvae         | dipvae| macOS, Ubuntu, Windows        | 3.10 |
+| gce            | gce | macOS, Ubuntu, Windows        | 3.10 |
+| imd            | imd | macOS, Ubuntu                 | 3.10 |
+| lime           | lime| macOS, Ubuntu, Windows        | 3.10 |
+| matching       | matching| macOS, Ubuntu, Windows        | 3.10 |
+| nncontrastive  | nncontrastive | macOS, Ubuntu, Windows        | 3.10 |
+| profwt         | profwt | macOS, Ubuntu, Windows        | 3.6  |
+| protodash      | protodash | macOS, Ubuntu, Windows        | 3.10 |
+| rbm            | brcg, glrm            | macOS, Ubuntu, Windows        | 3.10 |
+| rule_induction | ripper | macOS, Ubuntu, Windows        | 3.10 |
+| shap           | shap | macOS, Ubuntu, Windows        | 3.6  |
+| ted            | ted | macOS, Ubuntu, Windows        | 3.10 |
+| tsice          | tsice | macOS, Ubuntu, Windows        | 3.10 |
+| tslime         | tslime |  macOS, Ubuntu, Windows        | 3.10 |
+| tssaliency     | tssaliency | macOS, Ubuntu, Windows        | 3.10 |
 
 
 ### (Optional) Create a virtual environment
@@ -130,11 +130,11 @@ their respective folders as described in
 Then, navigate to the root directory of the project which contains `setup.py` file and run:
 
 ```bash
-(aix360)$ pip install -e .[<algo1>, <algo2>, ...]
+(aix360)$ pip install -e .[<algo1>,<algo2>, ...]
 ```
-The above command installs packages required by specific algorithms. Here `<algo>` keyword refers to one or more explainability algorithms. For instance to install packages needed by BRCG, DIPVAE, and TSICE algorithms, one could use
+The above command installs packages required by specific algorithms. Here `<algo>` refers to the installation keyword in [table](https://github.com/Trusted-AI/AIX360/edit/master/README.md#supported-configurations) above. For instance to install packages needed by BRCG, DIPVAE, and TSICE algorithms, one could use
 ```bash
-(aix360)$ pip install -e .[rbm, dipvae, tsice]
+(aix360)$ pip install -e .[rbm,dipvae,tsice]
 ```
  The default command `pip install .` installs [default dependencies](https://github.com/Trusted-AI/AIX360/blob/462c4d575bfc71c5cbfd32ceacdb3df96a8dc2d1/setup.py#L9) alone. 
 
@@ -149,13 +149,27 @@ If you face any issues, please try upgrading pip and setuptools and uninstall an
 
 ## PIP Installation of AI Explainability 360
 
-If you would like to quickly start using the AI explainability 360 toolkit without cloning this repository, then you can install the [aix360 pypi package](https://pypi.org/project/aix360/) as follows. 
+If you would like to quickly start using the AI explainability 360 toolkit without explicitly cloning this repository, you can use one of these options: 
 
+* Install v0.3.0 via repository link
+```bash
+(your environment)$ pip install -e git+https://github.com/Trusted-AI/AIX360.git#egg=aix360[<algo1>,<algo2>,...]
+```
+For example, use `pip install -e git+https://github.com/Trusted-AI/AIX360.git#egg=aix360[rbm,dipvae,tsice]` to install BRCG, DIPVAE, and TSICE. You may need to install `cmake` if its not already installed in your environment using `conda install cmake`. 
+
+* Install previous version v0.2.1 via [pypi](https://pypi.org/project/aix360/)
 ```bash
 (your environment)$ pip install aix360
 ```
+v0.2.1 includes fewer explainability algorithms. The pip installable package of v0.3.0 will be made available on [pypi](https://pypi.org/project/aix360/) soon. 
 
-This will install v0.2.1 which includes a subset of algorithms. This will be updated soon. If you follow this approach, you will need to download the notebooks available in the [examples](./examples) folder separately. 
+If you follow either of these two options, you will need to download the notebooks available in the [examples](./examples) folder separately. 
+
+## Dealing with installation errors
+
+AI Explainability 360 toolkit is tested on Windows, MacOS, and Linux [here](https://github.com/Trusted-AI/AIX360/blob/master/.github/workflows/Build.yml). However, if you still face installation issues due to package dependencies, please try installing the corresponding package via conda (e.g. conda install package-name) and then install the toolkit by following the usual steps. For example, if you face issues related to pygraphviz during installation, use `conda install pygraphviz` and then install the toolkit.
+
+Please use the right python environment based on the [table](https://github.com/Trusted-AI/AIX360/edit/master/README.md#supported-configurations) above.
 
 ## Running in Docker
 
