@@ -14,7 +14,7 @@ extra_requires = {
     ],
     "rbm": [
         "matplotlib",
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "scipy>=0.17,<=1.10.1",
         "scikit-learn<1.2.0",
         "cvxpy>=1.1",
@@ -26,7 +26,7 @@ extra_requires = {
         "tensorflow==1.14",
     ],
     "cofrnet": [
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "torch",
         "tqdm",
     ],
@@ -42,7 +42,7 @@ extra_requires = {
     "rule_induction": [
         "matplotlib",
         "numba",
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "scikit-learn",
         "nyoka",
         "cvxpy",
@@ -57,7 +57,7 @@ extra_requires = {
     "protodash": [
         "scikit-learn",
         "xport",
-        "scipy>=0.17,<=1.10.1",        
+        "scipy>=0.17,<=1.10.1",
         "cvxpy",
         "requests",
     ],
@@ -75,16 +75,16 @@ extra_requires = {
         "tensorflow==1.14",
         "matplotlib",
         "numba",
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "shap",
         "tqdm",
     ],
     "nncontrastive": [
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "tensorflow==2.9.3",
     ],
     "tsice": [
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "scipy",
         "plotly",  # required for units
         "ipython",  # required for units
@@ -92,7 +92,7 @@ extra_requires = {
         "requests",  # required for dataset and units
     ],
     "tssaliency": [
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "requests",  # required for dataset and units
     ],
     "imd": [
@@ -105,12 +105,12 @@ extra_requires = {
         "pygraphviz",  # for creating graph visualization
     ],
     "tslime": [
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "scipy",
         "requests",  # required for dataset and units
     ],
     "gce": [
-        "pandas<=1.4.3",
+        "pandas<2.0.0",
         "shap",
         "numba<=0.56",
         "requests",  # required for dataset and units
