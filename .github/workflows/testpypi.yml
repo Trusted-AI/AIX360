@@ -19,6 +19,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+    
       - name: Step 2 - set up python version
         uses: actions/setup-python@v4
         with:
@@ -28,7 +31,7 @@ jobs:
         run: pip3 install pytest nbmake wheel --upgrade setuptools
 
       - name: Step 4 - Install aix360 with contrastive (CEM)
-        run: pip3 install -i https://test.pypi.org/simple/ aix360['contrastive']==0.3.2
+        run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['contrastive']==0.3.2
 
 #       - name: Step 5 - Test CEM MAF
 #         run: python ./tests/contrastive/test_CEM_MAF.py
