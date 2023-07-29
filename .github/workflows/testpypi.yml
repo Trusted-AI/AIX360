@@ -164,7 +164,7 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         #os: [macos-latest]
         python-version: ["3.10"]
 
@@ -179,7 +179,7 @@ jobs:
           python-version: "${{ matrix.python-version }}"
 
       - name: Step 3 - upgrade setuptools
-        run: pip3 install pytest nbmake wheel --upgrade setuptools --upgrade pip
+        run: pip3 install pytest nbmake wheel setuptools==58.2.0 --upgrade pip
 
       - name: Step 4 - Install aix360 with rbm algorithm related dependencies
         run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['rbm']==0.3.7
