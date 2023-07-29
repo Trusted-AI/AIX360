@@ -7,37 +7,37 @@ on: [push]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # job to build CEM on python 3.6.
-  build-cem-on-py36:
-    # The type of runner that the job will run on
-    runs-on: "${{ matrix.os }}"
-    strategy:
-      matrix:
-        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
-        python-version: ["3.6"]
+#   # job to build CEM on python 3.6.
+#   build-cem-on-py36:
+#     # The type of runner that the job will run on
+#     runs-on: "${{ matrix.os }}"
+#     strategy:
+#       matrix:
+#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+#         os: [ubuntu-20.04, macos-latest, windows-latest]
+#         python-version: ["3.6"]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#       - name: Step 1 - checkout aix360 repository
+#         uses: actions/checkout@v3
     
-      - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
-        with:
-          python-version: "${{ matrix.python-version }}"
+#       - name: Step 2 - set up python version
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: "${{ matrix.python-version }}"
 
-      - name: Step 3 - upgrade setuptools
-        run: pip3 install pytest nbmake wheel --upgrade setuptools
+#       - name: Step 3 - upgrade setuptools
+#         run: pip3 install pytest nbmake wheel --upgrade setuptools
 
-      - name: Step 4 - Install aix360 with contrastive (CEM)
-        run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['contrastive']==0.3.2
+#       - name: Step 4 - Install aix360 with contrastive (CEM)
+#         run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['contrastive']==0.3.2
 
-#       - name: Step 5 - Test CEM MAF
-#         run: python ./tests/contrastive/test_CEM_MAF.py
+# #       - name: Step 5 - Test CEM MAF
+# #         run: python ./tests/contrastive/test_CEM_MAF.py
 
-      - name: Step 6 - Test CEM
-        run: python ./tests/contrastive/test_CEM.py
+#       - name: Step 6 - Test CEM
+#         run: python ./tests/contrastive/test_CEM.py
 
 #   # job to build default: ted algorithm on python 3.10.
 #   build-ted-on-py310:
@@ -158,40 +158,40 @@ jobs:
 #       - name: Step 5 - Test Protodash
 #         run: python ./tests/protodash/test_PDASH.py
 
-#   # job to build rbm algorithm on python 3.10.
-#   build-rbm-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [macos-latest, windows-latest]
-#         python-version: ["3.10"]
+  # job to build rbm algorithm on python 3.10.
+  build-rbm-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
+        python-version: ["3.10"]
 
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
 
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
 
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
 
-#       - name: Step 4 - Install aix360 with rbm algorithm related dependencies
-#         run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['rbm']==0.3.2
+      - name: Step 4 - Install aix360 with rbm algorithm related dependencies
+        run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['rbm']==0.3.2
 
-#       - name: Step 5 - Test BRCG
-#         run: python ./tests/rbm/test_Boolean_Rule_CG.py
+      - name: Step 5 - Test BRCG
+        run: python ./tests/rbm/test_Boolean_Rule_CG.py
 
-#       - name: Step 6 - Test Linear Rule Regression
-#         run: python ./tests/rbm/test_Linear_Rule_Regression.py
+      - name: Step 6 - Test Linear Rule Regression
+        run: python ./tests/rbm/test_Linear_Rule_Regression.py
 
-#       - name: Step 7 - Test Logistic Rule Regression
-#         run: python ./tests/rbm/test_Logistic_Rule_Regression.py
+      - name: Step 7 - Test Logistic Rule Regression
+        run: python ./tests/rbm/test_Logistic_Rule_Regression.py
 
 #   # job to build nncontrastive algorithm on python 3.10.
 #   build-nncontrastive-on-py310:
