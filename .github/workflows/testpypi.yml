@@ -63,7 +63,7 @@ jobs:
 #         run: pip3 install pytest nbmake wheel setuptools
 
 #       - name: Step 4 - Install aix360
-#         run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['ted']==0.3.2
+#         run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['ted']==0.3.4
 
 #       - name: Step 5 - Test TED
 #         run: python ./tests/ted/test_TED_Cartesian.py
