@@ -164,7 +164,7 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
         #os: [macos-latest]
         python-version: ["3.10"]
 
@@ -182,7 +182,7 @@ jobs:
         run: pip3 install pytest nbmake wheel setuptools==58.2.0 --upgrade pip
 
       - name: Step 4 - Install aix360 with rbm algorithm related dependencies
-        run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['rbm']==0.3.8
+        run: python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aix360['rbm']==0.3.9
 
       - name: Step 5 - Test BRCG
         run: python ./tests/rbm/test_Boolean_Rule_CG.py
