@@ -323,6 +323,7 @@ class NearestNeighborContrastiveExplainer(LocalBBExplainer):
         if not self.is_fitted:
             raise RuntimeError(f"Error: exemplar can only be set post model fitting!")
 
+        x = np.asarray(x)
         if self.model is not None:  # identify class tags for exemplars using model.
             classes = self.model(x)
             classes = np.array(classes, dtype=int).reshape(-1)
