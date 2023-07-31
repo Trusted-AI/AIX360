@@ -157,11 +157,10 @@ If you would like to quickly start using the AI explainability 360 toolkit witho
 ```
 For example, use `pip install -e git+https://github.com/Trusted-AI/AIX360.git#egg=aix360[rbm,dipvae,tsice]` to install BRCG, DIPVAE, and TSICE. You may need to install `cmake` if its not already installed in your environment using `conda install cmake`. 
 
-* Install previous version v0.2.1 via [pypi](https://pypi.org/project/aix360/)
+* Install v0.3.0 (or previous versions) via [pypi](https://pypi.org/project/aix360/)
 ```bash
 (your environment)$ pip install aix360
 ```
-v0.2.1 includes fewer explainability algorithms. The pip installable package of v0.3.0 will be made available on [pypi](https://pypi.org/project/aix360/) soon. 
 
 If you follow either of these two options, you will need to download the notebooks available in the [examples](./examples) folder separately. 
 
