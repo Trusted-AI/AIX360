@@ -37,10 +37,13 @@ class TSSaliencyExplainer(TSLocalBBExplainer):
         """Initializer for TSSaliencyExplainer
 
         Args:
-            model (Callable): model prediction (predict/predict_proba) function that
-                results a real value like probability or regressed value. This function
-                must accept numpy array of shape (input_length x len(feature_names)) as
-                input and result in numpy array of shape (1, -1).
+            model (Callable): Callable object produces a prediction as numpy array
+                for a given input as numpy array. It can be a model prediction (predict/
+                predict_proba) function that results a real value like probability or regressed value.
+                This function must accept numpy array of shape (input_length x len(feature_names)) as
+                input and result in numpy array of shape (1, -1). Currently, TSSaliency supports sinlge output
+                models only. For multi-output models, you can aggregate the output using a custom
+                model_wrapper. Use model wrapper classes from aix360.algorithms.tsutils.model_wrappers.
             input_length (int): length of history window used in model training.
             feature_names (List[str]): list of feature names in the input data.
             base_value (List[float]): base value to be used in saliency computation. The
