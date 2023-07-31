@@ -102,3 +102,7 @@ class TestTSLimeExplainer(unittest.TestCase):
         self.assertIn("surrogate_prediction", explanation)
 
         self.assertEqual(explanation["history_weights"].shape[0], relevant_history)
+
+
+if __name__ == "__main__":
+    unittest.main()
