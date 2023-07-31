@@ -23,7 +23,10 @@ class ClimateDataset:
 
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        url: str = None,
+    ):
         self.data_folder = os.path.realpath(
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)), "../data", "climate_data"
@@ -32,7 +35,11 @@ class ClimateDataset:
         self.data_file = os.path.realpath(
             os.path.join(self.data_folder, "jena_climate_2009_2016.csv")
         )
-        climate_data_url = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/jena_climate_2009_2016.csv.zip"
+        climate_data_url = (
+            url
+            if url is not None
+            else "https://storage.googleapis.com/tensorflow/tf-keras-datasets/jena_climate_2009_2016.csv.zip"
+        )
 
         self.input_length = 500
         # download data

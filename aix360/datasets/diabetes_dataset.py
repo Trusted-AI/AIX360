@@ -18,7 +18,10 @@ class DiabetesDataset:
 
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        url: str = None,
+    ):
         self.data_folder = os.path.realpath(
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)), "../data", "diabetes_data"
@@ -27,7 +30,11 @@ class DiabetesDataset:
         self.data_file = os.path.realpath(
             os.path.join(self.data_folder, "diabetes.csv")
         )
-        diabetes_url = "https://www4.stat.ncsu.edu/~boos/var.select/diabetes.tab.txt"
+        diabetes_url = (
+            url
+            if url is not None
+            else "https://www4.stat.ncsu.edu/~boos/var.select/diabetes.tab.txt"
+        )
 
         if not os.path.exists(self.data_file):
             response = requests.get(diabetes_url)

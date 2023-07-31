@@ -97,3 +97,7 @@ class TestTSSaliencyExplainer(unittest.TestCase):
         self.assertIn("base_value_prediction", explanation)
 
         self.assertEqual(explanation["saliency"].shape, test_window.shape)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -27,7 +27,7 @@ class FordDataset:
 
     """
 
-    def __init__(self, category_a: bool = True):
+    def __init__(self, url: str = None, category_a: bool = True):
         self.data_folder = os.path.realpath(
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)), "../data", "ford_data"
@@ -41,8 +41,12 @@ class FordDataset:
         )
 
         self.category = "A" if category_a else "B"
-        ford_data_url = "http://timeseriesclassification.com/ClassificationDownloads/Ford{}.zip".format(
-            self.category
+        ford_data_url = (
+            url
+            if url is not None
+            else "https://timeseriesclassification.com/aeon-toolkit/Ford{}.zip".format(
+                self.category
+            )
         )
 
         self.input_length = 500
