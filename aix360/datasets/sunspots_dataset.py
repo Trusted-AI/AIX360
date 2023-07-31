@@ -23,7 +23,10 @@ class SunspotDataset:
 
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        url: str = None,
+    ):
         self.data_folder = os.path.realpath(
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)), "../data", "sunspots_data"
@@ -32,7 +35,11 @@ class SunspotDataset:
         self.data_file = os.path.realpath(
             os.path.join(self.data_folder, "sunspots.csv")
         )
-        sunspots_url = "https://raw.githubusercontent.com/PacktPublishing/Practical-Time-Series-Analysis/master/Data%20Files/monthly-sunspot-number-zurich-17.csv"
+        sunspots_url = (
+            url
+            if url is not None
+            else "https://raw.githubusercontent.com/PacktPublishing/Practical-Time-Series-Analysis/master/Data%20Files/monthly-sunspot-number-zurich-17.csv"
+        )
 
         if not os.path.exists(self.data_file):
             response = requests.get(sunspots_url)
