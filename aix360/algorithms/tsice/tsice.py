@@ -121,8 +121,6 @@ class TSICEExplainer(TSLocalBBExplainer):
         if perturbers is None:
             perturbers = [
                 dict(type="block-bootstrap"),
-                dict(type="moving_average"),
-                dict(type="frequency"),
             ]
 
         self._parameters = {

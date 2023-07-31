@@ -49,7 +49,12 @@ class TSLimeExplainer(TSLocalBBExplainer):
 
         Args:
             model (Callable): Callable object produces a prediction as numpy array
-                for a given input as numpy array.
+                for a given input as numpy array. It can be a model prediction (predict/
+                predict_proba) function that results a real value like probability or regressed value.
+                This function must accept numpy array of shape (input_length x len(feature_names)) as
+                input and result in numpy array of shape (1, -1). Currently, TSLime supports sinlge output
+                models only. For multi-output models, you can aggregate the output using a custom
+                model_wrapper. Use model wrapper classes from aix360.algorithms.tsutils.model_wrappers.
             input_length (int): Input (history) length used for input model.
             n_perturbations (int): Number of perturbed instance for TSExplanation. Defaults to 25.
             relevant_history (int): Interested window size for explanations. The explanation is
