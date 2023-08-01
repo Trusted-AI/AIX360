@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml/badge.svg)](https://github.com/Trusted-AI/AIX360/actions/workflows/Build.yml)
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/py/aix360.svg)](https://badge.fury.io/py/aix360)
+[![PyPI version](https://badge.fury.io/py/aix360.svg?)](https://badge.fury.io/py/aix360)
 
 The AI Explainability 360 toolkit is an open-source library that supports interpretability and explainability of datasets and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics. The AI Explainability 360 toolkit supports tabular, text, images, and time series data. 
 
