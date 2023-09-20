@@ -21,7 +21,7 @@ from lime.wrappers.scikit_image import SegmentationAlgorithm
 
 from aix360.algorithms.lime import LimeTabularExplainer
 from aix360.algorithms.lime import LimeTextExplainer
-from aix360.algorithms.lime import LimeImageExplainer
+from aix360.algorithms.lime import LimeImageExplainer 
 
 
 class TestLIMEExplainer(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestLIMEExplainer(unittest.TestCase):
         i = 19
         explanation = explainer.explain_instance(test[i], rf.predict_proba, num_features=2, top_labels=1)
         print(i, explanation.as_map())
-        print('Invoked Tabular explainer\n')
+        print('Invoked Tabular explainer OK!\n')
 
         # test invocation of lime explainer on text data
 
