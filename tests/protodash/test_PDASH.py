@@ -33,7 +33,7 @@ class TestProtoDashExplainer(unittest.TestCase):
         original = original[:, 1:]
 
         # one hot encoding of all columns/features
-        onehot_encoder = OneHotEncoder(sparse=False)
+        onehot_encoder = OneHotEncoder(sparse_output=False)
         onehot_encoded = onehot_encoder.fit_transform(original)
 
         print(onehot_encoded.shape, original.shape)
