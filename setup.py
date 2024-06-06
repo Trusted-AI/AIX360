@@ -115,6 +115,14 @@ extra_requires = {
         "numba<=0.56",
         "requests",  # required for dataset and units
     ],
+    "ecertify": [
+        "numpy",
+        "pandas",
+        "scikit-learn",
+        "matplotlib",
+        "lime",
+        "shap",
+    ],
 }
 
 # minimal dependencies in install_requires
