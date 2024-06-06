@@ -120,6 +120,7 @@ extra_requires = {
         "pandas",
         "scikit-learn",
         "matplotlib",
+        "zoopt",
         "lime",
         "shap",
     ],
