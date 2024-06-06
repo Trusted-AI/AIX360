@@ -416,7 +416,7 @@ jobs:
         run: pip3 install .[ecertify]
 
       - name: Step 5 - Test Ecertify
-        run: python ./tests/imd/test_ecertify.py
+        run: python ./tests/ecertify/test_ecertify.py
 
       # - name: Step 6 - Test Ecertify Notebook
         # run: pytest --nbmake ./examples/ecertify/ecertify_example.ipynb
