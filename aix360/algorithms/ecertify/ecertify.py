@@ -6,7 +6,7 @@ import pandas as pd
 
 from algorithms.ecertify.ExpCertifyBB import Ecertify
 
-class CertifyExplanation():
+class CertifyExplanation(LocalBBExplainer):
     """
     Explanation certification class for black-box probabilistic certification of local explanations.
     Provides access to :class:`aix360.algorithms.ecertify.ExpCertifyBB`, where the certification strategies

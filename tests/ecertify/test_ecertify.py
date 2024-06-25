@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from aix360.algorithms.ecertify.ExpCertifyBB import Ecertify
+from aix360.algorithms.ecertify.ecertify import CertifyExplanation
 
 class TestCertifyExplainer(unittest.TestCase):
 
