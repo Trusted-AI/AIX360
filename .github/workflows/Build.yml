@@ -418,8 +418,8 @@ jobs:
       - name: Step 5 - Test Ecertify
         run: python ./tests/ecertify/test_ecertify.py
 
-      # - name: Step 6 - Test Ecertify Notebook
-        # run: pytest --nbmake ./examples/ecertify/ecertify_example.ipynb
+      - name: Step 6 - Test Ecertify Notebook
+        run: pytest --nbmake ./examples/ecertify/certification_example_fico.ipynb
 
   # job to build groupedce algorithm on python 3.10.
   # build-groupedce-on-py310:
