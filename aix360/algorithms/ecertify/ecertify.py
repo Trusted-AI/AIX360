@@ -4,7 +4,7 @@ import timeit
 import numpy as np
 import pandas as pd
 
-from aix360.algorithms.ecertify.ecertify import CertifyExplanation
+from aix360.algorithms.ecertify.ExpCertifyBB import Ecertify
 
 class CertifyExplanation(LocalBBExplainer):
     """
