@@ -62,7 +62,7 @@ def get_SHAP_classifier(label_x0, phi, phi0, x0, EX):
     Returns:
         Callable, sklearn ridge regression: linear classifier form of shap explanation
     """
-    coef = np.divide(phi[label_x0], (x0 - EX).values, where=(x0 - EX).values!=0)
+    coef = np.divide(phi[label_x0], (x0 - EX), where=(x0 - EX)!=0)
     g = sklearn.linear_model.Ridge(alpha=1.0, fit_intercept=True)#, normalize=False)
     g.coef_ = coef
     g.intercept_ = phi0[label_x0]

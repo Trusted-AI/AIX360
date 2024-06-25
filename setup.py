@@ -122,7 +122,7 @@ extra_requires = {
         "matplotlib",
         "zoopt",
         "lime",
-        "shap",
+        "shap==0.42.1",
     ],
 }
 
