@@ -22,7 +22,6 @@ def UsampleBetRects(x,lb,ub,num):
     Returns:
         tuple: (boolean: Indicator of failure to sample in region, samples: array of shape `num x d`)
     """
-    # global Currbst
     d = len(x)
     samples = np.zeros((num,d))
     totadded = 0
@@ -395,12 +394,13 @@ def Ecertify(x, theta, Z, Q, lb=0, ub=np.Inf, sigma_0=0.1, s=1, quality=f, choic
         if ub-lb < eps:
             # print("returning because lowest spatial resolution to reached (eps)!")
             return Currbst, prob_or_lcb
-        sigma = sigma_0 * (ub-lb)/d
+        sigma = sigma_0 #* (ub-lb)/d
         t1,t2, min_fid_or_violator, prob_or_lcb_new = Certify(lb, ub, Q, lgQ, q, theta, x, sigma, s, quality, eps_fid=eps_fid)
         # print(f"\t\t b = {b}")
         if t1:
             return Currbst, prob_or_lcb
         if t2:
+            # t2 => this region is certified, need to double the search space
             Currbst, lb = ub, ub
             ub = min((B+ub)/2, 2*ub)
             # if min_fid_or_violator < min_fid_curr:
@@ -408,14 +408,15 @@ def Ecertify(x, theta, Z, Q, lb=0, ub=np.Inf, sigma_0=0.1, s=1, quality=f, choic
             #     min_fid_curr = min_fid_or_violator
             #     # Convert into probability of being within eps_fid
             #     prob_or_lcb = 1 - prob_or_lcb_new
-            # print(f"\tcertified! doubling ub to {ub:.4f}... with B={B:.4f}")
+            # print(f"\tcertified! doubling ub to {ub:.4f}, with B={B:.4f}")
         else:
+            # this region is not certified and a violator has been found, need to halve search space and reset B
             temp = []
             for i in range(d):
                 if abs(min_fid_or_violator[i]-x[i]) > lb:
                     temp.append(abs(min_fid_or_violator[i]-x[i]))
 
-            # todo: try min, max or average --- this is another hyperparameter --- (done)
+            # try min, max or average of the violator radius --- this is another hyperparameter and depends on d
             if choice == "min":
                 B = min(temp)
             elif choice == "max":
@@ -426,12 +427,11 @@ def Ecertify(x, theta, Z, Q, lb=0, ub=np.Inf, sigma_0=0.1, s=1, quality=f, choic
                 raise ValueError('choice must be "min", "max" or "mean"!')
 
             ub = (B+lb)/2
-            # print(f"\tnot certified! halving ub to {ub:.4f}... changed B={B:.4f}")
+            # print(f"\tnot certified! halving ub to {ub:.4f}, changed B={B:.4f}")
     return Currbst, prob_or_lcb
 
 
 if __name__ == '__main__':
-
     #Calling Function
     d = 5 #input dimensionality
     x = np.array([0.0]*d) #input

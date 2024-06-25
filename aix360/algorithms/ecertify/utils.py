@@ -1,7 +1,14 @@
 import numpy as np
+import pandas as pd
 import sklearn
 import shap, lime
 from lime.lime_tabular import LimeTabularExplainer
+
+
+def load_fico_dataset(path='./datasets/heloc-clean-full.csv'):
+    data = pd.read_csv(path)
+    target = 'RiskPerformance'
+    return data.drop(columns=[target]), data[target]
 
 
 def get_LIME_classifier(lime_expl, label_x0, x0):
