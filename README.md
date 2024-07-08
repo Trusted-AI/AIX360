@@ -40,9 +40,12 @@ We have developed the package with extensibility in mind. This library is still 
 - Teaching AI to Explain its Decisions ([Hind et al., 2019](https://doi.org/10.1145/3306618.3314273)) 
 - Order Constraints in Optimal Transport ([Lim et al.,2022](https://arxiv.org/abs/2110.07275), [Github](https://github.com/IBM/otoc))
 
+### Certifying local explanations
+- Trust Regions for Explanations via Black-Box Probabilistic Certification (Ecertify) ([Dhurandhar et al., 2024](https://arxiv.org/abs/2402.11168))
+
 ### Global direct explanations
 
-- Interpretable Model Differencing (IMD) ([Haldar et al., 2023](https://arxiv.org/abs/2306.06473))
+- Interpretable Model Differencing (IMD) ([Haldar et al., 2023](https://proceedings.mlr.press/v216/haldar23a.html))
 - CoFrNets (Continued Fraction Nets) ([Puri et al., 2021](https://papers.nips.cc/paper/2021/file/b538f279cb2ca36268b23f557a831508-Paper.pdf))
 - Boolean Decision Rules via Column Generation (Light Edition) ([Dash et al., 2018](https://papers.nips.cc/paper/7716-boolean-decision-rules-via-column-generation))
 - Generalized Linear Rule Models ([Wei et al., 2019](http://proceedings.mlr.press/v97/wei19a.html))
@@ -67,6 +70,7 @@ We have developed the package with extensibility in mind. This library is still 
 | contrastive    |cem, cem_maf    | macOS, Ubuntu, Windows        | 3.6  |
 | dipvae         | dipvae| macOS, Ubuntu, Windows        | 3.10 |
 | gce            | gce | macOS, Ubuntu, Windows        | 3.10 |
+| ecertify       | ecertify | macOS, Ubuntu, Windows        | 3.10 |
 | imd            | imd | macOS, Ubuntu                 | 3.10 |
 | lime           | lime| macOS, Ubuntu, Windows        | 3.10 |
 | matching       | matching| macOS, Ubuntu, Windows        | 3.10 |
