@@ -13,381 +13,381 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # job to build CEM on python 3.6.
-#   build-cem-on-py36:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.6"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with contrastive (CEM)
-#         run: pip3 install .[contrastive]
-
-# #       - name: Step 5 - Test CEM MAF
-# #         run: python ./tests/contrastive/test_CEM_MAF.py
-
-#       - name: Step 6 - Test CEM
-#         run: python ./tests/contrastive/test_CEM.py
-
-#   # job to build default: ted algorithm on python 3.10.
-#   build-ted-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360. (Default installs ted algorithm related dependencies)
-#         run: pip3 install .
-
-#       - name: Step 5 - Test TED
-#         run: python ./tests/ted/test_TED_Cartesian.py
-
-#   # job to build default: ted algorithm on python 3.10.
-#   build-rule_induction-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360. (Default installs ted algorithm related dependencies)
-#         run: pip3 install .[rule_induction]
-
-#       - name: Step 5 - Test rule_induction
-#         run: python -m unittest discover -s ./tests/rule_induction
-
-
-#   # job to build matching algorithm on python 3.10.
-#   build-matching-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install matching algorithm related dependencies
-#         run: pip3 install .[matching]
-
-#       - name: Step 5 - Test Matching Explainer
-#         run: python ./tests/matching/test_order_constraints.py
-
-#   # job to build dipvae algorithm on python 3.10.
-#   build-dipvae-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with dipvae algorithm related dependencies
-#         run: pip3 install .[dipvae]
-
-#       - name: Step 5 - Test DIPVAE
-#         run: python ./tests/dipvae/test_DIPVAE.py
-
-#   # job to build cofrnet algorithm on python 3.10.
-#   build-cofrnet-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with cofrnet algorithm related dependencies
-#         run: pip3 install .[cofrnet]
-
-#       - name: Step 5 - Test CoFrNet
-#         run: python ./tests/cofrnet/cofrnet_test.py
-
-#       - name: Step 6 - Test CoFrNet Notebook
-#         run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
-
-#   # job to build protodash algorithm on python 3.10.
-#   build-protodash-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with protodash algorithm related dependencies
-#         run: pip3 install .[protodash]
-
-#       - name: Step 5 - Test Protodash
-#         run: python ./tests/protodash/test_PDASH.py
-
-#   # job to build rbm algorithm on python 3.10.
-#   build-rbm-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with rbm algorithm related dependencies
-#         run: pip3 install .[rbm]
-
-#       - name: Step 5 - Test BRCG
-#         run: python ./tests/rbm/test_Boolean_Rule_CG.py
-
-#       - name: Step 6 - Test Linear Rule Regression
-#         run: python ./tests/rbm/test_Linear_Rule_Regression.py
-
-#       - name: Step 7 - Test Logistic Rule Regression
-#         run: python ./tests/rbm/test_Logistic_Rule_Regression.py
-
-#   # job to build nncontrastive algorithm on python 3.10.
-#   build-nncontrastive-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with nncontrastive algorithm related dependencies
-#         run: pip3 install .[nncontrastive]
-
-#       - name: Step 5 - Test NearestNeighborContrastiveExplainer
-#         run: python ./tests/nncontrastive/test_nncontrastive.py
-
-#   # job to build tsice, tssaliency and tslime algorithms on python 3.10.
-#   build-tsice-tssaliency-tslime-on-py310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         os: [ubuntu-20.04, macos-latest, windows-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 4 - Install aix360 with tsice algorithm related dependencies
-#         run: pip3 install .[tsice]
-
-#       - name: Step 5 - Test TSICEExplainer
-#         run: python ./tests/tsice/test_tsice.py
-
-#       # tssaliency deps are already satisfied.
-#       - name: Step 6 - Test TSSaliencyExplainer
-#         run: python ./tests/tssaliency/test_tssaliency.py
-
-#       # tslime deps are already satisfied.
-#       - name: Step 7 - Test TSLimeExplainer
-#         run: python ./tests/tslime/test_tslime.py
-
-#   build-imd-on-py38-310:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         #        os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-#         os: [ubuntu-20.04]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - Install graphviz related things
-#         run: sudo apt-get install python3-dev graphviz libgraphviz-dev pkg-config
-
-#       - name: Step 4 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 5 - Install aix360 with imd algorithm related dependencies
-#         run: pip3 install .[imd]
-
-#       - name: Step 5 - Test IMD
-#         run: python ./tests/imd/test_imd.py
-
-#       - name: Step 6 - Test IMD Notebook
-#         run: pytest --nbmake ./examples/imd/imd_example.ipynb
-
-#   build-imd-on-310-macos:
-#     # The type of runner that the job will run on
-#     runs-on: "${{ matrix.os }}"
-#     strategy:
-#       matrix:
-#         os: [macos-latest]
-#         python-version: ["3.10"]
-
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Step 1 - checkout aix360 repository
-#         uses: actions/checkout@v3
-
-#       - name: Step 2 - set up python version
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "${{ matrix.python-version }}"
-
-#       - name: Step 3 - Install graphviz related things
-#         run: brew install graphviz
-
-#       - name: Step 4 - upgrade setuptools
-#         run: pip3 install pytest nbmake wheel --upgrade setuptools
-
-#       - name: Step 5 - Install aix360 with imd algorithm related dependencies
-#         run: pip3 install .[imd]
-
-#       - name: Step 5 - Test IMD
-#         run: python ./tests/imd/test_imd.py
-
-#       - name: Step 6 - Test IMD Notebook
-#         run: pytest --nbmake ./examples/imd/imd_example.ipynb
+  build-cem-on-py36:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.6"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with contrastive (CEM)
+        run: pip3 install .[contrastive]
+
+#       - name: Step 5 - Test CEM MAF
+#         run: python ./tests/contrastive/test_CEM_MAF.py
+
+      - name: Step 6 - Test CEM
+        run: python ./tests/contrastive/test_CEM.py
+
+  # job to build default: ted algorithm on python 3.10.
+  build-ted-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360. (Default installs ted algorithm related dependencies)
+        run: pip3 install .
+
+      - name: Step 5 - Test TED
+        run: python ./tests/ted/test_TED_Cartesian.py
+
+  # job to build default: ted algorithm on python 3.10.
+  build-rule_induction-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360. (Default installs ted algorithm related dependencies)
+        run: pip3 install .[rule_induction]
+
+      - name: Step 5 - Test rule_induction
+        run: python -m unittest discover -s ./tests/rule_induction
+
+
+  # job to build matching algorithm on python 3.10.
+  build-matching-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install matching algorithm related dependencies
+        run: pip3 install .[matching]
+
+      - name: Step 5 - Test Matching Explainer
+        run: python ./tests/matching/test_order_constraints.py
+
+  # job to build dipvae algorithm on python 3.10.
+  build-dipvae-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with dipvae algorithm related dependencies
+        run: pip3 install .[dipvae]
+
+      - name: Step 5 - Test DIPVAE
+        run: python ./tests/dipvae/test_DIPVAE.py
+
+  # job to build cofrnet algorithm on python 3.10.
+  build-cofrnet-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with cofrnet algorithm related dependencies
+        run: pip3 install .[cofrnet]
+
+      - name: Step 5 - Test CoFrNet
+        run: python ./tests/cofrnet/cofrnet_test.py
+
+      - name: Step 6 - Test CoFrNet Notebook
+        run: pytest --nbmake ./examples/cofrnet/cofrnet_example.ipynb
+
+  # job to build protodash algorithm on python 3.10.
+  build-protodash-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with protodash algorithm related dependencies
+        run: pip3 install .[protodash]
+
+      - name: Step 5 - Test Protodash
+        run: python ./tests/protodash/test_PDASH.py
+
+  # job to build rbm algorithm on python 3.10.
+  build-rbm-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with rbm algorithm related dependencies
+        run: pip3 install .[rbm]
+
+      - name: Step 5 - Test BRCG
+        run: python ./tests/rbm/test_Boolean_Rule_CG.py
+
+      - name: Step 6 - Test Linear Rule Regression
+        run: python ./tests/rbm/test_Linear_Rule_Regression.py
+
+      - name: Step 7 - Test Logistic Rule Regression
+        run: python ./tests/rbm/test_Logistic_Rule_Regression.py
+
+  # job to build nncontrastive algorithm on python 3.10.
+  build-nncontrastive-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with nncontrastive algorithm related dependencies
+        run: pip3 install .[nncontrastive]
+
+      - name: Step 5 - Test NearestNeighborContrastiveExplainer
+        run: python ./tests/nncontrastive/test_nncontrastive.py
+
+  # job to build tsice, tssaliency and tslime algorithms on python 3.10.
+  build-tsice-tssaliency-tslime-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with tsice algorithm related dependencies
+        run: pip3 install .[tsice]
+
+      - name: Step 5 - Test TSICEExplainer
+        run: python ./tests/tsice/test_tsice.py
+
+      # tssaliency deps are already satisfied.
+      - name: Step 6 - Test TSSaliencyExplainer
+        run: python ./tests/tssaliency/test_tssaliency.py
+
+      # tslime deps are already satisfied.
+      - name: Step 7 - Test TSLimeExplainer
+        run: python ./tests/tslime/test_tslime.py
+
+  build-imd-on-py38-310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        #        os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - Install graphviz related things
+        run: sudo apt-get install python3-dev graphviz libgraphviz-dev pkg-config
+
+      - name: Step 4 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 5 - Install aix360 with imd algorithm related dependencies
+        run: pip3 install .[imd]
+
+      - name: Step 5 - Test IMD
+        run: python ./tests/imd/test_imd.py
+
+      - name: Step 6 - Test IMD Notebook
+        run: pytest --nbmake ./examples/imd/imd_example.ipynb
+
+  build-imd-on-310-macos:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: [macos-latest]
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - Install graphviz related things
+        run: brew install graphviz
+
+      - name: Step 4 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 5 - Install aix360 with imd algorithm related dependencies
+        run: pip3 install .[imd]
+
+      - name: Step 5 - Test IMD
+        run: python ./tests/imd/test_imd.py
+
+      - name: Step 6 - Test IMD Notebook
+        run: pytest --nbmake ./examples/imd/imd_example.ipynb
 
   build-ecertify-on-py38-310:
     # The type of runner that the job will run on
@@ -422,29 +422,29 @@ jobs:
         run: pytest --nbmake ./examples/ecertify/certification_example_fico.ipynb
 
   # job to build groupedce algorithm on python 3.10.
-  # build-groupedce-on-py310:
-  #   # The type of runner that the job will run on
-  #   runs-on: "${{ matrix.os }}"
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-20.04, macos-latest, windows-latest]
-  #       python-version: ["3.10"]
+  build-groupedce-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10"]
 
-  #   # Steps represent a sequence of tasks that will be executed as part of the job
-  #   steps:
-  #     - name: Step 1 - checkout aix360 repository
-  #       uses: actions/checkout@v3
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
 
-  #     - name: Step 2 - set up python version
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: "${{ matrix.python-version }}"
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
 
-  #     - name: Step 3 - upgrade setuptools
-  #       run: pip3 install pytest nbmake wheel --upgrade setuptools
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
 
-  #     - name: Step 4 - Install aix360 with groupedce algorithm related dependencies
-  #       run: pip3 install .[gce]
+      - name: Step 4 - Install aix360 with groupedce algorithm related dependencies
+        run: pip3 install .[gce]
 
-  #     - name: Step 5 - Test GroupedCEExplainer
-  #       run: python ./tests/gce/test_gce.py
+      - name: Step 5 - Test GroupedCEExplainer
+        run: python ./tests/gce/test_gce.py
