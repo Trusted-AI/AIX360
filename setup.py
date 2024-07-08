@@ -96,7 +96,7 @@ extra_requires = {
         "requests",  # required for dataset and units
     ],
     "imd": [
-        "numpy",
+        "numpy<2.0.0",
         "pandas",
         "scikit-learn",
         "matplotlib",
