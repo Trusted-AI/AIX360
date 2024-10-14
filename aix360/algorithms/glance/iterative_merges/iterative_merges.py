@@ -368,61 +368,61 @@ def _select_action_low_cost(
         return n_flipped, min_recourse_cost_sum, best_action
 
 
-def _select_action_min_cost_eff_thres(
-    model: Any,
-    instances: pd.DataFrame,
-    cluster_instances: pd.DataFrame,
-    candidate_actions: pd.DataFrame,
-    dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
-    numerical_features_names: List[str],
-    categorical_features_names: List[str],
-    effectiveness_threshold: int,
-):
-    actions_list = [action for _, action in candidate_actions.iterrows()]
-    actions_list.sort(
-        key=lambda action: action_fake_cost(
-            action, numerical_features_names, categorical_features_names
-        )
-    )
-    cf_list = []
-    for action in tqdm(
-        actions_list, total=len(actions_list)
-    ):
-        cfs = apply_action_pandas(
-            X=instances,
-            action=action,
-            numerical_columns=numerical_features_names,
-            categorical_columns=categorical_features_names,
-            categorical_no_action_token="-",
-        )
-        predictions: np.ndarray = model.predict(cfs)
-        n_flipped = predictions.sum()
+# def _select_action_min_cost_eff_thres(
+#     model: Any,
+#     instances: pd.DataFrame,
+#     cluster_instances: pd.DataFrame,
+#     candidate_actions: pd.DataFrame,
+#     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
+#     numerical_features_names: List[str],
+#     categorical_features_names: List[str],
+#     effectiveness_threshold: int,
+# ):
+#     actions_list = [action for _, action in candidate_actions.iterrows()]
+#     actions_list.sort(
+#         key=lambda action: action_fake_cost(
+#             action, numerical_features_names, categorical_features_names
+#         )
+#     )
+#     cf_list = []
+#     for action in tqdm(
+#         actions_list, total=len(actions_list)
+#     ):
+#         cfs = apply_action_pandas(
+#             X=instances,
+#             action=action,
+#             numerical_columns=numerical_features_names,
+#             categorical_columns=categorical_features_names,
+#             categorical_no_action_token="-",
+#         )
+#         predictions: np.ndarray = model.predict(cfs)
+#         n_flipped = predictions.sum()
 
-        if n_flipped / len(instances) >= effectiveness_threshold:
-            cfs = apply_action_pandas(
-                X=cluster_instances,
-                action=action,
-                numerical_columns=numerical_features_names,
-                categorical_columns=categorical_features_names,
-                categorical_no_action_token="-",
-            )
-            predictions: np.ndarray = model.predict(cfs)
-            n_flipped = predictions.sum()
-            factuals_flipped = cluster_instances[predictions == 1]
-            cfs_flipped = cfs[predictions == 1]
-            recourse_cost_sum = dist_func_dataframe(factuals_flipped, cfs_flipped).sum()
-            cf_list.append((n_flipped, recourse_cost_sum, action))
+#         if n_flipped / len(instances) >= effectiveness_threshold:
+#             cfs = apply_action_pandas(
+#                 X=cluster_instances,
+#                 action=action,
+#                 numerical_columns=numerical_features_names,
+#                 categorical_columns=categorical_features_names,
+#                 categorical_no_action_token="-",
+#             )
+#             predictions: np.ndarray = model.predict(cfs)
+#             n_flipped = predictions.sum()
+#             factuals_flipped = cluster_instances[predictions == 1]
+#             cfs_flipped = cfs[predictions == 1]
+#             recourse_cost_sum = dist_func_dataframe(factuals_flipped, cfs_flipped).sum()
+#             cf_list.append((n_flipped, recourse_cost_sum, action))
 
-    if len(cf_list) == 0:
-        raise ValueError(
-            "Change action_threshold. No action found in cluster with effectiveness in all instances above the threshold"
-        )
-    else:
-        n_flipped, min_recourse_cost_sum, best_action = min(
-            cf_list, key=lambda x: (x[1], -x[0])
-        )
+#     if len(cf_list) == 0:
+#         raise ValueError(
+#             "Change action_threshold. No action found in cluster with effectiveness in all instances above the threshold"
+#         )
+#     else:
+#         n_flipped, min_recourse_cost_sum, best_action = min(
+#             cf_list, key=lambda x: (x[1], -x[0])
+#         )
 
-        return n_flipped, min_recourse_cost_sum, best_action
+#         return n_flipped, min_recourse_cost_sum, best_action
 
 
 def actions_cumulative_eff_cost(
@@ -455,168 +455,168 @@ def actions_cumulative_eff_cost(
 
     return n_flipped_total, recourse_cost_sum
 
-def _select_action_min_cost_eff_thres_combinations(
-    model: Any,
-    instances: pd.DataFrame,
-    clusters: Dict[int, pd.DataFrame],
-    candidate_actions: Dict[int, pd.DataFrame],
-    dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
-    numerical_features_names: List[str],
-    categorical_features_names: List[str],
-    effectiveness_threshold: float,
-    num_min_cost: Optional[int] = None,
-):
-    actions_list = [action for actions_cluster in candidate_actions.values() for _, action in actions_cluster.iterrows()]
-    actions_list_with_cost = []
-    for action in tqdm(actions_list):
-        cfs = apply_action_pandas(
-            X=instances,
-            action=action,
-            numerical_columns=numerical_features_names,
-            categorical_columns=categorical_features_names,
-            categorical_no_action_token="-",
-        )
-        predictions: np.ndarray = model.predict(cfs)
-        n_flipped = predictions.sum()
-        factuals_flipped = instances[predictions == 1]
-        cfs_flipped = cfs[predictions == 1]
-        mean_recourse_cost = dist_func_dataframe(factuals_flipped, cfs_flipped).mean()
-        actions_list_with_cost.append((action, mean_recourse_cost))
+# def _select_action_min_cost_eff_thres_combinations(
+#     model: Any,
+#     instances: pd.DataFrame,
+#     clusters: Dict[int, pd.DataFrame],
+#     candidate_actions: Dict[int, pd.DataFrame],
+#     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
+#     numerical_features_names: List[str],
+#     categorical_features_names: List[str],
+#     effectiveness_threshold: float,
+#     num_min_cost: Optional[int] = None,
+# ):
+#     actions_list = [action for actions_cluster in candidate_actions.values() for _, action in actions_cluster.iterrows()]
+#     actions_list_with_cost = []
+#     for action in tqdm(actions_list):
+#         cfs = apply_action_pandas(
+#             X=instances,
+#             action=action,
+#             numerical_columns=numerical_features_names,
+#             categorical_columns=categorical_features_names,
+#             categorical_no_action_token="-",
+#         )
+#         predictions: np.ndarray = model.predict(cfs)
+#         n_flipped = predictions.sum()
+#         factuals_flipped = instances[predictions == 1]
+#         cfs_flipped = cfs[predictions == 1]
+#         mean_recourse_cost = dist_func_dataframe(factuals_flipped, cfs_flipped).mean()
+#         actions_list_with_cost.append((action, mean_recourse_cost))
     
-    actions_list_with_cost.sort(key=lambda t: t[1])
-    if num_min_cost is not None:
-        actions_list_with_cost = actions_list_with_cost[:num_min_cost]
+#     actions_list_with_cost.sort(key=lambda t: t[1])
+#     if num_min_cost is not None:
+#         actions_list_with_cost = actions_list_with_cost[:num_min_cost]
     
-    num_actions = len(clusters)
+#     num_actions = len(clusters)
     
-    best_action_set = None
-    for candidate_action_set in itertools.combinations(actions_list_with_cost, num_actions):
-        n_flipped, cost_sum = actions_cumulative_eff_cost(
-            model=model,
-            X=instances,
-            actions_with_costs=list(candidate_action_set),
-            dist_func_dataframe=dist_func_dataframe,
-            numerical_columns=numerical_features_names,
-            categorical_columns=categorical_features_names,
-            categorical_no_action_token="-",
-        )
+#     best_action_set = None
+#     for candidate_action_set in itertools.combinations(actions_list_with_cost, num_actions):
+#         n_flipped, cost_sum = actions_cumulative_eff_cost(
+#             model=model,
+#             X=instances,
+#             actions_with_costs=list(candidate_action_set),
+#             dist_func_dataframe=dist_func_dataframe,
+#             numerical_columns=numerical_features_names,
+#             categorical_columns=categorical_features_names,
+#             categorical_no_action_token="-",
+#         )
     
-        if n_flipped >= effectiveness_threshold * instances.shape[0]:
-            if best_action_set is None or cost_sum < best_cost_sum:
-                best_action_set = candidate_action_set
-                best_n_flipped = n_flipped
-                best_cost_sum = cost_sum
+#         if n_flipped >= effectiveness_threshold * instances.shape[0]:
+#             if best_action_set is None or cost_sum < best_cost_sum:
+#                 best_action_set = candidate_action_set
+#                 best_n_flipped = n_flipped
+#                 best_cost_sum = cost_sum
 
-    if best_action_set is None:
-        raise ValueError(
-            "Change effectiveness_threshold. No action set found with cumulative effectiveness above the threshold"
-        )
-    else:
-        return best_n_flipped, best_cost_sum, [p[0] for p in best_action_set]
+#     if best_action_set is None:
+#         raise ValueError(
+#             "Change effectiveness_threshold. No action set found with cumulative effectiveness above the threshold"
+#         )
+#     else:
+#         return best_n_flipped, best_cost_sum, [p[0] for p in best_action_set]
 
 
-def _select_actions_eff_thres_hybrid(
-    model: Any,
-    instances: pd.DataFrame,
-    clusters: Dict[int, pd.DataFrame],
-    candidate_actions: Dict[int, pd.DataFrame],
-    dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
-    numerical_features_names: List[str],
-    categorical_features_names: List[str],
-    effectiveness_threshold: float,
-    max_n_actions_full_combinations: int = 10,
-):
-    actions_list = [action for actions_cluster in candidate_actions.values() for _, action in actions_cluster.iterrows()]
-    action_individual_costs = np.empty((instances.shape[0], len(actions_list)))
-    for i, action in enumerate(tqdm(actions_list)):
-        cfs = apply_action_pandas(
-            X=instances,
-            action=action,
-            numerical_columns=numerical_features_names,
-            categorical_columns=categorical_features_names,
-            categorical_no_action_token="-",
-        )
-        predictions: np.ndarray = model.predict(cfs)
-        action_individual_costs[predictions == 0, i] = np.inf
+# def _select_actions_eff_thres_hybrid(
+#     model: Any,
+#     instances: pd.DataFrame,
+#     clusters: Dict[int, pd.DataFrame],
+#     candidate_actions: Dict[int, pd.DataFrame],
+#     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
+#     numerical_features_names: List[str],
+#     categorical_features_names: List[str],
+#     effectiveness_threshold: float,
+#     max_n_actions_full_combinations: int = 10,
+# ):
+#     actions_list = [action for actions_cluster in candidate_actions.values() for _, action in actions_cluster.iterrows()]
+#     action_individual_costs = np.empty((instances.shape[0], len(actions_list)))
+#     for i, action in enumerate(tqdm(actions_list)):
+#         cfs = apply_action_pandas(
+#             X=instances,
+#             action=action,
+#             numerical_columns=numerical_features_names,
+#             categorical_columns=categorical_features_names,
+#             categorical_no_action_token="-",
+#         )
+#         predictions: np.ndarray = model.predict(cfs)
+#         action_individual_costs[predictions == 0, i] = np.inf
 
-        factuals_flipped = instances[predictions == 1]
-        cfs_flipped = cfs[predictions == 1]
-        individual_recourse_costs = dist_func_dataframe(factuals_flipped, cfs_flipped)
-        action_individual_costs[predictions == 1, i] = individual_recourse_costs
+#         factuals_flipped = instances[predictions == 1]
+#         cfs_flipped = cfs[predictions == 1]
+#         individual_recourse_costs = dist_func_dataframe(factuals_flipped, cfs_flipped)
+#         action_individual_costs[predictions == 1, i] = individual_recourse_costs
     
-    dominated = np.zeros(action_individual_costs.shape[1])
-    for i in tqdm(range(action_individual_costs.shape[1])):
-        for j in range(i, action_individual_costs.shape[1]):
-            if (action_individual_costs[:, i] <= action_individual_costs[:, j]).all() and (action_individual_costs[:, i] < action_individual_costs[:, j]).any():
-                dominated[j] = 1
-            if (action_individual_costs[:, i] >= action_individual_costs[:, j]).all() and (action_individual_costs[:, i] > action_individual_costs[:, j]).any():
-                dominated[i] = 1
+#     dominated = np.zeros(action_individual_costs.shape[1])
+#     for i in tqdm(range(action_individual_costs.shape[1])):
+#         for j in range(i, action_individual_costs.shape[1]):
+#             if (action_individual_costs[:, i] <= action_individual_costs[:, j]).all() and (action_individual_costs[:, i] < action_individual_costs[:, j]).any():
+#                 dominated[j] = 1
+#             if (action_individual_costs[:, i] >= action_individual_costs[:, j]).all() and (action_individual_costs[:, i] > action_individual_costs[:, j]).any():
+#                 dominated[i] = 1
 
-    action_individual_costs = action_individual_costs[:, ~dominated.astype(bool)]
-    non_dominated_idxs = np.where(dominated == 0)[0]
-    actions_list = [action for i, action in enumerate(actions_list) if i in non_dominated_idxs]
+#     action_individual_costs = action_individual_costs[:, ~dominated.astype(bool)]
+#     non_dominated_idxs = np.where(dominated == 0)[0]
+#     actions_list = [action for i, action in enumerate(actions_list) if i in non_dominated_idxs]
     
-    uf = DisjointSet(range(action_individual_costs.shape[1]))
-    for i in tqdm(range(action_individual_costs.shape[1])):
-        for j in range(i, action_individual_costs.shape[1]):
-            if not uf.connected(i, j):
-                if (action_individual_costs[:, i] == action_individual_costs[:, j]).all():
-                    uf.merge(i, j)
+#     uf = DisjointSet(range(action_individual_costs.shape[1]))
+#     for i in tqdm(range(action_individual_costs.shape[1])):
+#         for j in range(i, action_individual_costs.shape[1]):
+#             if not uf.connected(i, j):
+#                 if (action_individual_costs[:, i] == action_individual_costs[:, j]).all():
+#                     uf.merge(i, j)
     
-    sufficient_actions_idxs = [eq_class.pop() for eq_class in uf.subsets()]
-    actions_list = [actions_list[i] for i in sufficient_actions_idxs]
-    action_individual_costs = action_individual_costs[:, sufficient_actions_idxs]
+#     sufficient_actions_idxs = [eq_class.pop() for eq_class in uf.subsets()]
+#     actions_list = [actions_list[i] for i in sufficient_actions_idxs]
+#     action_individual_costs = action_individual_costs[:, sufficient_actions_idxs]
     
-    naned_action_individual_costs = np.where(np.isinf(action_individual_costs), np.nan, action_individual_costs)
-    action_cost_means = np.nanmean(naned_action_individual_costs, axis=0)
-    action_n_flipped = (action_individual_costs != np.inf).astype(int).sum(axis=0)
+#     naned_action_individual_costs = np.where(np.isinf(action_individual_costs), np.nan, action_individual_costs)
+#     action_cost_means = np.nanmean(naned_action_individual_costs, axis=0)
+#     action_n_flipped = (action_individual_costs != np.inf).astype(int).sum(axis=0)
     
-    costs_sorted_idxs = np.argsort(action_cost_means)
-    effs_sorted_idxs = np.argsort(action_n_flipped)
-    effs_over_costs_sorted_idx = np.argsort(action_n_flipped / action_cost_means)
-    n_slice = max_n_actions_full_combinations // 6
+#     costs_sorted_idxs = np.argsort(action_cost_means)
+#     effs_sorted_idxs = np.argsort(action_n_flipped)
+#     effs_over_costs_sorted_idx = np.argsort(action_n_flipped / action_cost_means)
+#     n_slice = max_n_actions_full_combinations // 6
     
-    # Get indices of the n_slice smallest costs
-    smallest_cost_indices = costs_sorted_idxs[:n_slice]
-    # Get indices of the n_slice largest numbers of flipped individuals
-    largest_eff_indices = effs_sorted_idxs[-n_slice:]
-    # Get indices of the n_slice middle cost values
-    mid_start = (len(costs_sorted_idxs) - n_slice) // 2  # Start position of the middle n_slice values
-    middle_cost_indices = costs_sorted_idxs[mid_start:mid_start + n_slice]
-    # Get indices of the n_slice middle n_flipped values
-    mid_start = (len(effs_sorted_idxs) - n_slice) // 2  # Start position of the middle n_slice values
-    middle_eff_indices = effs_sorted_idxs[mid_start:mid_start + n_slice]
-    # Get indices of the n_slice largest n_flipped / cost_mean
-    largest_ratio_indices = effs_over_costs_sorted_idx[-n_slice:]
-    # Finally, get n_slice random indices
-    random_indices = np.random.choice(list(range(len(action_cost_means))), n_slice)
+#     # Get indices of the n_slice smallest costs
+#     smallest_cost_indices = costs_sorted_idxs[:n_slice]
+#     # Get indices of the n_slice largest numbers of flipped individuals
+#     largest_eff_indices = effs_sorted_idxs[-n_slice:]
+#     # Get indices of the n_slice middle cost values
+#     mid_start = (len(costs_sorted_idxs) - n_slice) // 2  # Start position of the middle n_slice values
+#     middle_cost_indices = costs_sorted_idxs[mid_start:mid_start + n_slice]
+#     # Get indices of the n_slice middle n_flipped values
+#     mid_start = (len(effs_sorted_idxs) - n_slice) // 2  # Start position of the middle n_slice values
+#     middle_eff_indices = effs_sorted_idxs[mid_start:mid_start + n_slice]
+#     # Get indices of the n_slice largest n_flipped / cost_mean
+#     largest_ratio_indices = effs_over_costs_sorted_idx[-n_slice:]
+#     # Finally, get n_slice random indices
+#     random_indices = np.random.choice(list(range(len(action_cost_means))), n_slice)
     
-    candidate_idxs = set(smallest_cost_indices) | set(largest_eff_indices) | set(middle_cost_indices) | set(middle_eff_indices) | set(largest_ratio_indices) | set(random_indices)
-    candidate_idxs = np.array(list(candidate_idxs))
+#     candidate_idxs = set(smallest_cost_indices) | set(largest_eff_indices) | set(middle_cost_indices) | set(middle_eff_indices) | set(largest_ratio_indices) | set(random_indices)
+#     candidate_idxs = np.array(list(candidate_idxs))
     
-    num_actions = len(clusters)
-    best_action_set = None
-    for candidate_action_set in tqdm(itertools.combinations(candidate_idxs, num_actions), total=math.comb(len(candidate_idxs), num_actions)):
-        cand_matrix = action_individual_costs[:, candidate_action_set]
-        min_individual_costs = cand_matrix.min(axis=1)
-        n_individuals = min_individual_costs.shape[0]
+#     num_actions = len(clusters)
+#     best_action_set = None
+#     for candidate_action_set in tqdm(itertools.combinations(candidate_idxs, num_actions), total=math.comb(len(candidate_idxs), num_actions)):
+#         cand_matrix = action_individual_costs[:, candidate_action_set]
+#         min_individual_costs = cand_matrix.min(axis=1)
+#         n_individuals = min_individual_costs.shape[0]
 
-        n_flipped = (np.where(min_individual_costs != np.inf))[0].shape[0]
-        effectiveness = n_flipped / n_individuals
-        cost_sum = min_individual_costs[min_individual_costs != np.inf].sum()
+#         n_flipped = (np.where(min_individual_costs != np.inf))[0].shape[0]
+#         effectiveness = n_flipped / n_individuals
+#         cost_sum = min_individual_costs[min_individual_costs != np.inf].sum()
 
-        if effectiveness >= effectiveness_threshold:
-            if best_action_set is None or cost_sum < best_cost_sum:
-                best_action_set = candidate_action_set
-                best_cost_sum = cost_sum
-                best_n_flipped = n_flipped
+#         if effectiveness >= effectiveness_threshold:
+#             if best_action_set is None or cost_sum < best_cost_sum:
+#                 best_action_set = candidate_action_set
+#                 best_cost_sum = cost_sum
+#                 best_n_flipped = n_flipped
     
-    if best_action_set is None:
-        raise ValueError(
-            "Change effectiveness_threshold. No action set found with cumulative effectiveness above the threshold"
-        )
-    else:
-        return best_n_flipped, best_cost_sum, [actions_list[i] for i in best_action_set]
+#     if best_action_set is None:
+#         raise ValueError(
+#             "Change effectiveness_threshold. No action set found with cumulative effectiveness above the threshold"
+#         )
+#     else:
+#         return best_n_flipped, best_cost_sum, [actions_list[i] for i in best_action_set]
 
 
 def _select_action_max_eff(
@@ -744,17 +744,17 @@ def cluster_results(
                 num_low_cost=num_low_cost,
                 inv_total_clusters=(1 / len(clusters)),
             )
-        elif cluster_action_choice_algo == "min-cost-eff-thres":
-            n_flipped, recourse_cost_sum, selected_action = _select_action_min_cost_eff_thres(
-                model=model,
-                instances=instances,
-                cluster_instances=cluster,
-                candidate_actions=cluster_expl_actions[i],
-                dist_func_dataframe=dist_func_dataframe,
-                numerical_features_names=numerical_features_names,
-                categorical_features_names=categorical_features_names,
-                effectiveness_threshold=effectiveness_threshold,
-            )
+        # elif cluster_action_choice_algo == "min-cost-eff-thres":
+        #     n_flipped, recourse_cost_sum, selected_action = _select_action_min_cost_eff_thres(
+        #         model=model,
+        #         instances=instances,
+        #         cluster_instances=cluster,
+        #         candidate_actions=cluster_expl_actions[i],
+        #         dist_func_dataframe=dist_func_dataframe,
+        #         numerical_features_names=numerical_features_names,
+        #         categorical_features_names=categorical_features_names,
+        #         effectiveness_threshold=effectiveness_threshold,
+        #     )
         elif cluster_action_choice_algo == "min-cost-eff-thres-combinations":
             break
         elif cluster_action_choice_algo == "eff-thres-hybrid":
@@ -799,18 +799,18 @@ def cluster_results(
         total_mean_recourse_cost = total_recourse_cost_sum / n_flipped_total
         
         return ret_clusters, total_effectiveness_percentage, total_mean_recourse_cost
-    elif cluster_action_choice_algo == "eff-thres-hybrid":
-        n_flipped_total, total_recourse_cost_sum, action_set = _select_actions_eff_thres_hybrid(
-            model=model,
-            instances=instances,
-            clusters=clusters,
-            candidate_actions=cluster_expl_actions,
-            dist_func_dataframe=dist_func_dataframe,
-            numerical_features_names=numerical_features_names,
-            categorical_features_names=categorical_features_names,
-            effectiveness_threshold=effectiveness_threshold,
-            max_n_actions_full_combinations=max_n_actions_full_combinations,
-        )
+    # elif cluster_action_choice_algo == "eff-thres-hybrid":
+    #     n_flipped_total, total_recourse_cost_sum, action_set = _select_actions_eff_thres_hybrid(
+    #         model=model,
+    #         instances=instances,
+    #         clusters=clusters,
+    #         candidate_actions=cluster_expl_actions,
+    #         dist_func_dataframe=dist_func_dataframe,
+    #         numerical_features_names=numerical_features_names,
+    #         categorical_features_names=categorical_features_names,
+    #         effectiveness_threshold=effectiveness_threshold,
+    #         max_n_actions_full_combinations=max_n_actions_full_combinations,
+    #     )
         
         assert len(action_set) == len(clusters)
         actions_iter = iter(action_set)
