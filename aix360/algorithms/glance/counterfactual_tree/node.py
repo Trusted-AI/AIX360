@@ -1,4 +1,46 @@
 class Node:
+    """
+    A class representing a node in a decision tree structure.
+
+    Each node can have child nodes, actions associated with it, and metrics 
+    such as effectiveness and cost. This class provides methods to add child 
+    nodes, retrieve actions from leaf nodes, and visualize the tree structure.
+
+    Attributes:
+    ----------
+    split_feature : str or None
+        The feature used to split the data at this node. Default is None.
+        
+    actions : list or None
+        A list of actions associated with this node. Default is None.
+        
+    effectiveness : float
+        The effectiveness of the actions taken at this node. Default is 0.
+        
+    cost : float
+        The total cost associated with the actions at this node. Default is 0.
+        
+    size : int
+        The number of instances or data points at this node. Default is 0.
+        
+    children : dict
+        A dictionary mapping from subgroup values to child nodes.
+        
+    Methods:
+    -------
+    add_child(subgroup, child_node):
+        Adds a child node to this node.
+    
+    return_leafs_actions():
+        Returns all actions from the leaf nodes in the subtree rooted at this node.
+        
+    to_igraph(numeric_features=[]):
+        Converts the tree structure to an igraph object for visualization.
+        
+    display_igraph_jupyter(numeric_features=[]):
+        Displays the tree structure in a Jupyter notebook using matplotlib and igraph.
+    """
+
     def __init__(
         self,
         split_feature=None,
@@ -7,6 +49,26 @@ class Node:
         cost=0,
         size=0,
     ):
+        """
+        Initializes a new Node instance.
+
+        Parameters:
+        ----------
+        split_feature : str or None
+            The feature used to split the data at this node. Default is None.
+            
+        actions : list or None
+            A list of actions associated with this node. Default is None.
+            
+        effectiveness : float
+            The effectiveness of the actions taken at this node. Default is 0.
+            
+        cost : float
+            The total cost associated with the actions at this node. Default is 0.
+            
+        size : int
+            The number of instances or data points at this node. Default is 0.
+        """
         self.split_feature = split_feature
         self.effectiveness = effectiveness
         self.cost = cost
@@ -15,10 +77,29 @@ class Node:
         self.actions = actions
 
     def add_child(self, subgroup, child_node):
+        """
+        Adds a child node to this node.
+
+        Parameters:
+        ----------
+        subgroup : any
+            The value associated with the child node.
+            
+        child_node : Node
+            The child node to be added.
+        """
         print()
         self.children[tuple(subgroup)] = child_node
 
     def return_leafs_actions(self):
+        """
+        Returns all actions from the leaf nodes in the subtree rooted at this node.
+
+        Returns:
+        -------
+        list
+            A flattened list of actions from the leaf nodes.
+        """
         cfs_list = []
 
         def find_leafs_actions(node):
@@ -33,6 +114,19 @@ class Node:
 
     
     def to_igraph(self, numeric_features=[]):
+        """
+        Converts the tree structure to an igraph object for visualization.
+
+        Parameters:
+        ----------
+        numeric_features : list
+            A list of numeric feature names used for processing node labels.
+
+        Returns:
+        -------
+        ig.Graph
+            An igraph object representing the tree structure.
+        """
         import igraph as ig
 
         def pre_order(node, timer, reg):
@@ -119,6 +213,14 @@ class Node:
         return graph
 
     def display_igraph_jupyter(self, numeric_features=[]):
+        """
+        Displays the tree structure in a Jupyter notebook using matplotlib and igraph.
+
+        Parameters:
+        ----------
+        numeric_features : list
+            A list of numeric feature names used for processing node labels.
+        """
         import igraph as ig
         import matplotlib.pyplot as plt
 

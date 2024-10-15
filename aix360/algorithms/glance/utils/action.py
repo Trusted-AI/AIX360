@@ -94,6 +94,33 @@ def extract_actions_pandas(
     numerical_features: List[str],
     categorical_no_action_token: Any,
 ):
+    """
+    Extracts the actions needed to convert the original dataset `X` into the counterfactual dataset `cfs`.
+
+    For categorical features, the function identifies changes between `X` and `cfs`.
+    If no change is observed in a categorical feature, a specified `categorical_no_action_token` is used to denote that no action is needed. 
+    For numerical features, the function computes the difference between the counterfactual and the original values.
+
+    Parameters:
+    ----------
+    X : pd.DataFrame
+        The original dataset, where each row represents an instance, and each column is a feature.
+    cfs : pd.DataFrame
+        The counterfactual dataset, which has the same structure as `X`. It represents the desired state after some action is applied.
+    categorical_features : List[str]
+        List of columns in `X` and `cfs` that are categorical.
+    numerical_features : List[str]
+        List of columns in `X` and `cfs` that are numerical.
+    categorical_no_action_token : Any
+        A token or value to insert into categorical features where no change is needed (i.e., the feature value in `X` is the same as in `cfs`).
+
+    Returns:
+    -------
+    pd.DataFrame
+        A DataFrame of the same shape as `X` and `cfs` where each value indicates the action required to transform `X` into `cfs`:
+        - For categorical features: the value in `cfs` if it differs from `X`, otherwise `categorical_no_action_token`.
+        - For numerical features: the difference between `cfs` and `X`.
+    """
     actions = X.copy(deep=True)
 
     for col in categorical_features:
@@ -111,6 +138,35 @@ def apply_actions_pandas_rows(
     categorical_columns: List[str],
     categorical_no_action_token: object,
 ) -> pd.DataFrame:
+    """
+    Applies a set of actions to transform the original dataset `X` based on the actions specified in the `actions` DataFrame.
+
+    For numerical columns, the function adds the values from the `actions` DataFrame to the corresponding columns in `X`. 
+    For categorical columns, if the action for a column is not equal to the `categorical_no_action_token`, the value from the `actions` DataFrame is used to update `X`. 
+    Otherwise, the original value from `X` is retained.
+
+    Parameters:
+    ----------
+    X : pd.DataFrame
+        The original dataset, where each row represents an instance, and each column is a feature.
+    actions : pd.DataFrame
+        A DataFrame of the same shape as `X`, containing the actions to apply to each feature.
+        - For numerical columns: contains the values to add to the corresponding features in `X`.
+        - For categorical columns: contains either the new value to apply or the `categorical_no_action_token`.
+    numerical_columns : List[str]
+        List of columns in `X` and `actions` that are numerical.
+    categorical_columns : List[str]
+        List of columns in `X` and `actions` that are categorical.
+    categorical_no_action_token : object
+        A token or value indicating that no action should be taken for a categorical feature.
+
+    Returns:
+    -------
+    pd.DataFrame
+        A DataFrame of the same shape as `X` where the actions have been applied:
+        - For numerical columns: each value is updated by adding the corresponding action from `actions`.
+        - For categorical columns: updated values from `actions` are used where applicable; otherwise, the original values from `X` are retained.
+    """
     ret = X.copy(deep=True)
     for col in numerical_columns:
         ret[col] = X[col] + actions[col]
@@ -127,6 +183,31 @@ def actions_mean_pandas(
     categorical_features: List[str],
     categorical_no_action_token: Any,
 ) -> pd.Series:
+    """
+    Computes the mean action for numerical features and the most frequent action for categorical features from a given actions DataFrame.
+
+    For numerical features, the function calculates the mean of the actions across all instances. 
+    For categorical features, it determines the most frequent value in the `actions` DataFrame, unless all values are equal to the `categorical_no_action_token`, 
+    in which case the token is returned.
+
+    Parameters:
+    ----------
+    actions : pd.DataFrame
+        A DataFrame where each row represents an instance, and each column represents an action for a feature (either numerical or categorical).
+    numerical_features : List[str]
+        List of columns in `actions` that are numerical features.
+    categorical_features : List[str]
+        List of columns in `actions` that are categorical features.
+    categorical_no_action_token : Any
+        A token or value that indicates no action is needed for categorical features.
+
+    Returns:
+    -------
+    pd.Series
+        A Series where:
+        - For numerical features, the values are the mean of the actions for each numerical column.
+        - For categorical features, the values are the most frequent action in each categorical column, or the `categorical_no_action_token` if no action was needed.
+    """
     ret = pd.Series(index=actions.columns, dtype="object")
     ret[numerical_features] = actions[numerical_features].mean()
     for col in categorical_features:

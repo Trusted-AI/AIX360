@@ -269,6 +269,38 @@ def cumulative(
     categorical_features_names,
     categorical_no_action_token,
 ):
+    """
+    Computes the cumulative effectiveness and cost of applying a set of actions 
+    to a given set of instances using a predictive model.
+
+    Parameters:
+    ----------
+    model : Any
+        A predictive model with a predict method. This model will be used to predict 
+        outcomes after applying actions to the input instances.
+    instances : pd.DataFrame
+        A DataFrame containing the instances for which actions are to be applied.
+    actions : List[dict]
+        A list of actions, where each action is represented as a dictionary that 
+        specifies how to modify the instances.
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A distance function that takes two DataFrames and returns a Series of distances 
+        between corresponding rows.
+    numeric_features_names : List[str]
+        A list of names for the numeric features in the instances DataFrame.
+    categorical_features_names : List[str]
+        A list of names for the categorical features in the instances DataFrame.
+    categorical_no_action_token : Any
+        A token used to represent a no-action state for categorical features.
+
+    Returns:
+    -------
+    Tuple[int, float]
+        A tuple containing:
+        - effectiveness: An integer count of how many actions were effective (i.e., 
+          resulted in a finite cost).
+        - cost: A float representing the total cost incurred by the effective actions. 
+    """
     costs = []
     all_predictions = []
 
@@ -321,6 +353,61 @@ def _select_action_low_cost(
     num_low_cost: int,
     inv_total_clusters: int,
 ):
+    """
+    Selects the action with the lowest cost that flips a sufficient number of instances 
+    in the given dataset, based on a predictive model.
+
+    This function evaluates candidate actions, applies them to the provided instances, 
+    and calculates the number of predictions that were flipped as a result. It returns 
+    the action that results in the lowest recourse cost while also meeting a specified 
+    threshold of flipped predictions.
+
+    Parameters:
+    ----------
+    model : Any
+        A machine learning model used for making predictions.
+
+    instances : pd.DataFrame
+        A DataFrame containing the instances for which counterfactuals are being generated.
+
+    cluster_instances : pd.DataFrame
+        A DataFrame containing instances from a specific cluster used for evaluating actions.
+
+    candidate_actions : pd.DataFrame
+        A DataFrame containing potential actions to apply to the instances.
+
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A function that computes the distance or cost between two DataFrames.
+
+    numerical_features_names : List[str]
+        A list of names for the numerical features in the instances.
+
+    categorical_features_names : List[str]
+        A list of names for the categorical features in the instances.
+
+    action_threshold : int
+        The minimum ratio of flipped predictions to total instances required to consider 
+        an action effective.
+
+    num_low_cost : int
+        The maximum number of low-cost actions to evaluate.
+
+    inv_total_clusters : int
+        The inverse of the total number of clusters used for normalization.
+
+    Returns:
+    -------
+    Tuple[int, float, pd.Series]
+        A tuple containing:
+        - The number of predictions flipped.
+        - The minimum recourse cost associated with the best action.
+        - The best action selected from the candidate actions.
+
+    Raises:
+    ------
+    ValueError
+        If no actions are found that meet the effectiveness threshold.
+    """
     actions_list = [action for _, action in candidate_actions.iterrows()]
     actions_list.sort(
         key=lambda action: action_fake_cost(
@@ -367,64 +454,6 @@ def _select_action_low_cost(
 
         return n_flipped, min_recourse_cost_sum, best_action
 
-
-# def _select_action_min_cost_eff_thres(
-#     model: Any,
-#     instances: pd.DataFrame,
-#     cluster_instances: pd.DataFrame,
-#     candidate_actions: pd.DataFrame,
-#     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
-#     numerical_features_names: List[str],
-#     categorical_features_names: List[str],
-#     effectiveness_threshold: int,
-# ):
-#     actions_list = [action for _, action in candidate_actions.iterrows()]
-#     actions_list.sort(
-#         key=lambda action: action_fake_cost(
-#             action, numerical_features_names, categorical_features_names
-#         )
-#     )
-#     cf_list = []
-#     for action in tqdm(
-#         actions_list, total=len(actions_list)
-#     ):
-#         cfs = apply_action_pandas(
-#             X=instances,
-#             action=action,
-#             numerical_columns=numerical_features_names,
-#             categorical_columns=categorical_features_names,
-#             categorical_no_action_token="-",
-#         )
-#         predictions: np.ndarray = model.predict(cfs)
-#         n_flipped = predictions.sum()
-
-#         if n_flipped / len(instances) >= effectiveness_threshold:
-#             cfs = apply_action_pandas(
-#                 X=cluster_instances,
-#                 action=action,
-#                 numerical_columns=numerical_features_names,
-#                 categorical_columns=categorical_features_names,
-#                 categorical_no_action_token="-",
-#             )
-#             predictions: np.ndarray = model.predict(cfs)
-#             n_flipped = predictions.sum()
-#             factuals_flipped = cluster_instances[predictions == 1]
-#             cfs_flipped = cfs[predictions == 1]
-#             recourse_cost_sum = dist_func_dataframe(factuals_flipped, cfs_flipped).sum()
-#             cf_list.append((n_flipped, recourse_cost_sum, action))
-
-#     if len(cf_list) == 0:
-#         raise ValueError(
-#             "Change action_threshold. No action found in cluster with effectiveness in all instances above the threshold"
-#         )
-#     else:
-#         n_flipped, min_recourse_cost_sum, best_action = min(
-#             cf_list, key=lambda x: (x[1], -x[0])
-#         )
-
-#         return n_flipped, min_recourse_cost_sum, best_action
-
-
 def actions_cumulative_eff_cost(
     model: Any,
     X: pd.DataFrame,
@@ -434,6 +463,46 @@ def actions_cumulative_eff_cost(
     categorical_columns: List[str],
     categorical_no_action_token: Any,
 ) -> Tuple[float, float]:
+    """
+    Evaluates the cumulative effectiveness and cost of applying a sequence of actions 
+    to a dataset using a predictive model.
+
+    This function applies each action from the sorted list of actions with their costs, 
+    predicts the outcomes, and calculates the total number of predictions that were flipped 
+    as well as the total recourse cost incurred from the actions.
+
+    Parameters:
+    ----------
+    model : Any
+        A machine learning model used for making predictions on the modified instances.
+
+    X : pd.DataFrame
+        The original DataFrame of instances to which actions will be applied.
+
+    actions_with_costs : List[Tuple[pd.Series, float]]
+        A list of tuples where each tuple contains:
+        - A pandas Series representing the action to apply.
+        - A float representing the cost associated with the action.
+
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A function that computes the distance or cost between two DataFrames.
+
+    numerical_columns : List[str]
+        A list of names for the numerical columns in the DataFrame.
+
+    categorical_columns : List[str]
+        A list of names for the categorical columns in the DataFrame.
+
+    categorical_no_action_token : Any
+        A token used to represent the absence of an action for categorical features.
+
+    Returns:
+    -------
+    Tuple[float, float]
+        A tuple containing:
+        - The total number of predictions flipped across all actions applied.
+        - The total recourse cost incurred from applying the actions.
+    """
     X = X.copy()
     actions_with_costs = sorted(actions_with_costs, key=lambda t: t[1])
     n_flipped_total = 0
@@ -455,170 +524,6 @@ def actions_cumulative_eff_cost(
 
     return n_flipped_total, recourse_cost_sum
 
-# def _select_action_min_cost_eff_thres_combinations(
-#     model: Any,
-#     instances: pd.DataFrame,
-#     clusters: Dict[int, pd.DataFrame],
-#     candidate_actions: Dict[int, pd.DataFrame],
-#     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
-#     numerical_features_names: List[str],
-#     categorical_features_names: List[str],
-#     effectiveness_threshold: float,
-#     num_min_cost: Optional[int] = None,
-# ):
-#     actions_list = [action for actions_cluster in candidate_actions.values() for _, action in actions_cluster.iterrows()]
-#     actions_list_with_cost = []
-#     for action in tqdm(actions_list):
-#         cfs = apply_action_pandas(
-#             X=instances,
-#             action=action,
-#             numerical_columns=numerical_features_names,
-#             categorical_columns=categorical_features_names,
-#             categorical_no_action_token="-",
-#         )
-#         predictions: np.ndarray = model.predict(cfs)
-#         n_flipped = predictions.sum()
-#         factuals_flipped = instances[predictions == 1]
-#         cfs_flipped = cfs[predictions == 1]
-#         mean_recourse_cost = dist_func_dataframe(factuals_flipped, cfs_flipped).mean()
-#         actions_list_with_cost.append((action, mean_recourse_cost))
-    
-#     actions_list_with_cost.sort(key=lambda t: t[1])
-#     if num_min_cost is not None:
-#         actions_list_with_cost = actions_list_with_cost[:num_min_cost]
-    
-#     num_actions = len(clusters)
-    
-#     best_action_set = None
-#     for candidate_action_set in itertools.combinations(actions_list_with_cost, num_actions):
-#         n_flipped, cost_sum = actions_cumulative_eff_cost(
-#             model=model,
-#             X=instances,
-#             actions_with_costs=list(candidate_action_set),
-#             dist_func_dataframe=dist_func_dataframe,
-#             numerical_columns=numerical_features_names,
-#             categorical_columns=categorical_features_names,
-#             categorical_no_action_token="-",
-#         )
-    
-#         if n_flipped >= effectiveness_threshold * instances.shape[0]:
-#             if best_action_set is None or cost_sum < best_cost_sum:
-#                 best_action_set = candidate_action_set
-#                 best_n_flipped = n_flipped
-#                 best_cost_sum = cost_sum
-
-#     if best_action_set is None:
-#         raise ValueError(
-#             "Change effectiveness_threshold. No action set found with cumulative effectiveness above the threshold"
-#         )
-#     else:
-#         return best_n_flipped, best_cost_sum, [p[0] for p in best_action_set]
-
-
-# def _select_actions_eff_thres_hybrid(
-#     model: Any,
-#     instances: pd.DataFrame,
-#     clusters: Dict[int, pd.DataFrame],
-#     candidate_actions: Dict[int, pd.DataFrame],
-#     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
-#     numerical_features_names: List[str],
-#     categorical_features_names: List[str],
-#     effectiveness_threshold: float,
-#     max_n_actions_full_combinations: int = 10,
-# ):
-#     actions_list = [action for actions_cluster in candidate_actions.values() for _, action in actions_cluster.iterrows()]
-#     action_individual_costs = np.empty((instances.shape[0], len(actions_list)))
-#     for i, action in enumerate(tqdm(actions_list)):
-#         cfs = apply_action_pandas(
-#             X=instances,
-#             action=action,
-#             numerical_columns=numerical_features_names,
-#             categorical_columns=categorical_features_names,
-#             categorical_no_action_token="-",
-#         )
-#         predictions: np.ndarray = model.predict(cfs)
-#         action_individual_costs[predictions == 0, i] = np.inf
-
-#         factuals_flipped = instances[predictions == 1]
-#         cfs_flipped = cfs[predictions == 1]
-#         individual_recourse_costs = dist_func_dataframe(factuals_flipped, cfs_flipped)
-#         action_individual_costs[predictions == 1, i] = individual_recourse_costs
-    
-#     dominated = np.zeros(action_individual_costs.shape[1])
-#     for i in tqdm(range(action_individual_costs.shape[1])):
-#         for j in range(i, action_individual_costs.shape[1]):
-#             if (action_individual_costs[:, i] <= action_individual_costs[:, j]).all() and (action_individual_costs[:, i] < action_individual_costs[:, j]).any():
-#                 dominated[j] = 1
-#             if (action_individual_costs[:, i] >= action_individual_costs[:, j]).all() and (action_individual_costs[:, i] > action_individual_costs[:, j]).any():
-#                 dominated[i] = 1
-
-#     action_individual_costs = action_individual_costs[:, ~dominated.astype(bool)]
-#     non_dominated_idxs = np.where(dominated == 0)[0]
-#     actions_list = [action for i, action in enumerate(actions_list) if i in non_dominated_idxs]
-    
-#     uf = DisjointSet(range(action_individual_costs.shape[1]))
-#     for i in tqdm(range(action_individual_costs.shape[1])):
-#         for j in range(i, action_individual_costs.shape[1]):
-#             if not uf.connected(i, j):
-#                 if (action_individual_costs[:, i] == action_individual_costs[:, j]).all():
-#                     uf.merge(i, j)
-    
-#     sufficient_actions_idxs = [eq_class.pop() for eq_class in uf.subsets()]
-#     actions_list = [actions_list[i] for i in sufficient_actions_idxs]
-#     action_individual_costs = action_individual_costs[:, sufficient_actions_idxs]
-    
-#     naned_action_individual_costs = np.where(np.isinf(action_individual_costs), np.nan, action_individual_costs)
-#     action_cost_means = np.nanmean(naned_action_individual_costs, axis=0)
-#     action_n_flipped = (action_individual_costs != np.inf).astype(int).sum(axis=0)
-    
-#     costs_sorted_idxs = np.argsort(action_cost_means)
-#     effs_sorted_idxs = np.argsort(action_n_flipped)
-#     effs_over_costs_sorted_idx = np.argsort(action_n_flipped / action_cost_means)
-#     n_slice = max_n_actions_full_combinations // 6
-    
-#     # Get indices of the n_slice smallest costs
-#     smallest_cost_indices = costs_sorted_idxs[:n_slice]
-#     # Get indices of the n_slice largest numbers of flipped individuals
-#     largest_eff_indices = effs_sorted_idxs[-n_slice:]
-#     # Get indices of the n_slice middle cost values
-#     mid_start = (len(costs_sorted_idxs) - n_slice) // 2  # Start position of the middle n_slice values
-#     middle_cost_indices = costs_sorted_idxs[mid_start:mid_start + n_slice]
-#     # Get indices of the n_slice middle n_flipped values
-#     mid_start = (len(effs_sorted_idxs) - n_slice) // 2  # Start position of the middle n_slice values
-#     middle_eff_indices = effs_sorted_idxs[mid_start:mid_start + n_slice]
-#     # Get indices of the n_slice largest n_flipped / cost_mean
-#     largest_ratio_indices = effs_over_costs_sorted_idx[-n_slice:]
-#     # Finally, get n_slice random indices
-#     random_indices = np.random.choice(list(range(len(action_cost_means))), n_slice)
-    
-#     candidate_idxs = set(smallest_cost_indices) | set(largest_eff_indices) | set(middle_cost_indices) | set(middle_eff_indices) | set(largest_ratio_indices) | set(random_indices)
-#     candidate_idxs = np.array(list(candidate_idxs))
-    
-#     num_actions = len(clusters)
-#     best_action_set = None
-#     for candidate_action_set in tqdm(itertools.combinations(candidate_idxs, num_actions), total=math.comb(len(candidate_idxs), num_actions)):
-#         cand_matrix = action_individual_costs[:, candidate_action_set]
-#         min_individual_costs = cand_matrix.min(axis=1)
-#         n_individuals = min_individual_costs.shape[0]
-
-#         n_flipped = (np.where(min_individual_costs != np.inf))[0].shape[0]
-#         effectiveness = n_flipped / n_individuals
-#         cost_sum = min_individual_costs[min_individual_costs != np.inf].sum()
-
-#         if effectiveness >= effectiveness_threshold:
-#             if best_action_set is None or cost_sum < best_cost_sum:
-#                 best_action_set = candidate_action_set
-#                 best_cost_sum = cost_sum
-#                 best_n_flipped = n_flipped
-    
-#     if best_action_set is None:
-#         raise ValueError(
-#             "Change effectiveness_threshold. No action set found with cumulative effectiveness above the threshold"
-#         )
-#     else:
-#         return best_n_flipped, best_cost_sum, [actions_list[i] for i in best_action_set]
-
-
 def _select_action_max_eff(
     model: Any,
     instances: pd.DataFrame,
@@ -628,6 +533,48 @@ def _select_action_max_eff(
     categorical_features_names: List[str],
     num_actions: int = 1,
 ) -> Tuple[int, int, pd.Series]:
+    """
+    Selects actions based on maximizing the effectiveness.
+
+    This function evaluates a set of candidate actions by applying each action to the given
+    instances, predicting the outcomes, and calculating the number of predictions that are
+    flipped (changed from 0 to 1). It also computes the recourse cost associated with each action.
+    Depending on the number of actions specified, it returns either the best action or a list
+    of the top actions based on effectiveness.
+
+    Parameters:
+    ----------
+    model : Any
+        A machine learning model used for making predictions on the modified instances.
+
+    instances : pd.DataFrame
+        The DataFrame of original instances to which actions will be applied.
+
+    candidate_actions : pd.DataFrame
+        A DataFrame containing the candidate actions to evaluate.
+
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A function that computes the distance or cost between two DataFrames.
+
+    numerical_features_names : List[str]
+        A list of names for the numerical columns in the DataFrame.
+
+    categorical_features_names : List[str]
+        A list of names for the categorical columns in the DataFrame.
+
+    num_actions : int, optional
+        The number of top actions to select based on effectiveness. Defaults to 1.
+
+    Returns:
+    -------
+    Tuple[int, int, pd.Series]
+        If `num_actions` is 1, returns:
+        - The maximum number of predictions flipped.
+        - The total recourse cost associated with the best action.
+        - The best action (pd.Series).
+        
+        If `num_actions` > 1, returns a list of the top actions based on their effectiveness.
+    """
     max_n_flipped = 0
     cf_list = []
 
@@ -672,6 +619,41 @@ def _select_action_mean(
     numerical_features_names: List[str],
     categorical_features_names: List[str],
 ) -> Tuple[int, int, pd.Series]:
+    """
+    Selects the mean action from a set of candidate actions and evaluates its effectiveness.
+
+    This function computes the mean action from the candidate actions and applies it to the
+    given instances. It then predicts the outcomes and calculates the number of predictions that
+    are flipped (changed from 0 to 1) as well as the associated recourse cost.
+
+    Parameters:
+    ----------
+    model : Any
+        A machine learning model used for making predictions on the modified instances.
+
+    instances : pd.DataFrame
+        The DataFrame of original instances to which the mean action will be applied.
+
+    candidate_actions : pd.DataFrame
+        A DataFrame containing the candidate actions from which the mean action will be derived.
+
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A function that computes the distance or cost between two DataFrames.
+
+    numerical_features_names : List[str]
+        A list of names for the numerical columns in the DataFrame.
+
+    categorical_features_names : List[str]
+        A list of names for the categorical columns in the DataFrame.
+
+    Returns:
+    -------
+    Tuple[int, int, pd.Series]
+        A tuple containing:
+        - The number of predictions flipped by applying the mean action.
+        - The total recourse cost associated with the mean action.
+        - The mean action (pd.Series).
+    """
     mean_action = actions_mean_pandas(
         actions=candidate_actions,
         numerical_features=numerical_features_names,
@@ -709,6 +691,65 @@ def cluster_results(
     num_min_cost: Optional[int] = None,
     max_n_actions_full_combinations: int = 50,
 ) -> Tuple[Dict[int, Dict[str, Any]], float, float]:
+    """
+    Evaluates and selects actions for each cluster based on a specified action choice algorithm.
+
+    This function iterates through each cluster of instances, applying the specified algorithm to 
+    select the best action for achieving recourse while minimizing costs. It calculates the total 
+    effectiveness and mean recourse costs across all clusters.
+
+    Parameters:
+    ----------
+    model : Any
+        A machine learning model used for making predictions on modified instances.
+
+    instances : pd.DataFrame
+        The DataFrame of original instances to which actions will be applied.
+
+    clusters : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to DataFrames of instances belonging to each cluster.
+
+    cluster_expl_actions : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to DataFrames of candidate actions for each cluster.
+
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A function that computes the distance or cost between two DataFrames.
+
+    numerical_features_names : List[str]
+        A list of names for the numerical columns in the DataFrames.
+
+    categorical_features_names : List[str]
+        A list of names for the categorical columns in the DataFrames.
+
+    cluster_action_choice_algo : Literal["max-eff", "mean-act", "low-cost", "min-cost-eff-thres", "eff-thres-hybrid"]
+        The algorithm to use for selecting actions from candidate actions. Options include:
+        - "max-eff": Select the action with maximum effectiveness.
+        - "mean-act": Select the mean action from candidate actions.
+        - "low-cost": Select actions based on low cost.
+
+    action_threshold : int
+        Minimum threshold for the number of flipped predictions required to consider an action effective.
+
+    num_low_cost : int
+        The number of low-cost actions to consider (used when the low-cost algorithm is selected).
+
+    effectiveness_threshold : float
+        Minimum effectiveness required for actions (used when the min-cost-eff-thres algorithm is selected).
+
+    num_min_cost : Optional[int]
+        Number of minimum cost actions to consider (used when the min-cost-eff-thres algorithm is selected).
+
+    max_n_actions_full_combinations : int
+        Maximum number of actions to evaluate in full combinations (not currently used in the function).
+
+    Returns:
+    -------
+    Tuple[Dict[int, Dict[str, Any]], float, float]
+        A tuple containing:
+        - A dictionary where each key is a cluster ID and each value is another dictionary with the selected action, its effectiveness, and cost.
+        - Total effectiveness percentage across all clusters.
+        - Total mean recourse cost across all clusters.
+    """
     n_flipped_total = 0
     total_recourse_cost_sum = 0
     ret_clusters = {}
@@ -744,17 +785,6 @@ def cluster_results(
                 num_low_cost=num_low_cost,
                 inv_total_clusters=(1 / len(clusters)),
             )
-        # elif cluster_action_choice_algo == "min-cost-eff-thres":
-        #     n_flipped, recourse_cost_sum, selected_action = _select_action_min_cost_eff_thres(
-        #         model=model,
-        #         instances=instances,
-        #         cluster_instances=cluster,
-        #         candidate_actions=cluster_expl_actions[i],
-        #         dist_func_dataframe=dist_func_dataframe,
-        #         numerical_features_names=numerical_features_names,
-        #         categorical_features_names=categorical_features_names,
-        #         effectiveness_threshold=effectiveness_threshold,
-        #     )
         elif cluster_action_choice_algo == "min-cost-eff-thres-combinations":
             break
         elif cluster_action_choice_algo == "eff-thres-hybrid":
@@ -799,18 +829,6 @@ def cluster_results(
         total_mean_recourse_cost = total_recourse_cost_sum / n_flipped_total
         
         return ret_clusters, total_effectiveness_percentage, total_mean_recourse_cost
-    # elif cluster_action_choice_algo == "eff-thres-hybrid":
-    #     n_flipped_total, total_recourse_cost_sum, action_set = _select_actions_eff_thres_hybrid(
-    #         model=model,
-    #         instances=instances,
-    #         clusters=clusters,
-    #         candidate_actions=cluster_expl_actions,
-    #         dist_func_dataframe=dist_func_dataframe,
-    #         numerical_features_names=numerical_features_names,
-    #         categorical_features_names=categorical_features_names,
-    #         effectiveness_threshold=effectiveness_threshold,
-    #         max_n_actions_full_combinations=max_n_actions_full_combinations,
-    #     )
         
         assert len(action_set) == len(clusters)
         actions_iter = iter(action_set)
@@ -838,6 +856,31 @@ def print_results(
     total_effectiveness: float,
     total_cost: float,
 ):
+    """
+    Prints the statistics for each cluster, including effectiveness and cost.
+
+    This function takes the results of cluster analysis and formats them for easy 
+    viewing. It displays the size of each cluster, the actions taken, and the 
+    effectiveness and cost of those actions.
+
+    Parameters:
+    ----------
+    clusters_stats : Dict[int, Dict[str, numbers.Number]]
+        A dictionary where keys are cluster IDs (integers) and values are 
+        dictionaries containing statistics for each cluster. Each value dictionary
+        must contain the following keys:
+            - "size": The size of the cluster.
+            - "action": The actions taken for the cluster.
+            - "effectiveness": The effectiveness of the actions in the cluster.
+            - "cost": The cost associated with the actions.
+
+    total_effectiveness : float
+        The total effectiveness percentage across all clusters, represented as a decimal 
+        (e.g., 0.75 for 75%).
+
+    total_cost : float
+        The total cost associated with the actions taken across all clusters.
+    """
     for i, stats in enumerate(clusters_stats.values()):
         print(f"CLUSTER {i + 1} with size {stats['size']}:")
         display(pd.DataFrame(stats["action"]).T)
@@ -876,6 +919,41 @@ def _merge_clusters(
     numerical_features_names: List[str],
     categorical_features_names: List[str],
 ):
+    """
+    Merges two clusters into one and updates all associated data structures.
+
+    This function takes two cluster identifiers and combines their respective data.
+    It updates the clusters, explanations, centroids, and action dataframes accordingly.
+
+    Parameters:
+    ----------
+    cluster1 : int
+        The identifier for the first cluster to merge.
+
+    cluster2 : int
+        The identifier for the second cluster to merge into.
+
+    clusters : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their respective dataframes.
+
+    cluster_explanations : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their explanations dataframes.
+
+    cluster_centroids : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their centroid dataframes.
+
+    cluster_expl_actions : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their explanation actions dataframes.
+
+    explanations_centroid : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their centroid explanations dataframes.
+
+    numerical_features_names : List[str]
+        A list of names for the numerical features in the dataset.
+
+    categorical_features_names : List[str]
+        A list of names for the categorical features in the dataset.
+    """
     clusters[cluster2] = pd.concat(
         [clusters[cluster2], clusters[cluster1]], ignore_index=True
     )
@@ -915,6 +993,36 @@ def _find_candidate_clusters(
     heuristic_weights: Tuple[float, float],
     dist_func_dataframe: Callable[[pd.DataFrame, pd.DataFrame], pd.Series],
 ) -> Tuple[int, int]:
+    """
+    Identifies the best candidate clusters for merging based on distances of centroids
+    and explanation centroids, weighted by given heuristic values.
+
+    The function selects the smallest cluster and calculates distances to all other clusters' centroids.
+    It uses these distances to determine a heuristic value for potential merges, returning the two 
+    clusters with the best merge heuristic.
+
+    Parameters:
+    ----------
+    clusters : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their respective dataframes.
+
+    cluster_centroids : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their centroid dataframes.
+
+    explanations_centroid : Dict[int, pd.DataFrame]
+        A dictionary mapping cluster IDs to their explanation centroids.
+
+    heuristic_weights : Tuple[float, float]
+        A tuple containing two weights used to combine centroid distances and explanation centroid distances.
+
+    dist_func_dataframe : Callable[[pd.DataFrame, pd.DataFrame], pd.Series]
+        A function that computes the distance between two dataframes, returning a series of distances.
+
+    Returns:
+    -------
+    Tuple[int, int]
+        A tuple containing the IDs of the two candidate clusters identified for merging.
+    """
     clusters_idx = clusters.keys()
 
     smallest_cluster = min(clusters_idx, key=lambda i: (clusters[i].shape[0], i))
@@ -966,6 +1074,36 @@ def _generate_clusters(
     categorical_features_names: List[str],
     clustering_method: ClusteringMethod,
 ) -> Dict[int, pd.DataFrame]:
+    """
+    Generates clusters from the given instances using the specified clustering method.
+
+    The function applies one-hot encoding to the categorical features in the input data,
+    fits the provided clustering method, and assigns instances to clusters. It returns 
+    a dictionary mapping cluster IDs to their respective dataframes.
+
+    Parameters:
+    ----------
+    instances : pd.DataFrame
+        The input data containing instances to be clustered.
+
+    num_clusters : int
+        The desired number of clusters to generate. Note that the actual number of 
+        clusters may vary depending on the clustering method used.
+
+    categorical_features_names : List[str]
+        A list of names of categorical features in the input data that need to be 
+        one-hot encoded for clustering.
+
+    clustering_method : ClusteringMethod
+        An instance of a clustering method (e.g., KMeans, DBSCAN) that implements 
+        the fit and predict methods.
+
+    Returns:
+    -------
+    Dict[int, pd.DataFrame]
+        A dictionary where the keys are cluster IDs and the values are dataframes 
+        containing the instances assigned to each cluster.
+    """
     ohe_instances = _one_hot_encode(instances, categorical_features_names)
     clustering_method.fit(ohe_instances)
     assigned_clusters = clustering_method.predict(ohe_instances)
@@ -978,6 +1116,27 @@ def _generate_clusters(
 
 
 def _one_hot_encode(X: pd.DataFrame, categorical_columns: List[str]) -> pd.DataFrame:
+    """
+    Applies one-hot encoding to the specified categorical columns of a DataFrame.
+
+    This function transforms categorical columns in the input DataFrame into 
+    a one-hot encoded format, allowing them to be used in machine learning models. 
+    The non-categorical columns are retained in their original form.
+
+    Parameters:
+    ----------
+    X : pd.DataFrame
+        The input DataFrame containing the data with both categorical and numerical features.
+
+    categorical_columns : List[str]
+        A list of names of the categorical columns in the DataFrame that should be one-hot encoded.
+
+    Returns:
+    -------
+    pd.DataFrame
+        A new DataFrame where the specified categorical columns have been one-hot encoded, 
+        and all other columns are retained as is.
+    """
     transformer = ColumnTransformer(
         [("ohe", OneHotEncoder(sparse_output=False), categorical_columns)],
         remainder="passthrough",

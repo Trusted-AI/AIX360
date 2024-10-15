@@ -4,7 +4,49 @@ import numpy as np
 from sklearn.inspection import permutation_importance
 
 class RandomSampling(LocalCounterfactualMethod):
+    """
+    RandomSampling is a local counterfactual method that generates counterfactual instances 
+    through random sampling based on the distribution of features in the unaffected training data.
+
+    This method identifies the most important features and the most frequent categories within the 
+    unaffected training data to generate counterfactuals by sampling from these distributions.
+
+    Methods:
+    --------
+    __init__(model, n_most_important, n_categorical_most_frequent, numerical_features, categorical_features, random_state=None):
+        Initializes the RandomSampling instance with the specified parameters.
+
+    fit(X, y):
+        Fits the RandomSampling method to the provided training data by calculating feature importances and identifying unaffected instances.
+
+    _sample_instances(n_samples, fixed_feature_values, random_state=None):
+        Samples instances based on the specified feature distributions, fixing certain feature values while sampling others.
+
+    explain(instance, num_counterfactuals, n_samples=1000, random_state=None):
+        Generates counterfactual explanations for a given instance by sampling and modifying feature values.
+
+    explain_instances(instances, num_counterfactuals, n_samples=1000, random_state=None):
+        Generates counterfactuals for multiple instances by calling the explain method for each instance.
+    """
     def __init__(self, model, n_most_important, n_categorical_most_frequent, numerical_features, categorical_features, random_state=None):
+        """
+        Initializes a new instance of the RandomSampling class.
+
+        Parameters:
+        ----------
+        model : object
+            A machine learning model used for predictions and feature importance evaluation.
+        n_most_important : int
+            The number of most important features to consider when generating counterfactuals.
+        n_categorical_most_frequent : int
+            The number of most frequent categories to consider for categorical features.
+        numerical_features : List[str]
+            A list of continuous (numerical) feature names.
+        categorical_features : List[str]
+            A list of categorical feature names.
+        random_state : int, optional
+            Seed for random number generation to ensure reproducibility, by default None.
+        """
         self.model = model
         self.n_most_important = n_most_important
         self.n_categorical_most_frequent = n_categorical_most_frequent
@@ -13,6 +55,21 @@ class RandomSampling(LocalCounterfactualMethod):
         self.random_state = random_state
 
     def fit(self, X: pd.DataFrame, y: pd.Series):
+        """
+        Fits the RandomSampling method to the provided training data by calculating feature importances and identifying unaffected instances.
+
+        Parameters:
+        ----------
+        X : pd.DataFrame
+            The training dataset containing feature columns.
+        y : pd.Series
+            The target variable corresponding to the training dataset.
+
+        Returns:
+        -------
+        self : RandomSampling
+            Returns the fitted instance of RandomSampling.
+        """
         self.X_ = X
         self.feature_names_ = X.columns.tolist()
         # Permutation feature importance
@@ -44,6 +101,23 @@ class RandomSampling(LocalCounterfactualMethod):
         return self
 
     def _sample_instances(self, n_samples: int, fixed_feature_values, random_state=None):
+        """
+        Samples instances based on the specified feature distributions, fixing certain feature values while sampling others.
+
+        Parameters:
+        ----------
+        n_samples : int
+            The number of instances to sample.
+        fixed_feature_values : dict
+            A dictionary of feature names and their fixed values during sampling.
+        random_state : int, optional
+            Seed for random number generation, by default None.
+
+        Returns:
+        -------
+        pd.DataFrame
+            A DataFrame containing the sampled instances with the same feature structure as the original data.
+        """
         if random_state is not None:
             np.random.seed(random_state)
         samples_columns = []
@@ -58,6 +132,30 @@ class RandomSampling(LocalCounterfactualMethod):
         return pd.DataFrame({col_name: column for col_name, column in zip(self.X_.columns, samples_columns)})
     
     def explain(self, instance, num_counterfactuals, n_samples=1000, random_state=None):
+        """
+        Generates counterfactual explanations for a given instance by sampling and modifying feature values.
+
+        Parameters:
+        ----------
+        instance : pd.DataFrame
+            A single row DataFrame representing the instance for which counterfactuals are generated.
+        num_counterfactuals : int
+            The number of counterfactuals to generate.
+        n_samples : int, optional
+            The number of samples to draw for generating counterfactuals, by default 1000.
+        random_state : int, optional
+            Seed for random number generation, by default None.
+
+        Returns:
+        -------
+        pd.DataFrame
+            A DataFrame containing the generated counterfactuals for the provided instance.
+        
+        Raises:
+        -------
+        ValueError
+            If the input instance is not a single-row DataFrame or if its columns do not match the training dataset's columns.
+        """
         # Check if instance is a single row DataFrame
         if not isinstance(instance, pd.DataFrame) or instance.shape[0] != 1:
             raise ValueError("Input must be a single row DataFrame.")
@@ -106,6 +204,25 @@ class RandomSampling(LocalCounterfactualMethod):
     def explain_instances(
         self, instances: pd.DataFrame, num_counterfactuals: int, n_samples=1000, random_state=None
     ) -> pd.DataFrame:
+        """
+        Generates counterfactuals for multiple instances by calling the explain method for each instance.
+
+        Parameters:
+        ----------
+        instances : pd.DataFrame
+            DataFrame containing instances for which counterfactual explanations are needed.
+        num_counterfactuals : int
+            The number of counterfactuals to generate for each instance.
+        n_samples : int, optional
+            The number of samples to draw for generating counterfactuals, by default 1000.
+        random_state : int, optional
+            Seed for random number generation, by default None.
+
+        Returns:
+        -------
+        pd.DataFrame
+            A DataFrame containing the generated counterfactuals for all provided instances.
+        """
         cfs = []
         for i in range(instances.shape[0]):
             cfs_instance = self.explain(instances.iloc[i:i+1], num_counterfactuals=num_counterfactuals, n_samples=n_samples, random_state=random_state)

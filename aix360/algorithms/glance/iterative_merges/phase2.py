@@ -13,6 +13,37 @@ def generate_cluster_centroid_explanations(
     numerical_features_names: List[str],
     categorical_features_names: List[str],
 ) -> Tuple[Dict[int, pd.DataFrame], Dict[int, pd.DataFrame], Dict[int, pd.DataFrame]]:
+    """
+    Generates explanations for cluster centroids by creating counterfactual instances
+    for each centroid and extracting corresponding actions and explanations.
+
+    Parameters:
+    ----------
+    cluster_centroids : Dict[int, pd.DataFrame]
+        A dictionary where keys are cluster identifiers and values are DataFrames
+        representing the centroids of each cluster.
+    cf_generator : LocalCounterfactualMethod
+        An instance of a LocalCounterfactualMethod used to generate counterfactuals.
+    num_local_counterfactuals : int
+        The number of counterfactuals to generate for each cluster centroid.
+    numerical_features_names : List[str]
+        A list of names for numerical features in the dataset.
+    categorical_features_names : List[str]
+        A list of names for categorical features in the dataset.
+
+    Returns:
+    -------
+    Tuple[Dict[int, pd.DataFrame], Dict[int, pd.DataFrame], Dict[int, pd.DataFrame]]
+        A tuple containing three dictionaries:
+        - cluster_explanations: A dictionary of counterfactuals for each cluster centroid.
+        - cluster_expl_actions: A dictionary of extracted actions for the generated counterfactuals.
+        - explanations_centroid: A dictionary of centroid explanations based on the generated counterfactuals.
+
+    Raises:
+    -------
+    ValueError
+        If no counterfactuals are found for any of the centroids.
+    """
     cluster_explanations = {
         i: cf_generator.explain_instances(
             cluster_centroids[i], num_local_counterfactuals
