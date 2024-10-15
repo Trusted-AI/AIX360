@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from typing import List, Dict
-from aix360.algorithms.glance.iterative_merges.iterative_merges import IterativeMerges,cumulative,action_fake_cost,_select_action_low_cost,_select_action_max_eff,_select_action_mean,print_results,format_glance_output,_generate_clusters, _one_hot_encode,_find_candidate_clusters,_merge_clusters
+from aix360.algorithms.glance.iterative_merges.iterative_merges import C_GLANCE,cumulative,action_fake_cost,_select_action_low_cost,_select_action_max_eff,_select_action_mean,print_results,format_glance_output,_generate_clusters, _one_hot_encode,_find_candidate_clusters,_merge_clusters
 import unittest
 
 # Sample data for testing
@@ -432,7 +432,7 @@ def test_cumulative():
 
 def test_iterative_merges_init():
     model = MockModel()
-    im = IterativeMerges(model=model)
+    im = C_GLANCE(model=model)
     
     assert im.model == model
     assert im.initial_clusters == 100
@@ -452,7 +452,7 @@ def test_set_features_names():
 
     sample_y = pd.Series([0, 1, 0])  # Target variable
     model = MockModel()
-    im = IterativeMerges(model=model)
+    im = C_GLANCE(model=model)
     
     numerical_names, categorical_names = im._set_features_names(sample_X, None, None)
     assert numerical_names == ['feature1', 'feature2']
@@ -475,11 +475,11 @@ def test_fit():
 
     sample_y = pd.Series([0, 1, 0])  # Target variable
     model = MockModel()
-    im = IterativeMerges(model=model)
+    im = C_GLANCE(model=model)
     
     result = im.fit(sample_X.drop(columns='target'), sample_y, sample_X)
     
-    assert isinstance(result, IterativeMerges)
+    assert isinstance(result, C_GLANCE)
     assert im.numerical_features_names == ['feature1', 'feature2']
     assert im.categorical_features_names == []
     assert im.X.equals(sample_X.drop(columns='target'))

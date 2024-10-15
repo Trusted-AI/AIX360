@@ -27,7 +27,7 @@ from ..utils.metadata_requests import _decide_cluster_method, _decide_local_cf_m
 from .phase2 import generate_cluster_centroid_explanations
 
 
-class IterativeMerges(GlobalCounterfactualMethod):
+class C_GLANCE(GlobalCounterfactualMethod):
     """
     A class for generating global counterfactual explanations using an iterative merging approach.
     
@@ -556,9 +556,7 @@ def _select_action_low_cost(
         )
     )
     cf_list = []
-    for action in tqdm(
-        actions_list[: min(num_low_cost, len(actions_list))], total=len(actions_list)
-    ):
+    for action in actions_list[: min(num_low_cost, len(actions_list))]:
         cfs = apply_action_pandas(
             X=instances,
             action=action,
@@ -719,9 +717,7 @@ def _select_action_max_eff(
     max_n_flipped = 0
     cf_list = []
 
-    for _, action in tqdm(
-        candidate_actions.iterrows(), total=candidate_actions.shape[0]
-    ):
+    for _, action in candidate_actions.iterrows():
         cfs = apply_action_pandas(
             X=instances,
             action=action,

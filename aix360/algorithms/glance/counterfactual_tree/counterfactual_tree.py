@@ -1,6 +1,6 @@
 from typing import Union, Any, List, Optional, Dict, Tuple, Callable
 from ..base import GlobalCounterfactualMethod, LocalCounterfactualMethod
-from ..iterative_merges.iterative_merges import IterativeMerges, _select_action_max_eff
+from ..iterative_merges.iterative_merges import C_GLANCE, _select_action_max_eff
 import pandas as pd
 from ..utils.metadata_requests import _decide_local_cf_method
 from ..utils.centroid import centroid_pandas
@@ -13,7 +13,7 @@ import numpy as np
 from tqdm import tqdm
 
 
-class CounterfactualTree:
+class T_GLANCE:
     """
     A class to generate counterfactual explanations using a decision tree-like structure.
     
@@ -204,7 +204,7 @@ class CounterfactualTree:
             self.generation_method = "Global-IM"
             if self.partition_counterfactuals == None:
                 self.partition_counterfactuals = 3
-            self.cf_generator = IterativeMerges(
+            self.cf_generator = C_GLANCE(
                 self.model, final_clusters=self.partition_counterfactuals, verbose=False
             )
             if self.train_dataset is None:
