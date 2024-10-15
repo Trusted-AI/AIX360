@@ -28,6 +28,50 @@ from .phase2 import generate_cluster_centroid_explanations
 
 
 class IterativeMerges(GlobalCounterfactualMethod):
+    """
+    A class for generating global counterfactual explanations using an iterative merging approach.
+    
+    It allows the user to control the number of clusters and the methods used 
+    for clustering and generating counterfactuals.
+
+    Attributes:
+    ----------
+    model : Any
+        The predictive model used for generating counterfactuals.
+    initial_clusters : int
+        The initial number of clusters to form.
+    final_clusters : int
+        The target number of clusters after merging.
+    num_local_counterfactuals : int
+        The number of local counterfactuals to generate for each cluster.
+    heuristic_weights : Tuple[float, float]
+        Weights used in the heuristic for merging clusters.
+    alternative_merges : bool
+        If True, allows alternative merging strategies.
+    random_seed : int
+        Seed for random number generation.
+    verbose : bool
+        If True, enables verbose output during processing.
+    final_clustering : Optional[Dict[int, pd.DataFrame]]
+        The final clustering of instances after merging.
+    cluster_results : Optional[Dict[int, Dict[str, Any]]]
+        Results of the clustering including effectiveness and cost metrics.
+
+    Methods:
+    -------
+    _set_features_names(X, numerical_names, categorical_names):
+        Sets the feature names for numerical and categorical features.
+    
+    fit(X, y, train_dataset, feat_to_vary, numeric_features_names, categorical_features_names,
+        clustering_method, cf_generator, cluster_action_choice_algo, ...)
+        Fits the clustering and counterfactual generation model to the provided dataset.
+    
+    explain_group(instances):
+        Explains the group of instances by generating counterfactuals based on clustering.
+    
+    global_actions():
+        Retrieves the global actions derived from the clustered results.
+    """
 
     def __init__(
         self,
@@ -40,6 +84,28 @@ class IterativeMerges(GlobalCounterfactualMethod):
         random_seed: int = 13,
         verbose=True,
     ) -> None:
+        """
+        Initializes the IterativeMerges instance.
+
+        Parameters:
+        ----------
+        model : Any
+            The predictive model used for generating counterfactuals.
+        initial_clusters : int, optional
+            The initial number of clusters to form. Default is 100.
+        final_clusters : int, optional
+            The target number of clusters after merging. Default is 10.
+        num_local_counterfactuals : int, optional
+            The number of local counterfactuals to generate for each cluster. Default is 5.
+        heuristic_weights : Tuple[float, float], optional
+            Weights used in the heuristic for merging clusters. Default is (0.5, 0.5).
+        alternative_merges : bool, optional
+            If True, allows alternative merging strategies. Default is True.
+        random_seed : int, optional
+            Seed for random number generation. Default is 13.
+        verbose : bool, optional
+            If True, enables verbose output during processing. Default is True.
+        """
         super().__init__()
         self.model = model
         self.initial_clusters = initial_clusters
@@ -58,6 +124,23 @@ class IterativeMerges(GlobalCounterfactualMethod):
         numerical_names: Optional[List[str]],
         categorical_names: Optional[List[str]]
     ) -> Tuple[List[str], List[str]]:
+        """
+        Sets the feature names for numerical and categorical features.
+
+        Parameters:
+        ----------
+        X : pd.DataFrame
+            The dataset to analyze.
+        numerical_names : Optional[List[str]]
+            List of numerical feature names. If None, they will be inferred from X.
+        categorical_names : Optional[List[str]]
+            List of categorical feature names. If None, they will be inferred from X.
+
+        Returns:
+        -------
+        Tuple[List[str], List[str]]
+            A tuple containing lists of numerical and categorical feature names.
+        """
         if numerical_names is None and categorical_names is None:
             numerical_names = X.select_dtypes(
                 include=["number"]
@@ -86,7 +169,7 @@ class IterativeMerges(GlobalCounterfactualMethod):
             LocalCounterfactualMethod,
             Literal["Dice", "NearestNeighbors", "RandomSampling"]
         ] = "Dice",
-        cluster_action_choice_algo: Literal["max-eff", "mean-act", "low-cost", "min-cost-eff-thres", "eff-thres-hybrid"] = "max-eff",
+        cluster_action_choice_algo: Literal["max-eff", "mean-act", "low-cost"] = "max-eff",
         nns__n_scalars: Optional[int] = None,
         rs__n_most_important: Optional[int] = None,
         rs__n_categorical_most_frequent: Optional[int] = None,
@@ -96,6 +179,51 @@ class IterativeMerges(GlobalCounterfactualMethod):
         min_cost_eff_thres_combinations__num_min_cost: Optional[int] = None,
         eff_thres_hybrid__max_n_actions_full_combinations: Optional[int] = None,
     ) -> "IterativeMerges":
+        """
+        Fits the clustering and counterfactual generation model to the provided dataset.
+
+        Parameters:
+        ----------
+        X : pd.DataFrame
+            Features of the dataset.
+        y : pd.Series
+            Target variable.
+        train_dataset : pd.DataFrame
+            The training dataset used for local counterfactual generation methods.
+        feat_to_vary : Optional[Union[List[str], str]], optional
+            Features to vary in counterfactual generation. Default is "all".
+        numeric_features_names : Optional[List[str]], optional
+            List of numeric feature names. If None, they will be inferred from X.
+        categorical_features_names : Optional[List[str]], optional
+            List of categorical feature names. If None, they will be inferred from X.
+        clustering_method : Union[ClusteringMethod, Literal["KMeans"]], optional
+            The clustering method to use. Default is "KMeans".
+        cf_generator : Union[LocalCounterfactualMethod, Literal["Dice", "NearestNeighbors", "RandomSampling"]], optional
+            The local counterfactual generation method to use. Default is "Dice".
+        cluster_action_choice_algo : Literal["max-eff", "mean-act", "low-cost""], optional
+            The algorithm for selecting actions from clusters. Default is "max-eff".
+        nns__n_scalars : Optional[int], optional
+            Number of scalar features to use for nearest neighbors. Default is None.
+        rs__n_most_important : Optional[int], optional
+            Number of most important features for random sampling. Default is None.
+        rs__n_categorical_most_frequent : Optional[int], optional
+            Number of most frequent categorical features for random sampling. Default is None.
+        lowcost__action_threshold : Optional[int], optional
+            Action threshold for low-cost methods. Default is None.
+        lowcost__num_low_cost : Optional[int], optional
+            Number of low-cost actions to consider. Default is None.
+        min_cost_eff_thres__effectiveness_threshold : Optional[float], optional
+            Effectiveness threshold for minimum cost methods. Default is None.
+        min_cost_eff_thres_combinations__num_min_cost : Optional[int], optional
+            Number of minimum cost combinations to evaluate. Default is None.
+        eff_thres_hybrid__max_n_actions_full_combinations : Optional[int], optional
+            Maximum number of actions for full combinations in hybrid thresholding. Default is None.
+
+        Returns:
+        -------
+        IterativeMerges
+            Returns the fitted instance of IterativeMerges.
+        """
         self.numerical_features_names, self.categorical_features_names = self._set_features_names(
             X=X,
             numerical_names=numeric_features_names,
@@ -149,6 +277,19 @@ class IterativeMerges(GlobalCounterfactualMethod):
     def explain_group(
         self, instances: pd.DataFrame
     ) -> Tuple[int, float]:
+        """
+        Explains the group of instances by generating counterfactuals based on clustering.
+
+        Parameters:
+        ----------
+        instances : pd.DataFrame
+            The group of instances to explain.
+
+        Returns:
+        -------
+        Tuple[int, float]
+            A tuple containing the total effectiveness and total cost of the generated counterfactuals.
+        """
         if self.initial_clusters > instances.shape[0]:
             warnings.warn(
                 "Requested number of initial clusters is larger than the number of instances to explain. Setting to number of instances."
