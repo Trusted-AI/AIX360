@@ -226,7 +226,8 @@ class Node:
 
         g = self.to_igraph(numeric_features=numeric_features)
         fig, ax = plt.subplots()
-        fig.set_figwidth(20)
+        fig.set_figheight(10)
+        fig.set_figwidth(40)
         vertex_labels = g.vs["label"]
         edge_labels = g.es["label"]
         ig.plot(
