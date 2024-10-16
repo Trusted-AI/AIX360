@@ -457,8 +457,6 @@ def cumulative(
         predictions = model.predict(applied_df)
         all_predictions.append(predictions)
         cur_costs = dist_func_dataframe(instances.reset_index(drop=True), applied_df.reset_index(drop=True))
-#         import pdb
-#         pdb.set_trace()
         cur_costs[predictions == 0] = np.inf
         costs.append(cur_costs)
 
