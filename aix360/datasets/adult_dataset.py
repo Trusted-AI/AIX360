@@ -44,7 +44,7 @@ class AdultDataset():
     """Adult Dataset.
 
     The Adult dataset, also known as the "Census Income" dataset, is a widely used collection of demographic information derived from the 1994 U.S. Census database 
-    and is available at https://archive.ics.uci.edu/dataset/2/adult. 
+    and is available at https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data. 
     The target variable is whether an individual earns more than $50,000 per year,
     making it a popular dataset for classification tasks in machine learning.
     """
