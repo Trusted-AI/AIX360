@@ -178,7 +178,7 @@ class C_GLANCE(GlobalCounterfactualMethod):
         min_cost_eff_thres__effectiveness_threshold: Optional[float] = None,
         min_cost_eff_thres_combinations__num_min_cost: Optional[int] = None,
         eff_thres_hybrid__max_n_actions_full_combinations: Optional[int] = None,
-    ) -> "IterativeMerges":
+    ) -> "C_GLANCE":
         """
         Fits the clustering and counterfactual generation model to the provided dataset.
 
