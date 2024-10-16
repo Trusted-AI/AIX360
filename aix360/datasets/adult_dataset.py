@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
 def default_preprocessing(data):
-    all_columns = ["Age", "Workclass", "Fnlwgt", "Education", "Marital-Status",
+    all_columns = ["Age", "Workclass", "Education", "Marital-Status",
                             "Occupation", "Relationship", "Race", "Sex", "Capital-Gain",
                             "Capital-Loss", "Hours-Per-Week", "Native-Country", "Status"]
     cate_columns = ['Workclass', 'Education', 'Marital-Status', 'Occupation',
@@ -13,6 +13,7 @@ def default_preprocessing(data):
     numerical_columns = [c for c in all_columns if c not in cate_columns + ["Status"]]
 
     # remove redundant education num column (education processed in one_hot)
+    data = data.drop(2, axis=1)
     data = data.drop(4, axis=1)
     # remove rows with missing values: '?,'
     data = data.replace('?,', np.nan); data = data.dropna() 
