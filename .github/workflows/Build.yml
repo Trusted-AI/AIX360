@@ -448,3 +448,57 @@ jobs:
 
       - name: Step 5 - Test GroupedCEExplainer
         run: python ./tests/gce/test_gce.py
+
+  build-glance-on-py310:
+    # The type of runner that the job will run on
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+        python-version: ["3.10.14"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - checkout aix360 repository
+        uses: actions/checkout@v3
+
+      - name: Step 2 - set up python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Step 3 - upgrade setuptools
+        run: pip3 install pytest nbmake wheel --upgrade setuptools
+
+      - name: Step 4 - Install aix360 with dipvae algorithm related dependencies
+        run: pip3 install .[glance]
+
+      - name: Step 5 - Test Base
+        run: python ./tests/glance/test_base.py
+
+      - name: Step 6 - Test Counterfactual Costs
+        run: python ./tests/glance/test_counterfactual_costs.py
+
+      - name: Step 7 - Test Counterfactual Tree
+        run: python ./tests/glance/test_counterfactual_tree.py
+
+      - name: Step 8 - Test Iterative Merges
+        run: python ./tests/glance/test_iterative_merges.py
+
+      - name: Step 9 - Test KMeans
+        run: python ./tests/glance/test_KMeans.py
+
+      - name: Step 10 - Test Local Cfs
+        run: python ./tests/glance/test_local_cfs.py
+
+      - name: Step 11 - Test Node
+        run: python ./tests/glance/test_node.py
+
+      - name: Step 12 - Test Phase2
+        run: python ./tests/glance/test_phase2.py
+
+      - name: Step 13 - Test Utils
+        run: python ./tests/glance/test_utils.py
+
+  
