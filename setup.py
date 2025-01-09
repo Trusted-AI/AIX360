@@ -131,7 +131,8 @@ extra_requires = {
         "dice-ml==0.11",
         "tqdm==4.66.1",
         "igraph==0.11.4",
-        "colorama==0.4.6"
+        "colorama==0.4.6",
+        "xgboost==2.0.3"
     ],
 }
 
