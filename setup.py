@@ -130,7 +130,8 @@ extra_requires = {
         "scikit-learn==1.5.2",
         "dice-ml==0.11",
         "tqdm==4.66.1",
-        "igraph==0.11.4"
+        "igraph==0.11.4",
+        "colorama==0.4.6"
     ],
 }
 
