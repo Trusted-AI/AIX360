@@ -86,7 +86,7 @@ class CoFrNet_Model(nn.Module):
         '''
         epsilonMatrix = torch.mul(torch.full_like(Wx, epsilon), torch.sign(Wx))
         denom = torch.where(torch.abs(Wx) < epsilon, epsilonMatrix, Wx)
-        denom = torch.nan_to_num(denom, nan=epsilon)
+        denom = torch.where(denom == 0, epsilon, denom)
         #print(epsilonMatrix, Wx)
         if torch.any(torch.isnan(torch.reciprocal(denom))):
             print(f'nans present when doing 1/x')
