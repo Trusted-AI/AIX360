@@ -130,7 +130,7 @@ class CoFrNet_Explainer(DIExplainer):
         var_num: For "print_co_fr": Variable (index of input feature) for Which to Display Ladder, Default 6
         '''
         
-        def importances(self):
+        def importances():
             final_layer_weights = vars(self.model.layers[-1])['_parameters']['weight'].data.numpy()
             weights_by_node = final_layer_weights.T
             averaged = np.average(weights_by_node, axis = 1)
@@ -144,7 +144,7 @@ class CoFrNet_Explainer(DIExplainer):
                 #print(vars(self.model.layers[-1])['_parameters']['weight'].data.numpy().T)
     
 
-        def print_co_fr(self, max_layer_num = 10, var_num = 6): 
+        def print_co_fr(max_layer_num = 10, var_num = 6): 
             #max_layer_num = chosen depth of ladder to show (10 layers, index would be 9)
             #var_num = variable for which to display ladder
             thingToPrint = ""
