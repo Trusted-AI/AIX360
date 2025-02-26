@@ -124,6 +124,16 @@ extra_requires = {
         "lime",
         "shap==0.42.1",
     ],
+    "glance":[
+        "numpy==1.23.5",
+        "pandas==1.5.3",
+        "scikit-learn==1.5.2",
+        "dice-ml==0.11",
+        "tqdm==4.66.1",
+        "igraph==0.11.4",
+        "colorama==0.4.6",
+        "xgboost==2.0.3"
+    ],
 }
 
 # minimal dependencies in install_requires
