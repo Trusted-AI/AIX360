@@ -18,6 +18,7 @@ extra_requires = {
         "scipy>=0.17,<=1.10.1",
         "scikit-learn<1.2.0",
         "cvxpy>=1.1",
+        "ecos",
         "numpy<=1.24.3",
     ],
     "profwt": [
