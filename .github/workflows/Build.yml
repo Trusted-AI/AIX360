@@ -19,16 +19,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.6"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -51,16 +51,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -80,16 +80,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -110,16 +110,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -139,16 +139,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -168,16 +168,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -200,16 +200,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -229,16 +229,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -263,16 +263,16 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -291,16 +291,16 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -328,16 +328,16 @@ jobs:
       fail-fast: false
       matrix:
         #        os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04]
+        os: [ubuntu-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -367,10 +367,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -396,16 +396,16 @@ jobs:
       fail-fast: false
       matrix:
         #        os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -427,16 +427,16 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
@@ -455,16 +455,16 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Step 1 - checkout aix360 repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Step 2 - set up python version
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
