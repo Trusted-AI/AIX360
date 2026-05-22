@@ -381,7 +381,10 @@ jobs:
         run: pip3 install pytest nbmake wheel --upgrade setuptools
 
       - name: Step 5 - Install aix360 with imd algorithm related dependencies
-        run: pip3 install .[imd]
+        run: |
+          export CFLAGS="-I$(brew --prefix graphviz)/include"
+          export LDFLAGS="-L$(brew --prefix graphviz)/lib"
+          pip3 install .[imd]
 
       - name: Step 5 - Test IMD
         run: python ./tests/imd/test_imd.py
