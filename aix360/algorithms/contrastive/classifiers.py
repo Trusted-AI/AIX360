@@ -1,6 +1,7 @@
 import abc
 import sys
 import numpy as np
+import tensorflow as tf
 import torch
 
 # compatibility with Python 2 and 3 when using ABCMeta
@@ -58,12 +59,16 @@ class KerasClassifier(BaseClassifier):
         _nb_classes:  number of outputs (e.g. binary classifier has 1 output)
         _input_shape: shape of 1 input sample
     """
-    def __init__(self, model, input_layer=0, output_layer=0):
+    def __init__(self, model, input_layer=0, output_layer=0, device=None):
 
         """Initialize KerasClassifier.
 
         Args:
             model: a trained keras classifier model.
+            device: optional device string (e.g. '/cpu:0') to pin symbolic
+                forward passes to. Use when the model was built on a
+                specific device and functional re-applications must stay
+                there (see CELEBAModel CPU pinning).
         """
 
         import keras.backend as k
@@ -71,6 +76,7 @@ class KerasClassifier(BaseClassifier):
         super(KerasClassifier, self).__init__()
 
         self._model = model
+        self.device = device
 
         if hasattr(model, 'inputs'):
             self._input = model.inputs[input_layer]
@@ -104,7 +110,16 @@ class KerasClassifier(BaseClassifier):
         return(prob, predicted_class, prob_str)
 
     def predictsym(self, x):
-        return self._model(x)
+        # If the underlying Keras model was built on a specific device
+        # (e.g. CPU to dodge TF1.15 cuBLAS-on-Ampere bugs), pin the
+        # symbolic call to that device too. Functional Keras-model calls
+        # otherwise inherit the caller's tf.device scope, defeating the
+        # original placement.
+        device = getattr(self, 'device', None)
+        if device is None:
+            return self._model(x)
+        with tf.device(device):
+            return self._model(x)
 
 
 class PytorchClassifier():

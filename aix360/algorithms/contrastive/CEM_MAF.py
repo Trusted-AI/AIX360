@@ -1,8 +1,9 @@
 from __future__ import print_function
 
-from aix360.algorithms.lwbe import LocalWBExplainer 
+from aix360.algorithms.lwbe import LocalWBExplainer
 from aix360.algorithms.contrastive.CEM_MAF_aen_PN import AEADEN as AEADEN_PN
 from aix360.algorithms.contrastive.CEM_MAF_aen_PP import AEADEN as AEADEN_PP
+import tensorflow as tf
 from tensorflow.contrib.keras.api.keras.models import model_from_json
 
 import os
@@ -11,6 +12,7 @@ import random
 import time
 import numpy as np
 from skimage.segmentation import slic
+from contextlib import nullcontext as _nullcontext
 
 
 class CEM_MAFImageExplainer(LocalWBExplainer):
@@ -40,7 +42,8 @@ class CEM_MAFImageExplainer(LocalWBExplainer):
 
     def explain_instance(self, sess, input_img, input_latent, arg_mode, arg_kappa, arg_binary_search_steps,
                         arg_max_iterations, arg_initial_const, arg_gamma, arg_beta, arg_attr_reg=1,
-                        arg_attr_penalty_reg=1, arg_latent_square_loss_reg=1):
+                        arg_attr_penalty_reg=1, arg_latent_square_loss_reg=1, gan_device=None,
+                        attr_classifier_device=None):
         """Explains an input instance input_image e.g. celebA is shape (1, 224, 224, 3)
 
         Hard coded batch_size=1, assuming we provide explanation for 1 input_image at a time. Returns
@@ -92,11 +95,13 @@ class CEM_MAFImageExplainer(LocalWBExplainer):
                             mode = arg_mode, batch_size=1, kappa=arg_kappa, init_learning_rate=1e-2,
                             binary_search_steps=arg_binary_search_steps, max_iterations=arg_max_iterations,
                             initial_const=arg_initial_const, gamma=arg_gamma, attr_reg=arg_attr_reg,
-                            attr_penalty_reg=arg_attr_penalty_reg, latent_square_loss_reg=arg_latent_square_loss_reg)
+                            attr_penalty_reg=arg_attr_penalty_reg, latent_square_loss_reg=arg_latent_square_loss_reg,
+                            gan_device=gan_device, attr_classifier_device=attr_classifier_device)
 
             adv_img = attack_pn.attack(input_img, target_label, input_latent)
             adv_prob, adv_class, adv_prob_str = self._wbmodel.predict_long(adv_img)
-            attr_mod = self.check_attributes_celebA(self._attributes, input_img, adv_img)
+            attr_mod = self.check_attributes_celebA(self._attributes, input_img, adv_img,
+                                                   attr_classifier_device=attr_classifier_device)
             
             INFO = "[INFO] Orig class:{}, Adv class:{}, Orig prob:{}, Adv prob:{}".format(orig_class, adv_class, orig_prob_str, adv_prob_str)
 
@@ -118,7 +123,8 @@ class CEM_MAFImageExplainer(LocalWBExplainer):
             attack_pp = AEADEN_PP(sess, self._wbmodel, mask_mat=mask_mat, mode=arg_mode, batch_size=1, \
                                 kappa=arg_kappa, init_learning_rate=1e-2, binary_search_steps=arg_binary_search_steps, \
                                 max_iterations=arg_max_iterations, initial_const=arg_initial_const, beta=arg_beta, \
-                                gamma=arg_gamma, attributes=self._attributes, aix360_path=self._aix360_path)
+                                gamma=arg_gamma, attributes=self._attributes, aix360_path=self._aix360_path,
+                                attr_classifier_device=attr_classifier_device)
 
 
             target = np.zeros(self._wbmodel._nb_classes)
@@ -152,7 +158,7 @@ class CEM_MAFImageExplainer(LocalWBExplainer):
         return(adv_img, attr_mod, INFO)
 
       
-    def check_attributes_celebA(self, attributes, x, y): 
+    def check_attributes_celebA(self, attributes, x, y, attr_classifier_device=None):
         """
         Load attribute classifiers and check which attributes in original image x
         are modified in adversarial image y
@@ -161,6 +167,12 @@ class CEM_MAFImageExplainer(LocalWBExplainer):
             attributes (str list): list of attributes to load attribute classifiers for
             x (numpy.ndarray): original image
             y (numpy.ndarray): adversarial image
+            attr_classifier_device (str or None): TF device on which to build and
+                run the attribute classifiers (e.g. '/cpu:0'). On TF1.15 + Ampere
+                (A100/H100, sm_80), the bundled cuBLAS-10 has no SGEMM kernels
+                for sm_80; running these conv classifiers on the GPU silently
+                returns non-deterministic / NaN-corrupted outputs. Pass
+                '/cpu:0' on Ampere/Hopper. Leave None on pre-Ampere GPUs.
 
         Returns:
             str: string detailing which attributes were added to (or removed from)
@@ -169,20 +181,22 @@ class CEM_MAFImageExplainer(LocalWBExplainer):
 
         orig_attr_score = np.zeros((len(attributes),1))
         adv_attr_score = np.zeros((len(attributes),1))
-        for i in range(len(attributes)):
-            attr = attributes[i]
-            # load json and create model
-            json_file_name = "../../aix360/models/CEM_MAF/simple_{}_model.json".format(attr)
-            json_file = open(json_file_name, 'r')
-            loaded_model_json = json_file.read()
-            json_file.close()
-            loaded_model = model_from_json(loaded_model_json)
-            # load weights into new model
-            weight_file_name = "../../aix360/models/CEM_MAF/simple_{}_weights.h5".format(attr)
-            loaded_model.load_weights(weight_file_name)
+        attr_device_ctx = tf.device(attr_classifier_device) if attr_classifier_device else _nullcontext()
+        with attr_device_ctx:
+            for i in range(len(attributes)):
+                attr = attributes[i]
+                # load json and create model
+                json_file_name = "../../aix360/models/CEM_MAF/attr_model/simple_{}_model.json".format(attr)
+                json_file = open(json_file_name, 'r')
+                loaded_model_json = json_file.read()
+                json_file.close()
+                loaded_model = model_from_json(loaded_model_json)
+                # load weights into new model
+                weight_file_name = "../../aix360/models/CEM_MAF/attr_model/simple_{}_weights.h5".format(attr)
+                loaded_model.load_weights(weight_file_name)
 
-            orig_attr_score[i] = loaded_model.predict(x)[0]
-            adv_attr_score[i] = loaded_model.predict(y)[0]
+                orig_attr_score[i] = loaded_model.predict(x)[0]
+                adv_attr_score[i] = loaded_model.predict(y)[0]
 
         # pre-determined thresholds for changes in prediction values
         thresh_pos = np.zeros((len(attributes),1))

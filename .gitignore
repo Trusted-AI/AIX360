@@ -111,3 +111,22 @@ venv.bak/
 **/ford_data/Ford*
 **/climate_data/*.csv
 **/diabetes.csv
+
+# CEM_MAF: runtime-fetched from Hugging Face by dwnld_CEM_MAF_celebA.py
+aix360/models/CEM_MAF/celebA
+aix360/models/CEM_MAF/attr_model/simple_*
+aix360/models/CEM_MAF/gan/gan_weights.safetensors
+aix360/models/CEM_MAF/gan/gan_static_kwargs.json
+aix360/data/celeba_data/[0-9]*_*
+
+# Karras PGG upstream (Google Drive pickle, no longer used at runtime)
+aix360/algorithms/contrastive/progressive_growing_of_gans/
+
+# Nbconvert side output
+examples/contrastive/*.executed.ipynb
+
+# setup.py generated
+aix360/version.py
+
+# Claude Code project instructions (local only)
+CLAUDE.md

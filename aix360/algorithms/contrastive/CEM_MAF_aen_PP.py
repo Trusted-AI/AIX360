@@ -18,13 +18,15 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.contrib.keras.api.keras.models import Model, Sequential, model_from_json
 from tensorflow.contrib.keras.api.keras.callbacks import ModelCheckpoint
+from contextlib import nullcontext as _nullcontext
 
 class AEADEN:
     def __init__(self, sess, model, mask_mat, mode, batch_size, kappa, init_learning_rate,
-                 binary_search_steps, max_iterations, initial_const, beta, gamma, attributes, aix360_path):
+                 binary_search_steps, max_iterations, initial_const, beta, gamma, attributes, aix360_path,
+                 attr_classifier_device=None):
         """
-        Initialize PP explainer object. 
-        
+        Initialize PP explainer object.
+
         Args:
             sess (tensorflow.python.client.session.Session): Tensorflow session
             model: KerasClassifier that contains a trained model to be explained
@@ -36,12 +38,17 @@ class AEADEN:
             init_learning_rate (float): initial learning rate for gradient descent optimizer
             binary_search_steps (int): Controls number of random restarts to find best PN
             max_iterations (int): Max number iterations to run some version of gradient descent on
-                PP optimization problem from a single random initialization, i.e., total 
+                PP optimization problem from a single random initialization, i.e., total
                 number of iterations wll be arg_binary_search_steps * arg_max_iterations
             initial_const (int): Constant used for upper/lower bounds in binary search
             gamma (float): Penalty parameter encouraging addition of attributes for PP
             attributes (str list): list of attributes to load attribute classifiers for
-            aix360_path (str): path to aix360 used to determine paths to pretrained attribute classifiers 
+            aix360_path (str): path to aix360 used to determine paths to pretrained attribute classifiers
+            attr_classifier_device (str or None): TF device for the attribute
+                classifiers. Pass '/cpu:0' on Ampere/Hopper (A100/H100) to
+                avoid the TF1.15 + cuBLAS-10 SGEMM bug for sm_80, which
+                otherwise produces non-deterministic / NaN-corrupted
+                attr_score values feeding the PP loss.
         """
 
 #        image_size, num_channels, nun_classes = model.image_size, model.num_channels, model.num_labels
@@ -71,23 +78,26 @@ class AEADEN:
         
         ### Load attribute classifier
         nn_type = "simple"
-        #import copy
         attr_model_list=[]
-        for attr in self.attributes:
-            # load test data into memory using Image Data Generator
-#            print("Loading data for " + attr + " into memory")
-            # load json and create model
-            json_file_name = os.path.join(aix360_path, "models/CEM_MAF/{}_{}_model.json".format(nn_type, attr))
-            json_file = open(json_file_name, 'r')
-            loaded_model_json = json_file.read()
-            json_file.close()
-            loaded_model = model_from_json(loaded_model_json)
-            # load weights into new model
-            weight_file_name = os.path.join(aix360_path, "models/CEM_MAF/{}_{}_weights.h5".format(nn_type, attr))
-            loaded_model.load_weights(weight_file_name)
-            print("Loaded model for " + attr + " from disk")
-            attr_model_list.append(loaded_model)
-        
+        # See [[project-cem-maf-vuln]] / gan_device — TF1.15 + cuBLAS-10 +
+        # Ampere SGEMM bug also affects these conv classifiers; pin to
+        # '/cpu:0' on A100/H100.
+        self.attr_classifier_device = attr_classifier_device
+        attr_device_ctx = tf.device(attr_classifier_device) if attr_classifier_device else _nullcontext()
+        with attr_device_ctx:
+            for attr in self.attributes:
+                # load json and create model
+                json_file_name = os.path.join(aix360_path, "models/CEM_MAF/attr_model/{}_{}_model.json".format(nn_type, attr))
+                json_file = open(json_file_name, 'r')
+                loaded_model_json = json_file.read()
+                json_file.close()
+                loaded_model = model_from_json(loaded_model_json)
+                # load weights into new model
+                weight_file_name = os.path.join(aix360_path, "models/CEM_MAF/attr_model/{}_{}_weights.h5".format(nn_type, attr))
+                loaded_model.load_weights(weight_file_name)
+                print("Loaded model for " + attr + " from disk")
+                attr_model_list.append(loaded_model)
+
         print("# of attr models is",len(attr_model_list))
 
 
@@ -184,14 +194,16 @@ class AEADEN:
         if self.mode == "PP":
             self.attr_score = tf.constant(0, dtype="float32")
             self.attr_score_s = tf.constant(0, dtype="float32")
-            #print(attr_model_list[0].predict(self.adv_img)) 
-            #print(loaded_model.predict(self.adv_img)) 
-            for i in range(len(attr_model_list)):
-                self.attr_score = self.attr_score + tf.maximum(attr_model_list[i](self.adv_img) - attr_model_list[i](self.orig_img),tf.constant(0, tf.float32))
-                self.attr_score_s = self.attr_score_s + tf.maximum(attr_model_list[i](self.adv_img_s) - attr_model_list[i](self.orig_img),tf.constant(0, tf.float32))
-                #print(self.attr_score.shape) 
-            self.attr_score = tf.squeeze(self.attr_score)
-            self.attr_score_s = tf.squeeze(self.attr_score_s)  
+            # Re-enter attr-classifier device context for the symbolic forward
+            # passes — the variables live on CPU but Conv2D ops would still
+            # default to GPU otherwise.
+            attr_use_ctx = tf.device(self.attr_classifier_device) if self.attr_classifier_device else _nullcontext()
+            with attr_use_ctx:
+                for i in range(len(attr_model_list)):
+                    self.attr_score = self.attr_score + tf.maximum(attr_model_list[i](self.adv_img) - attr_model_list[i](self.orig_img),tf.constant(0, tf.float32))
+                    self.attr_score_s = self.attr_score_s + tf.maximum(attr_model_list[i](self.adv_img_s) - attr_model_list[i](self.orig_img),tf.constant(0, tf.float32))
+                self.attr_score = tf.squeeze(self.attr_score)
+                self.attr_score_s = tf.squeeze(self.attr_score_s)
            #self.ImgToEnforceLabel_Score = model.predict(self.adv_img)
             #self.ImgToEnforceLabel_Score_s = model.predict(self.adv_img_s)
 # %%change%%
@@ -263,7 +275,7 @@ class AEADEN:
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         start_vars = set(x.name for x in tf.global_variables())
         # self.train = optimizer.minimize(self.Loss_ToOptimize, var_list=[self.adv_img_s], global_step=self.global_step)
-        self.train = optimizer.minimize(self.Loss_ToOptimize, var_list=[self.mask_vec_s], global_step=self.global_step)
+        self.train = optimizer.minimize(self.Loss_ToOptimize, var_list=[self.mask_vec_s], global_step=self.global_step, colocate_gradients_with_ops=True)
         end_vars = tf.global_variables()
         new_vars = [x for x in end_vars if x.name not in start_vars]
 
