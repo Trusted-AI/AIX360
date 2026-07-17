@@ -1,11 +1,21 @@
 import os
-import requests
-import pandas as pd
-from zipfile import ZipFile
 from io import BytesIO
+from urllib.parse import urlparse
+from zipfile import ZipFile
+
+import pandas as pd
+import requests
 
 
 class FordDataset:
+    _DEFAULT_URLS = {
+        "A": "https://timeseriesclassification.com/aeon-toolkit/FordA.zip",
+        "B": "https://timeseriesclassification.com/aeon-toolkit/FordB.zip",
+    }
+    _ALLOWED_NETLOCS = {"timeseriesclassification.com"}
+    _REQUEST_TIMEOUT = 30
+    _MAX_DOWNLOAD_SIZE = 100 * 1024 * 1024
+
     """
     This dataset describes engine noise with reading of length 500 from an automotive subsystem.
     Train and test data sets were collected in typical operating conditions, with minimal noise
@@ -41,19 +51,32 @@ class FordDataset:
         )
 
         self.category = "A" if category_a else "B"
-        ford_data_url = (
-            url
-            if url is not None
-            else "https://timeseriesclassification.com/aeon-toolkit/Ford{}.zip".format(
-                self.category
-            )
-        )
+        ford_data_url = url if url is not None else self._DEFAULT_URLS[self.category]
 
         self.input_length = 500
         if not os.path.exists(self.train_data_file):
-            response = requests.get(ford_data_url)
-            byte_content = ZipFile(BytesIO(response.content))
-            byte_content.extractall(self.data_folder)
+            self._download_and_extract(ford_data_url)
+
+    def _validate_url(self, url):
+        parsed_url = urlparse(url)
+        if parsed_url.scheme != "https" or parsed_url.netloc not in self._ALLOWED_NETLOCS:
+            raise ValueError("Unsupported dataset URL")
+
+    def _download_and_extract(self, url):
+        self._validate_url(url)
+        response = requests.get(url, timeout=self._REQUEST_TIMEOUT)
+        response.raise_for_status()
+        if len(response.content) > self._MAX_DOWNLOAD_SIZE:
+            raise ValueError("Dataset download exceeds size limit")
+
+        with ZipFile(BytesIO(response.content)) as zip_file:
+            for member in zip_file.infolist():
+                member_path = os.path.realpath(
+                    os.path.join(self.data_folder, member.filename)
+                )
+                if os.path.commonpath([self.data_folder, member_path]) != self.data_folder:
+                    raise ValueError("Zip archive contains unsafe paths")
+            zip_file.extractall(self.data_folder)
 
     def load_data(self):
         """
