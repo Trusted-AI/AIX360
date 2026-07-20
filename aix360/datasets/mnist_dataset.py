@@ -45,7 +45,7 @@ class MNISTDataset():
         for name in files:
             if not os.path.exists(self._dirpath + "/" + name):
                 print("retrieving file", name)
-                urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/' + name, self._dirpath + "/" + name)
+                urllib.request.urlretrieve('https://ossci-datasets.s3.amazonaws.com/mnist/' + name, self._dirpath + "/" + name)
                 print("retrieved")
 
         train_data       = extract_data(self._dirpath + "/train-images-idx3-ubyte.gz", 60000)
