@@ -37,6 +37,7 @@ class CIFARDataset():
                 print("retrieved")
             #now extract the files
             #print("extracting files")
+            # need to check for tar slip
             tar = tarfile.open(full_name, "r:gz")
             tar.extractall(self._dirpath)
             tar.close()        
