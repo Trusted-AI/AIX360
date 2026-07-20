@@ -12,15 +12,18 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # job to build CEM on python 3.6.
-  build-cem-on-py36:
+  # job to build CEM on python 3.7.
+  build-cem-on-py37:
     # The type of runner that the job will run on
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
         #os: [ubuntu-18.04, ubuntu-latest, macos-latest, windows-latest]
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.6"]
+        # Runners pinned to versions that still have Python 3.7 in
+        # actions/python-versions: ubuntu-22.04 (24.04 dropped it) and
+        # macos-13 (arm64 macos-latest never had a 3.7 build).
+        os: [ubuntu-22.04, macos-13, windows-latest]
+        python-version: ["3.7"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
