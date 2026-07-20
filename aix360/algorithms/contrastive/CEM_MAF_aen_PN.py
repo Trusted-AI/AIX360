@@ -24,7 +24,7 @@ from tensorflow.contrib.keras.api.keras.callbacks import ModelCheckpoint
 import os
 from contextlib import nullcontext as _nullcontext
 
-from aix360.algorithms.contrastive.progressive_growing_of_gans.networks import G_paper
+from aix360.algorithms.contrastive.gan_networks import G_paper
 
 # SHA-256 of the trusted GAN artifacts under aix360/models/CEM_MAF/gan/.
 # Pinned to detect tampering or accidental corruption regardless of how the
