@@ -1,13 +1,23 @@
 import os
-import requests
+from io import BytesIO
+from urllib.parse import urlparse
+from zipfile import ZipFile
+
 import numpy as np
 import pandas as pd
-from zipfile import ZipFile
-from io import BytesIO
+import requests
 from tensorflow import keras
 
 
 class ClimateDataset:
+    _DEFAULT_URL = (
+        "https://storage.googleapis.com/tensorflow/tf-keras-datasets/"
+        "jena_climate_2009_2016.csv.zip"
+    )
+    _ALLOWED_NETLOCS = {"storage.googleapis.com"}
+    _REQUEST_TIMEOUT = 30
+    _MAX_DOWNLOAD_SIZE = 100 * 1024 * 1024
+
     """
     The dataset is from Max Planck Institute for Biogeochemistry, Keras examples.
 
@@ -35,18 +45,12 @@ class ClimateDataset:
         self.data_file = os.path.realpath(
             os.path.join(self.data_folder, "jena_climate_2009_2016.csv")
         )
-        climate_data_url = (
-            url
-            if url is not None
-            else "https://storage.googleapis.com/tensorflow/tf-keras-datasets/jena_climate_2009_2016.csv.zip"
-        )
+        climate_data_url = url if url is not None else self._DEFAULT_URL
 
         self.input_length = 500
         # download data
         if not os.path.exists(self.data_file):
-            response = requests.get(climate_data_url)
-            byte_content = ZipFile(BytesIO(response.content))
-            byte_content.extractall(self.data_folder)
+            self._download_and_extract(climate_data_url)
 
         self.time_column = "Date Time"
         self.feature_names = [
@@ -65,6 +69,27 @@ class ClimateDataset:
             "Maximum wind speed",
             "Wind direction in degrees",
         ]
+
+    def _validate_url(self, url):
+        parsed_url = urlparse(url)
+        if parsed_url.scheme != "https" or parsed_url.netloc not in self._ALLOWED_NETLOCS:
+            raise ValueError("Unsupported dataset URL")
+
+    def _download_and_extract(self, url):
+        self._validate_url(url)
+        response = requests.get(url, timeout=self._REQUEST_TIMEOUT)
+        response.raise_for_status()
+        if len(response.content) > self._MAX_DOWNLOAD_SIZE:
+            raise ValueError("Dataset download exceeds size limit")
+
+        with ZipFile(BytesIO(response.content)) as zip_file:
+            for member in zip_file.infolist():
+                member_path = os.path.realpath(
+                    os.path.join(self.data_folder, member.filename)
+                )
+                if os.path.commonpath([self.data_folder, member_path]) != self.data_folder:
+                    raise ValueError("Zip archive contains unsafe paths")
+            zip_file.extractall(self.data_folder)
 
     def _normalize(self, data, train_split):
         data_mean = data[:train_split].mean(axis=0)
