@@ -14,15 +14,44 @@
 
 
 import sys
+import hashlib
+import json
 import tensorflow as tf
 import numpy as np
-import pickle
+from safetensors.numpy import load_file as load_safetensors
 from tensorflow.contrib.keras.api.keras.models import Model, Sequential, model_from_json
 from tensorflow.contrib.keras.api.keras.callbacks import ModelCheckpoint
 import os
+from contextlib import nullcontext as _nullcontext
+
+from aix360.algorithms.contrastive.progressive_growing_of_gans.networks import G_paper
+
+# SHA-256 of the trusted GAN artifacts under aix360/models/CEM_MAF/gan/.
+# Pinned to detect tampering or accidental corruption regardless of how the
+# file reached disk (downloader, manual copy, etc.).
+_EXPECTED_SHA256 = {
+    "gan_weights.safetensors": "3897bd712f7db7619c6e32eee8955e2d6714fcb4a3fdbc7f56267c2c69129d19",
+    "gan_static_kwargs.json":  "9215b500feeb4bcaa5d388d9f8087a07be3eb065d8321248ce8f4ac5757941d6",
+}
+
+
+def _verify_sha256(path):
+    name = os.path.basename(path)
+    if name not in _EXPECTED_SHA256:
+        raise RuntimeError("No pinned hash for {}".format(name))
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    actual = h.hexdigest()
+    expected = _EXPECTED_SHA256[name]
+    if actual != expected:
+        raise RuntimeError(
+            "SHA-256 mismatch for {}: expected {}, got {}".format(path, expected, actual)
+        )
 
 class AEADEN:
-    def __init__(self, sess, model, attributes, aix360_path, mode, batch_size, kappa, init_learning_rate, binary_search_steps, max_iterations, initial_const, gamma, attr_reg, attr_penalty_reg, latent_square_loss_reg):
+    def __init__(self, sess, model, attributes, aix360_path, mode, batch_size, kappa, init_learning_rate, binary_search_steps, max_iterations, initial_const, gamma, attr_reg, attr_penalty_reg, latent_square_loss_reg, gan_device=None, attr_classifier_device=None):
         """
         Initialize PN explainer object. 
         
@@ -45,8 +74,17 @@ class AEADEN:
             attr_reg (float): Penalty parameter on regularization of PN to be predicted different from 
                 original image
             attr_penalty_reg (float): Penalty regularizing PN from being too different from original image
-            latent_square_loss_reg (float): Penalty regularizing PN from being too different from original 
+            latent_square_loss_reg (float): Penalty regularizing PN from being too different from original
                 image in the latent space
+            gan_device (str or None): TF device for the GAN forward pass.
+                Pass '/cpu:0' on Ampere/Hopper (A100/H100) — the bundled
+                cuBLAS-10 in TF1.15 has no SGEMM kernels for sm_80 and
+                NaN-corrupts the GAN forward through pixel_norm's rsqrt.
+            attr_classifier_device (str or None): TF device for the attribute
+                classifiers. Same TF1.15 + cuBLAS-10 + Ampere SGEMM bug — pass
+                '/cpu:0' on A100/H100 or attribute classifier outputs are
+                non-deterministic / NaN-corrupted, which silently corrupts
+                the attr_score and attr_penalty terms in the loss.
         """
 
 
@@ -93,43 +131,68 @@ class AEADEN:
         nn_type = "simple"
         #import copy
         attr_model_list=[]
- #       attr_threshold_idx=[]
- #       count=0
-        for attr in self.attributes:
-            # load test data into memory using Image Data Generator
-#            print("Loading data for " + attr + " into memory")
-            # load json and create model
-            json_file_name = os.path.join(aix360_path, "models/CEM_MAF/{}_{}_model.json".format(nn_type, attr))
-            json_file = open(json_file_name, 'r')
-            loaded_model_json = json_file.read()
-            json_file.close()
-            loaded_model = model_from_json(loaded_model_json)
-            # load weights into new model
-            weight_file_name = os.path.join(aix360_path, "models/CEM_MAF/{}_{}_weights.h5".format(nn_type, attr))
-            loaded_model.load_weights(weight_file_name)
-            print("Loaded model for " + attr + " from disk")
-            attr_model_list.append(loaded_model)
-#            if self.mode == "PP":
-#                pass
-#            else:
-#                attr_threshold_idx=tf.cond(loaded_model(self.orig_img)<= self.attr_threshold, lambda: attr_threshold_idx.append(count), lambda: attr_threshold_idx)
-#            count=count+1
+        # Optional device pin for the attribute classifiers. Same TF1.15 +
+        # cuBLAS-10 + Ampere SGEMM bug as gan_device — pass
+        # attr_classifier_device='/cpu:0' on A100/H100 or these conv
+        # classifiers return non-deterministic / NaN-corrupted predictions,
+        # which silently corrupts attr_score / attr_penalty in the loss.
+        self.attr_classifier_device = attr_classifier_device
+        attr_device_ctx = tf.device(attr_classifier_device) if attr_classifier_device else _nullcontext()
+        with attr_device_ctx:
+            for attr in self.attributes:
+                # load json and create model
+                json_file_name = os.path.join(aix360_path, "models/CEM_MAF/attr_model/{}_{}_model.json".format(nn_type, attr))
+                json_file = open(json_file_name, 'r')
+                loaded_model_json = json_file.read()
+                json_file.close()
+                loaded_model = model_from_json(loaded_model_json)
+                # load weights into new model
+                weight_file_name = os.path.join(aix360_path, "models/CEM_MAF/attr_model/{}_{}_weights.h5".format(nn_type, attr))
+                loaded_model.load_weights(weight_file_name)
+                print("Loaded model for " + attr + " from disk")
+                attr_model_list.append(loaded_model)
         print("# of attr models is",len(attr_model_list))
 #        print("# of attr smaller than THR is",len(attr_threshold_idx))
 
-        # load gan
-        # Import official CelebA-HQ networks.
-        with open(os.path.join(aix360_path, 'algorithms/contrastive/progressive_growing_of_gans/karras2018iclr-celebahq-1024x1024.pkl'), 'rb') as file:
-            G, D, Gs = pickle.load(file)
-        # inputs, redundent ...
-        # in_labels = tf.placeholder(tf.float32, shape=(None, 0))
+        # Load GAN from hash-verified safetensors + JSON sidecar.
+        # Replaces a pickle.load that exec()'d embedded source (CWE-502).
+        gan_dir = os.path.join(aix360_path, "models", "CEM_MAF", "gan")
+        weights_path = os.path.join(gan_dir, "gan_weights.safetensors")
+        kwargs_path = os.path.join(gan_dir, "gan_static_kwargs.json")
+        _verify_sha256(weights_path)
+        _verify_sha256(kwargs_path)
+        with open(kwargs_path) as f:
+            gan_meta = json.load(f)
+        gan_weights = load_safetensors(weights_path)
+
         in_labels = tf.constant(0, shape=(1, 0))
-        # get the GAN network, 
-        with tf.variable_scope(Gs.scope, reuse=tf.AUTO_REUSE):
-            out_image = Gs._build_func(self.adv_latent , in_labels, **Gs.static_kwargs, reuse=True)
-            tanspose_image = tf.transpose(out_image, perm=[0, 2, 3, 1])
-            resize_image= tf.image.resize_images(tanspose_image, [224, 224])
-            self.adv_img = tf.clip_by_value(resize_image/2, -0.5, 0.5)
+        gan_scope = gan_meta["scope"]
+        # Optional device pin for the GAN. TF1.15's bundled cuBLAS-10 has no
+        # SGEMM kernels for Ampere (sm_80, e.g. A100), which silently
+        # corrupts the GAN forward to NaN/Inf via pixel_norm's rsqrt — pass
+        # gan_device='/cpu:0' on Ampere/Hopper. On pre-Ampere GPUs (V100,
+        # T4, P100, ...) leave gan_device=None for full-GPU speed.
+        gan_device_ctx = tf.device(gan_device) if gan_device else _nullcontext()
+        with gan_device_ctx, tf.variable_scope(gan_scope, reuse=tf.AUTO_REUSE):
+            # G_paper now emits NHWC directly (networks.py was patched to
+            # NHWC so backward works on CPU and so non-NCHW kernels can
+            # dispatch on Ampere GPUs). The earlier explicit transpose is
+            # therefore unnecessary.
+            out_image = G_paper(self.adv_latent, in_labels, **gan_meta["static_kwargs"])
+            resize_image = tf.image.resize_images(out_image, [224, 224])
+            self.adv_img = tf.clip_by_value(resize_image / 2, -0.5, 0.5)
+
+        gan_assigns = []
+        for var in tf.global_variables():
+            if not var.name.startswith(gan_scope + "/"):
+                continue
+            localname = var.name[len(gan_scope) + 1:].split(":")[0]
+            if localname in gan_weights:
+                gan_assigns.append(tf.assign(var, gan_weights[localname]))
+        if not gan_assigns:
+            raise RuntimeError("No GAN variables matched the safetensors keys under scope {}".format(gan_scope))
+        self.gan_assigns = gan_assigns
+        self._gan_weights_loaded = False
         
         self.adv_updater = tf.assign(self.adv_latent, self.assign_adv_latent)
 
@@ -144,21 +207,22 @@ class AEADEN:
 #            self.ImgToEnforceLabel_Score = model.predict(self.adv_img)
             self.ImgToEnforceLabel_Score = model.predictsym(self.adv_img)
         # Attribute classifier score
-        self.attr_score = tf.constant(0, dtype="float32")        
-        self.attr_penalty = tf.constant(0, dtype="float32")  
-        if self.mode == "PP":
-            for i in range(len(attr_model_list)):
-                self.attr_score = self.attr_score + tf.maximum(attr_model_list[i](self.adv_img) - attr_model_list[i](self.orig_img),tf.constant(0, tf.float32))
-                self.attr_score = tf.squeeze(self.attr_score) 
-           #self.ImgToEnforceLabel_Score = model.predict(self.adv_img)
-            #self.ImgToEnforceLabel_Score_s = model.predict(self.adv_img_s)
-        elif self.mode == "PN":
-            for i in range(len(attr_model_list)):
-                self.attr_score = self.attr_score + tf.maximum(attr_model_list[i](self.orig_img) - attr_model_list[i](self.adv_img),tf.constant(0, tf.float32))
-                self.attr_score = tf.squeeze(self.attr_score)        
-                #self.attr_penalty = tf.squeeze(self.attr_penalty)                 
-                self.attr_penalty = self.attr_penalty + tf.multiply(tf.cond(tf.squeeze(attr_model_list[i](self.orig_img)) <= self.attr_threshold, lambda: tf.constant(1, tf.float32), lambda: tf.constant(0, tf.float32)),tf.squeeze(attr_model_list[i](self.adv_img)))
-                #tf.maximum(attr_model_list[i](self.orig_img) - attr_model_list[i](self.adv_img),tf.constant(0, tf.float32))
+        self.attr_score = tf.constant(0, dtype="float32")
+        self.attr_penalty = tf.constant(0, dtype="float32")
+        # Re-enter the attr-classifier device context for the symbolic forward
+        # passes — without this, Conv2D ops can be placed on GPU even though
+        # variables live on CPU, which still hits the cuBLAS-10 SGEMM bug.
+        attr_use_ctx = tf.device(self.attr_classifier_device) if self.attr_classifier_device else _nullcontext()
+        with attr_use_ctx:
+            if self.mode == "PP":
+                for i in range(len(attr_model_list)):
+                    self.attr_score = self.attr_score + tf.maximum(attr_model_list[i](self.adv_img) - attr_model_list[i](self.orig_img),tf.constant(0, tf.float32))
+                    self.attr_score = tf.squeeze(self.attr_score)
+            elif self.mode == "PN":
+                for i in range(len(attr_model_list)):
+                    self.attr_score = self.attr_score + tf.maximum(attr_model_list[i](self.orig_img) - attr_model_list[i](self.adv_img),tf.constant(0, tf.float32))
+                    self.attr_score = tf.squeeze(self.attr_score)
+                    self.attr_penalty = self.attr_penalty + tf.multiply(tf.cond(tf.squeeze(attr_model_list[i](self.orig_img)) <= self.attr_threshold, lambda: tf.constant(1, tf.float32), lambda: tf.constant(0, tf.float32)),tf.squeeze(attr_model_list[i](self.adv_img)))
         # Sum of attributes penalty in attr_threshold_idx  
  #       self.attr_penalty = tf.constant(0, dtype="float32")
  #       if len(attr_threshold_idx)==0:
@@ -194,7 +258,12 @@ class AEADEN:
         self.learning_rate = tf.train.polynomial_decay(self.INIT_LEARNING_RATE, self.global_step, self.MAX_ITERATIONS, 0, power=0.5)
         optimizer = tf.train.GradientDescentOptimizer(self.learning_rate)
         start_vars = set(x.name for x in tf.global_variables())
-        self.train = optimizer.minimize(self.Loss_Overall, var_list=[self.adv_latent], global_step=self.global_step)
+        # colocate_gradients_with_ops places each gradient op on the same
+        # device as its forward op. Without it, TF1 puts every gradient on
+        # the optimizer's device (GPU here) — which on TF1.15 + A100 hits
+        # the cuBLAS-10 SGEMM bug for the celebA ResNet50 backward pass
+        # even though predictsym was pinned to CPU.
+        self.train = optimizer.minimize(self.Loss_Overall, var_list=[self.adv_latent], global_step=self.global_step, colocate_gradients_with_ops=True)
         end_vars = tf.global_variables()
         new_vars = [x for x in end_vars if x.name not in start_vars]
 
@@ -238,6 +307,13 @@ class AEADEN:
                 return x!=y
 
         batch_size = self.batch_size
+
+        # Populate GAN variables from the safetensors weights once per
+        # explainer instance, after the caller's global_variables_initializer
+        # has run. Subsequent attack() calls are no-ops.
+        if not self._gan_weights_loaded:
+            self.sess.run(self.gan_assigns)
+            self._gan_weights_loaded = True
 
         # set the lower and upper bounds accordingly
         Const_LB = np.zeros(batch_size)
