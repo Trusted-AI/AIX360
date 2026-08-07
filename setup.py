@@ -68,6 +68,7 @@ extra_requires = {
         "keras==2.3.1",
         "tensorflow==1.14",
         "requests",
+        "safetensors<0.4",  # GAN weights format; <0.4 keeps Py3.6 wheels available
         "scipy>=0.17",
         "scikit-image",
         "torch",
