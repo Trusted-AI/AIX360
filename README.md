@@ -67,7 +67,7 @@ We have developed the package with extensibility in mind. This library is still 
 | Installation keyword | Explainer(s)      | OS                            | Python version |
 | ---------------|---------------| ------------------------------| -------------- |
 | cofrnet        |cofrnet        | macOS, Ubuntu, Windows        | 3.10 |
-| contrastive    |cem, cem_maf    | macOS, Ubuntu, Windows        | 3.6  |
+| contrastive    |cem, cem_maf    | macOS, Ubuntu, Windows        | 3.7  |
 | dipvae         | dipvae| macOS, Ubuntu, Windows        | 3.10 |
 | gce            | gce | macOS, Ubuntu, Windows        | 3.10 |
 | ecertify       | ecertify | macOS, Ubuntu, Windows        | 3.10 |

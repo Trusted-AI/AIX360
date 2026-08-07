@@ -67,8 +67,9 @@ extra_requires = {
     "contrastive": [
         "keras==2.3.1",
         "tensorflow==1.14",
+        "protobuf<3.20",  # TF 1.14's generated _pb2 files reject protobuf 4.x
         "requests",
-        "safetensors<0.4",  # GAN weights format; <0.4 keeps Py3.6 wheels available
+        "safetensors<0.4",  # GAN weights format; 0.3.x is the last series with Py3.7 wheels
         "scipy>=0.17",
         "scikit-image",
         "torch",
