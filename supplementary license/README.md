@@ -6,3 +6,6 @@ aix360/algorithms/contrastive/CEM_aen.py
 aix360/algorithms/contrastive/CEM_MAF_aen_PP.py       
 aix360/algorithms/contrastive/CEM_MAF_aen_PN.py       
 aix360/algorithms/contrastive/CEM_MAF_utils.py        
+
+Additionally, the GAN model used in examples/contrastive/CEM-MAF-CelebA.ipynb is a version taken from https://github.com/tkarras/progressive_growing_of_gans and is maintained under the Creative Commons Attribution-NonCommercial 4.0 International Public
+License.
