@@ -4,6 +4,8 @@
 [![Documentation Status](https://readthedocs.org/projects/aix360/badge/?version=latest)](https://aix360.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/aix360.svg?)](https://badge.fury.io/py/aix360)
 
+✨***NEW:** IBM Research has a new [**In-Context Explainability 360 (ICX360)**](https://github.com/IBM/ICX360/) toolkit that extends explainability to **LLMs**, specifically in terms of the input given to the LLM. Please check it out!* 🚀✨
+
 The AI Explainability 360 toolkit is an open-source library that supports interpretability and explainability of datasets and machine learning models. The AI Explainability 360 Python package includes a comprehensive set of algorithms that cover different dimensions of explanations along with proxy explainability metrics. The AI Explainability 360 toolkit supports tabular, text, images, and time series data. 
 
 The [AI Explainability 360 interactive experience](https://aix360.res.ibm.com/) provides a gentle introduction to the concepts and capabilities by walking through an example use case for different consumer personas. The [tutorials and example notebooks](./examples) offer a deeper, data scientist-oriented introduction. The complete API is also available. 
