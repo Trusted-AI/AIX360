@@ -226,5 +226,5 @@ AIX360 is built with the help of several open source packages. All of these are 
 
 ## License Information
 
-Please view both the [LICENSE](https://github.com/vijay-arya/AIX360/blob/master/LICENSE) file and the folder [supplementary license](https://github.com/vijay-arya/AIX360/tree/master/supplementary%20license) present in the root directory for license information. 
+Please view both the [LICENSE](https://github.com/Trusted-AI/AIX360/blob/master/LICENSE) file and the folder [supplementary license](https://github.com/Trusted-AI/AIX360/tree/master/supplementary%20license) present in the root directory for license information. 
 
