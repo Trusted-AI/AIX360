@@ -4,10 +4,23 @@ import numpy as np
 import pandas as pd
 
 import aix360.algorithms.rule_induction.trxf.metrics as metrics
+from aix360.algorithms.rule_induction.trxf.core import Predicate, Feature, Relation, Conjunction, DnfRuleSet
 from tests.rule_induction.trxf.utilities import create_numerical_test_data, create_numerical_test_ruleset_pos
 
 
 class TestMetrics(TestCase):
+    def test_compute_ruleset_metrics_single_class(self):
+        ruleset = DnfRuleSet([Conjunction([Predicate(Feature('value'), Relation.GT, 0)])], 'yes')
+        for values, labels, expected in [
+            ([1, 2], ['yes', 'yes'], {'tn': 0, 'fp': 0, 'fn': 0, 'tp': 2, 'accuracy': 1.0}),
+            ([-1, -2], ['no', 'no'], {'tn': 2, 'fp': 0, 'fn': 0, 'tp': 0, 'accuracy': 1.0}),
+            ([1, 2], ['no', 'no'], {'tn': 0, 'fp': 2, 'fn': 0, 'tp': 0, 'accuracy': 0.0}),
+            ([-1, -2], ['yes', 'yes'], {'tn': 0, 'fp': 0, 'fn': 2, 'tp': 0, 'accuracy': 0.0}),
+        ]:
+            with self.subTest(values=values, labels=labels):
+                actual = metrics.compute_ruleset_metrics(ruleset, pd.DataFrame({'value': values}), pd.Series(labels))
+                self.assertEqual(actual, expected)
+
     def test_compute_ruleset_metrics(self):
         X, y = create_numerical_test_data(10)
         ruleset = create_numerical_test_ruleset_pos()

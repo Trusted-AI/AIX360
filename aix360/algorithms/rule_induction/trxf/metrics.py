@@ -38,7 +38,7 @@ def compute_ruleset_metrics(ruleset: DnfRuleSet, X: pd.DataFrame, y: pd.Series):
     then_part = ruleset.then_part
     y_true = (y == then_part)
     y_pred = batch_evaluate(ruleset, X)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[False, True]).ravel()
     accuracy = (tn + tp) / len(y)
     return {'tn': tn, 'fp': fp, 'fn': fn, 'tp': tp, 'accuracy': accuracy}
 
