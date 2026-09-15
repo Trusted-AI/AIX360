@@ -245,7 +245,7 @@ def HeuristicSetSelection(X, Y, m, kernelType, sigma, optimizer):
                 w = np.max(u / K, 0)
                 incrementSetValue = -0.5 * K * (w ** 2) + (u * w)
 
-                if (incrementSetValue > newCurrSetValue) or (count == 1):
+                if (incrementSetValue > newCurrSetValue) or (count == 0):
                     # Bookeeping
                     newCurrSetValue = incrementSetValue
                     desiredElement = i
@@ -267,7 +267,7 @@ def HeuristicSetSelection(X, Y, m, kernelType, sigma, optimizer):
 
                 gradientVal = meanInnerProductX[i] - np.dot(currOptw, innerProduct)
 
-                if (gradientVal > maxGradient) or (count == 1):
+                if (gradientVal > maxGradient) or (count == 0):
                     maxGradient = gradientVal
                     desiredElement = i
                     newinnerProduct = innerProduct[:]
