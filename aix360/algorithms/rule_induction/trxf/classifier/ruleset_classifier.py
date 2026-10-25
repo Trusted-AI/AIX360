@@ -150,4 +150,4 @@ class RuleSetClassifier:
         return '\n'.join([body, else_clause])
 
     def __eq__(self, other):
-        return (self._rule_sets == other.rule_sets) and (self.default_label == other.default_label)
+        return (self._rule_sets == other._rule_sets) and (self.default_label == other.default_label)
