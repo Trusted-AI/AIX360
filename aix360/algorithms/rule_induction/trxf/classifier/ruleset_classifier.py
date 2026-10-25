@@ -99,23 +99,31 @@ class RuleSetClassifier:
                     return rule.label
             return self.default_label
         elif self.rule_selection_method == RuleSelectionMethod.WEIGHTED_SUM:
+            if not self.rules:
+                return self.default_label
             assert self.rules[0].weight is not None
             label_weights = {}
             for rule in self.rules:
+                if not rule.conjunction.evaluate(assignment):
+                    continue
                 if rule.label not in label_weights:
                     label_weights[rule.label] = rule.weight
                 else:
                     label_weights[rule.label] += rule.weight
-            return max(label_weights, key=label_weights.get)
+            return max(label_weights, key=label_weights.get) if label_weights else self.default_label
         elif self.rule_selection_method == RuleSelectionMethod.WEIGHTED_MAX:
+            if not self.rules:
+                return self.default_label
             assert self.rules[0].weight is not None
             label_weights = {}
             for rule in self.rules:
+                if not rule.conjunction.evaluate(assignment):
+                    continue
                 if rule.label not in label_weights:
                     label_weights[rule.label] = rule.weight
                 else:
                     label_weights[rule.label] = max(rule.weight, label_weights[rule.label])
-            return max(label_weights, key=label_weights.get)
+            return max(label_weights, key=label_weights.get) if label_weights else self.default_label
         else:
             raise ValueError("Unknown rule selection method: {}".format(self.rule_selection_method))
 
