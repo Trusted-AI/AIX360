@@ -56,7 +56,7 @@ class Feature:
                 _validate_number(rhs)
                 lhs = operand_stack.pop()
                 _validate_number(lhs)
-                expression = str(lhs) + token + str(rhs)
+                expression = '(' + str(lhs) + ')' + token + '(' + str(rhs) + ')'
                 try:
                     operand_stack.append(eval(expression))
                 except NameError as e:
