@@ -206,6 +206,7 @@ class LogisticRuleRegression(BaseEstimator, ClassifierMixin):
             # Model has no coefficients except intercept
             self.z = z
         self.lr = lr
+        return self
 
     def compute_conjunctions(self, X):
         """Compute conjunctions of features as specified in self.z.
